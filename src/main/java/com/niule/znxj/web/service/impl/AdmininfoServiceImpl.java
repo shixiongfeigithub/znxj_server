@@ -47,7 +47,7 @@ public class AdmininfoServiceImpl implements AdmininfoService{
             public int count() {
 
                 return admininfoMapper.count();
-            }*/
+    }*/
     public int addAdmininfo(Admininfo admininfo){
         return admininfoMapper.insert(admininfo);
     }

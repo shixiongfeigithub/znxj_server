@@ -22,12 +22,12 @@
         </div>
         <div class="row">
             <div class="well col-md-5 center login-box">
-
+				<div style="color: red;">${error}</div>
                 <form class="form-horizontal" action="/admin/login" method="post" autocomplete="off">
                     <%--<fieldset>--%>
                         <div class="input-group input-group-lg">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
-                            <input type="text" class="form-control"  placeholder="用户名" name="username" >
+                            <input type="text" class="form-control"  placeholder="用户名" name="username" value="${admininfo.username}">
                         </div>
                         <div class="clearfix"></div><br>
 

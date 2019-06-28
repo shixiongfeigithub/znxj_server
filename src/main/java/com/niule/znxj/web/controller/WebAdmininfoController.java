@@ -1,11 +1,14 @@
 package com.niule.znxj.web.controller;
 
-import com.github.pagehelper.PageInfo;
-import com.niule.znxj.web.model.Admininfo;
-import com.niule.znxj.web.model.Operatelog;
-import com.niule.znxj.web.model.Roles;
-import com.niule.znxj.web.model.Siteareainfo;
-import com.niule.znxj.web.service.*;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.List;
+import com.github.pagehelper.PageInfo;
+import com.niule.znxj.core.common.Resources;
+import com.niule.znxj.web.model.Admininfo;
+import com.niule.znxj.web.model.Roles;
+import com.niule.znxj.web.model.Siteareainfo;
+import com.niule.znxj.web.service.AdmininfoService;
+import com.niule.znxj.web.service.OperateLogService;
+import com.niule.znxj.web.service.PermissionService;
+import com.niule.znxj.web.service.RolesService;
+import com.niule.znxj.web.service.SiteService;
 
 /**
  * Created by administor on 2017/3/16.
@@ -53,10 +60,69 @@ public class WebAdmininfoController {
             if (subject.isAuthenticated()) {
                 return "redirect:/";
             }
+            Admininfo authUserInfo = admininfoService.login(admininfo);
+            String maxNum = Resources.ApplicationResources.getString("passwordFailNum");
+            String timeNum = Resources.ApplicationResources.getString("failFreezeTime");
+            if (authUserInfo==null) {
+            	Admininfo user = admininfoService.getexistuname(admininfo.getUsername());
+            	if (user==null) {
+            		 model.addAttribute("error", "用户不存在 ！");
+            		 String info="用户"+user.getUsername()+"登录失败";
+                     int addlog=operateLogService.insertSelective(user.getUsername(),info);
+                     return "login";
+				}
+            	Admininfo param = new Admininfo();
+            	param.setId(user.getId());
+            	Integer failNums =1;
+            	if(user.getFreezetime()==null) {
+            		if(user.getFailnums()==null || user.getFailnums()==0){
+            			param.setFailnums(failNums);
+            			admininfoService.updateByPrimaryKeySelective(param);
+            			model.addAttribute("error", "密码错误 ！");
+            			String info="用户"+user.getUsername()+"登录失败";
+                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+                        return "login";
+					}else {
+						failNums = user.getFailnums()+1;
+						param.setFailnums(failNums);
+						if(failNums<Integer.parseInt(maxNum)){
+							admininfoService.updateByPrimaryKeySelective(param);
+							model.addAttribute("error", "密码错误 ！");
+							String info="用户"+user.getUsername()+"登录失败";
+	                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+	                        return "login";
+						}else {
+							//失败5次后冻结账号
+							param.setFreezetime(new Date());
+							admininfoService.updateByPrimaryKeySelective(param);
+							model.addAttribute("error", "密码错误5次，账户被冻结，请十分钟后再试 ！");
+							String info="用户"+user.getUsername()+"密码错误"+maxNum+"次，账户被冻结";
+				            int addlog=operateLogService.insertSelective(user.getUsername(),info);
+	                        return "login";
+						}
+					}
+            	}else {
+                	long now = new Date().getTime();
+                	long freeze = user.getFreezetime().getTime();
+                	int secend = (int) ((now - freeze)/1000);
+            		if(secend>Integer.parseInt(timeNum)) {
+            			param.setFailnums(failNums);
+            			admininfoService.updateByPrimaryKeySelective(param);
+            			model.addAttribute("error", "密码错误 ！");
+            			String info="用户"+user.getUsername()+"登录失败";
+                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+                        return "login";
+            		}else {
+            			model.addAttribute("error", "账户已被冻结，请稍后再试 ！");
+            			String info="用户"+user.getUsername()+"登录失败";
+                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+                        return "login";
+            		}
+            	}
+			}
             // 身份验证
-            subject.login(new UsernamePasswordToken(admininfo.getUsername(), admininfo.getPassword()));
             // 验证成功在Session中保存用户信息
-            final Admininfo authUserInfo = admininfoService.login(admininfo);
+            subject.login(new UsernamePasswordToken(admininfo.getUsername(), admininfo.getPassword()));
             String info="用户"+authUserInfo.getUsername()+"已登录";
             String username=authUserInfo.getUsername();
             int addlog=operateLogService.insertSelective(username,info);

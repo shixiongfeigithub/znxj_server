@@ -24,6 +24,18 @@
             }
         })
     }
+    
+    function validateForm(){
+        var pwd=$("#pwd").val();
+        //固定电话
+        var reg=/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/;
+        if(!reg.test(pwd)){
+            alert("密码必须包含字母、数字和特殊符号");
+            return false;
+        }else {
+            return true;
+        }
+    }
 </script>
 <!-- topbar ends -->
 <div class="ch-container">
@@ -39,7 +51,7 @@
                             </h2>
                         </div>
                         <div class="box-content">
-                            <form id="sub" action="addadmin" method="post">
+                            <form id="sub" action="addadmin" method="post" onsubmit="return validateForm()">
                                 <input type="hidden" class="form-control" style="width: 300px;" name="createuser" required="required" value="${userInfo.id}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>

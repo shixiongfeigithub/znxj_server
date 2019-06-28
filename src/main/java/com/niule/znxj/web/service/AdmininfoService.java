@@ -2,11 +2,7 @@ package com.niule.znxj.web.service;
 
 import com.github.pagehelper.PageInfo;
 import com.niule.znxj.web.model.Admininfo;
-import com.niule.znxj.web.model.AdmininfoExample;
-import com.niule.znxj.web.model.Positioninfo;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Created by administor on 2017/3/16.
