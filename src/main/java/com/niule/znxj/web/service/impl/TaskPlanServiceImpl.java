@@ -1,7 +1,6 @@
 package com.niule.znxj.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.niule.znxj.core.entity.Result;
 import com.niule.znxj.core.util.json.JsonUtil;
 import com.niule.znxj.web.dao.*;
 import com.niule.znxj.web.model.*;
@@ -11,12 +10,9 @@ import com.niule.znxj.web.model.taskcontent.TaskContent;
 import com.niule.znxj.web.model.taskcontent.TaskEquipment;
 import com.niule.znxj.web.service.TaskPlanService;
 import com.niule.znxj.web.service.TaskreportService;
-import com.sun.jmx.snmp.tasks.Task;
-import com.sun.jmx.snmp.tasks.TaskServer;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

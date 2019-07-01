@@ -67,7 +67,7 @@
                                         </td>
                                         <td class="form-inline">
                                             <label class="control-label" for="pwd">登录密码:</label>
-                                            <input type="text" class="form-control" style="width: 300px;" id="pwd" name="password" value="${ad.password}">
+                                            <input type="password" class="form-control" style="width: 300px;" id="pwd" name="password" value="${ad.password}">
                                         </td>
                                     </tr>
                                     <tr>

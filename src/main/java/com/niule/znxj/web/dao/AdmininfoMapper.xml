@@ -14,6 +14,8 @@
 
     <result column="siteid" property="siteid" jdbcType="INTEGER" />
     <result column="customid" property="site.customid" jdbcType="VARCHAR" />
+    <result column="failnums" property="failnums" jdbcType="INTEGER" />
+    <result column="freezetime" property="freezetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -259,7 +261,11 @@
       <if test="roleid != null" >
         roleid = #{roleid,jdbcType=INTEGER},
       </if>
-        siteid = #{siteid,jdbcType=INTEGER},
+      siteid = #{siteid,jdbcType=INTEGER},
+      <if test="failnums != null" >
+        failnums = #{failnums,jdbcType=INTEGER},
+      </if>
+      freezetime = #{freezetime,jdbcType=TIMESTAMP},  
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
