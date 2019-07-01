@@ -1,6 +1,7 @@
 package com.niule.znxj.web.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.niule.znxj.core.common.Resources;
 import com.niule.znxj.core.entity.Result;
 import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.*;
@@ -45,7 +46,8 @@ public class WebAdmininfoController {
      * @param admininfo
      * @return
      */
-    @RequestMapping("/admin/login")
+    @SuppressWarnings("unused")
+	@RequestMapping("/admin/login")
     public String login(Model model, Admininfo admininfo, HttpServletRequest request ){
         List<Systemsettinginfo> systems=systemService.selectByExample();
         for(Systemsettinginfo systemsettinginfo : systems){
@@ -53,23 +55,82 @@ public class WebAdmininfoController {
                 request.getSession().setAttribute(systemsettinginfo.getKeyname(), systemsettinginfo.getValue());
         }
         try {
+        	String maxNum = Resources.ApplicationResources.getString("passwordFailNum");
+            String timeNum = Resources.ApplicationResources.getString("failFreezeTime");
+            long nowTime = new Date().getTime();
             // 验证成功在Session中保存用户信息
             final Admininfo authUserInfo = admininfoService.login(admininfo);
-            if(authUserInfo==null){
+            /*if(authUserInfo==null){
                 model.addAttribute("error","用户名或密码错误！");
                 return "login";
-            }
-            if (authUserInfo.getState()==0){
-                model.addAttribute("error","该账号已被禁用！");
-                return "login";
-            }
-            Date now = new Date();
-            if(authUserInfo!=null&&authUserInfo.getState()==1){
-                if(authUserInfo.getExpirydate().getTime() < now.getTime()){
-                    model.addAttribute("error","该账号已过期！");
+            }*/
+            if (authUserInfo==null) {
+            	Admininfo user = admininfoService.getexistuname(admininfo.getUsername());
+            	if (user==null) {
+            		 model.addAttribute("error", "用户不存在 ！");
+            		 String info="用户"+admininfo.getUsername()+"登录失败";
+                     int addlog=operateLogService.insertSelective(admininfo.getUsername(),info);
+                     return "login";
+				}
+            	if (user.getState()==0){
+                    model.addAttribute("error","该账号已被禁用！");
                     return "login";
                 }
-            }
+                if(user.getState()==1){
+                    if(user.getExpirydate().getTime() < nowTime){
+                        model.addAttribute("error","该账号已过期！");
+                        return "login";
+                    }
+                }
+            	Admininfo param = new Admininfo();
+            	param.setId(user.getId());
+            	Integer failNums =1;
+            	if(user.getFreezetime()==null) {
+            		if(user.getFailnums()==null || user.getFailnums()==0){
+            			param.setFailnums(failNums);
+            			admininfoService.updateByPrimaryKeySelective(param);
+            			model.addAttribute("error", "密码错误 ！");
+            			String info="用户"+user.getUsername()+"登录失败";
+                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+                        return "login";
+					}else {
+						failNums = user.getFailnums()+1;
+						param.setFailnums(failNums);
+						if(failNums<Integer.parseInt(maxNum)){
+							admininfoService.updateByPrimaryKeySelective(param);
+							model.addAttribute("error", "密码错误 ！");
+							String info="用户"+user.getUsername()+"登录失败";
+	                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+	                        return "login";
+						}else {
+							//失败5次后冻结账号
+							param.setFreezetime(new Date());
+							admininfoService.updateByPrimaryKeySelective(param);
+							model.addAttribute("error", "密码错误5次，账户被冻结，请十分钟后再试 ！");
+							String info="用户"+user.getUsername()+"密码错误"+maxNum+"次，账户被冻结";
+				            int addlog=operateLogService.insertSelective(user.getUsername(),info);
+	                        return "login";
+						}
+					}
+            	}else {
+                	long freezeTime = user.getFreezetime().getTime();
+                	int secend = (int) ((nowTime - freezeTime)/1000);
+            		if(secend>Integer.parseInt(timeNum)) {
+            			param.setFailnums(failNums);
+            			admininfoService.updateByPrimaryKeySelective(param);
+            			model.addAttribute("error", "密码错误 ！");
+            			String info="用户"+user.getUsername()+"登录失败";
+                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+                        return "login";
+            		}else {
+            			model.addAttribute("error", "账户已被冻结，请稍后再试 ！");
+            			String info="用户"+user.getUsername()+"登录失败";
+                        int addlog=operateLogService.insertSelective(user.getUsername(),info);
+                        return "login";
+            		}
+            	}
+			}
+            
             Subject subject = SecurityUtils.getSubject();
             // 已登录则 跳到首页
             if (subject.isAuthenticated()) {

@@ -3,7 +3,6 @@ package com.niule.znxj.web.controller;
 import com.niule.znxj.core.common.Resources;
 import com.niule.znxj.core.entity.JSONResult;
 import com.niule.znxj.core.entity.Result;
-import com.niule.znxj.core.util.StringUtils;
 import com.niule.znxj.web.model.Quickreport;
 import com.niule.znxj.web.model.Taskreportinfo;
 import com.niule.znxj.web.model.Userinfo;
@@ -15,7 +14,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.poi.util.SystemOutLogger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +33,7 @@ import java.util.*;
  * Created by MrD on 2017/3/22.
  */
 @Controller
+@RequestMapping("/app")
 public class AppController {
     @Resource
     private CommonService commonService;

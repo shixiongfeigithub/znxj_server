@@ -18,6 +18,9 @@ public class Admininfo {
     private Date createdate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expirydate;
+    private Integer failnums;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date freezetime;
 
     private Integer roleid;
 
@@ -53,7 +56,23 @@ public class Admininfo {
         return username;
     }
 
-    public void setUsername(String username) {
+    public Integer getFailnums() {
+		return failnums;
+	}
+
+	public void setFailnums(Integer failnums) {
+		this.failnums = failnums;
+	}
+
+	public Date getFreezetime() {
+		return freezetime;
+	}
+
+	public void setFreezetime(Date freezetime) {
+		this.freezetime = freezetime;
+	}
+
+	public void setUsername(String username) {
         this.username = username == null ? null : username.trim();
     }
 

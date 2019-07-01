@@ -117,7 +117,7 @@ public class IpFilter implements Filter{
 		//IP地址每一段的正则
 		String regx = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
 		//整个ip的正则
-		String ipRegx = regx + "\\." + regx + "\\."+ regx + "\\." + regx;
+		//String ipRegx = regx + "\\." + regx + "\\."+ regx + "\\." + regx;
 		Pattern pattern = Pattern.compile("("+regx+"\\."+ regx+"\\."+regx+"\\."+ "\\*)|" + 
 						"("+regx+"\\."+regx+"\\."+regx+"\\."+ "\\*(,|;))*");
 		if(this.isNullorMatches(allowIPWildcard, pattern)){
