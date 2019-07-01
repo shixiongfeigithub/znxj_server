@@ -30,11 +30,11 @@ public interface EquipmentinfoMapper {
 
     int updateByPrimaryKey(Equipmentinfo record);
 
-    public List<Equipmentinfo> findByPageEquipment(HashMap<String,Object> map);
-    public int countEquipment(HashMap<String,Object> map);
+    public List<Equipmentinfo> findByPageEquipment(HashMap<String, Object> map);
+    public int countEquipment(HashMap<String, Object> map);
 
-    public List<Equipmentinfo>findByPageEquipment2(HashMap<String,Object> map);
-    public int countEquipment2(HashMap<String,Object> map);
+    public List<Equipmentinfo>findByPageEquipment2(HashMap<String, Object> map);
+    public int countEquipment2(HashMap<String, Object> map);
 
     List<Equipmentinfo> queryequip(Integer areaid);
 }

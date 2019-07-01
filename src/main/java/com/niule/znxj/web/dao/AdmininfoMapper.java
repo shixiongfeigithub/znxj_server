@@ -35,4 +35,6 @@ public interface AdmininfoMapper {
     Admininfo getexistuname(String username);
 
     int admincount(int roleid);
+
+    Admininfo queryUserIsExistPower(String examUser, String examPwd);
 }

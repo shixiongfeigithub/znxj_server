@@ -4,66 +4,100 @@
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
 <head>
+
     <title>智能巡检系统</title>
-    <%@ include file="/WEB-INF/pages/common/header.jsp"%>
+    <%@ include file="/WEB-INF/pages/common/header.jsp" %>
+    <style>
+        .selected {
+            background: #35A7E7;
+            color: white;
+        }
+
+        .fontcenter {
+            text-align: center !important;
+            vertical-align: middle;
+        }
+
+        #testalert {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 200px;
+        }
+    </style>
     <script type="text/javascript">
-        function querybyquickid(id){
+        function querybyquickid(id) {
             $.ajax({
-                url:"querybyquickid?id="+id,
-                type:"post",
-                datatype:"json",
-                success: function(data) {
+                url: "querybyquickid?id=" + id,
+                type: "post",
+                datatype: "json",
+                success: function (data) {
                     var imgs;
                     var audios;
                     var videos;
-                    if(""!=data.img && data.img!="undefined"){
-                        imgs=JSON.parse(data.img);
-                    }else{
-                        imgs="";
+                    if ("" != data.img && data.img != "undefined") {
+                        imgs = JSON.parse(data.img);
+                    } else {
+                        imgs = "";
                     }
 
-                    if(""!=data.audio && data.audio!="undefined"){
-                        audios=JSON.parse(data.audio);
-                    }else{
-                        audios="";
+                    if ("" != data.audio && data.audio != "undefined") {
+                        audios = JSON.parse(data.audio);
+                    } else {
+                        audios = "";
                     }
-                    if(""!=data.video && data.video!="undefined"){
-                        videos=JSON.parse(data.video);
-                    }else{
-                        videos="";
+                    if ("" != data.video && data.video != "undefined") {
+                        videos = JSON.parse(data.video);
+                    } else {
+                        videos = "";
                     }
-                    if(imgs==""&&audios==""&&videos==""){
+                    if (imgs == "" && audios == "" && videos == "") {
                         alert("暂时没有其他异常信息");
-                    }else{
-                        showquickdetail(imgs,data.content,audios,videos);
+                    } else {
+                        showquickdetail(imgs, data.content, audios, videos);
                     }
                 }
             })
         }
-        function showquickdetail(imgs,val3,audios,videos){
+        function showquickdetail(imgs, val3, audios, videos) {
             // val2图片  val3文字  val4音频
-            var errorul=$("#errorul");
+            var errorul = $("#errorul");
             errorul.empty();
-            errorul.append("<li class='list-group-item'  onclick=showtext(this,'"+val3+"')>描述</li>");
-            for(var i=0;i<imgs.length;i++){
-                var j=parseInt(i)+1;
-                errorul.append("<li class='list-group-item'  onclick=showimg(this,'"+imgs[i]+"')>图片"+j+"</li>");
+            errorul.append("<li class='list-group-item'  onclick=showtext(this,'" + val3 + "')>描述</li>");
+            if (val3 != null && "" != val3) {
+                showtext(this, val3)
             }
-
-            for(var m=0;m<audios.length;m++){
-                var n=parseInt(m)+1;
-                errorul.append("<li class='list-group-item'  onclick=showaudio(this,'"+audios[m]+"')>音频"+n+"</li>");
+            if (imgs != null && "" != imgs) {
+                for (var i = 0; i < imgs.length; i++) {
+                    var j = parseInt(i) + 1;
+                    errorul.append("<li class='list-group-item'  onclick=showimg(this,'" + imgs[i] + "')>图片" + j + "</li>");
+                }
+                if (val3 == null && val3 == undefined) {
+                    showimg(this, imgs[0]);
+                }
             }
-
-            for(var a=0;a<videos.length;a++){
-                var b=parseInt(a)+1;
-                errorul.append("<li class='list-group-item'  onclick=showvideo(this,'"+videos[a]+"')>视频"+b+"</li>");
+            if (audios != null && "" != audios) {
+                for (var m = 0; m < audios.length; m++) {
+                    var n = parseInt(m) + 1;
+                    errorul.append("<li class='list-group-item'  onclick=showaudio(this,'" + audios[m] + "')>音频" + n + "</li>");
+                }
+                if (imgs == null && imgs == undefined) {
+                    showaudio(this, audios[0]);
+                }
             }
-
+            if (videos != null && "" != videos) {
+                for (var a = 0; a < videos.length; a++) {
+                    var b = parseInt(a) + 1;
+                    errorul.append("<li class='list-group-item'  onclick=showvideo(this,'" + videos[a] + "')>视频" + b + "</li>");
+                }
+                if (imgs == null && imgs == undefined && audios == null && audios == undefined) {
+                    showvideo(this, videos[0]);
+                }
+            }
             $("#myModal").modal("show");
         }
         /*显示图片*/
-        function showimg(obj,imgs){
+        function showimg(obj, imgs) {
             $(obj).siblings('li').removeClass('selected');  // 删除其他兄弟元素的样式
             $(obj).siblings('li').prop("selected", false);
             $(obj).addClass('selected');
@@ -71,26 +105,26 @@
 
             $("#pic").empty();
             var pic = document.createElement("img");
-            pic.src="report"+imgs;
+            pic.src = "report" + imgs;
 
-            $(pic).css("width","auto");
-            $(pic).css("height","auto");
-            $(pic).css("max-width","100%");
-            $(pic).css("max-height","100%");
+            $(pic).css("width", "auto");
+            $(pic).css("height", "auto");
+            $(pic).css("max-width", "100%");
+            $(pic).css("max-height", "100%");
 
             $("#pic")[0].appendChild(pic);
         }
         /*显示文字*/
-        function showtext(obj,val){
+        function showtext(obj, val) {
             $(obj).siblings('li').removeClass('selected');  // 删除其他兄弟元素的样式
             $(obj).siblings('li').prop("selected", false);
             $(obj).addClass('selected');
             $(obj).prop("selected", true);
             $("#pic").empty();
-            $("#pic")[0].innerHTML=val;
+            $("#pic")[0].innerHTML = val;
         }
         /*显示音频*/
-        function showaudio(obj,audioval){
+        function showaudio(obj, audioval) {
             $(obj).siblings('li').removeClass('selected');  // 删除其他兄弟元素的样式
             $(obj).siblings('li').prop("selected", false);
             $(obj).addClass('selected');
@@ -98,35 +132,35 @@
             $("#pic").empty();
             var au = document.createElement('audio');
             au.controls = true;
-            au.preload="auto";
+            au.preload = "auto";
 //            au.loop="loop";
             var source = document.createElement('source');
             au.appendChild(source);
-            source.src="report"+audioval;
-            source.type="audio/mpeg";
+            source.src = "report" + audioval;
+            source.type = "audio/mpeg";
             $("#pic")[0].appendChild(au);
         }
-        function showvideo(obj,videoval){
+        function showvideo(obj, videoval) {
             $(obj).siblings('li').removeClass('selected');  // 删除其他兄弟元素的样式
             $(obj).siblings('li').prop("selected", false);
             $(obj).addClass('selected');
             $(obj).prop("selected", true);
             $("#pic").empty();
             var video = document.createElement('video');
-            video.src = "report"+videoval;
+            video.src = "report" + videoval;
             video.controls = true;
-            video.preload="auto";
+            video.preload = "auto";
 //            video.loop="loop";
-            video.width="400";
-            video.height="210";
+            video.width = "400";
+            video.height = "210";
 
             $("#pic")[0].appendChild(video);
         }
-        function delbyquickid(id){
-            var isDel=confirm('确定删除吗？');
-            if (isDel!=true) {
+        function delbyquickid(id) {
+            var isDel = confirm('确定删除吗？');
+            if (isDel != true) {
                 return false;
-            }else {
+            } else {
                 $.ajax({
                     url: "delbyquickid?id=" + id,
                     type: "post",
@@ -143,15 +177,14 @@
                 });
             }
         }
-        function showtask(){
-            window.location="showQuickReport?page=1&qtype=0";
+        function showtask() {
+            window.location = "showQuickReport?qtype=0&page=" + $("#page").val();
         }
     </script>
     <script src="${pageContext.request.contextPath}/js/My97DatePicker/WdatePicker.js"></script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" value="${info.pageNum}" id="page">
 <div class="ch-container">
     <div class="row">
 
@@ -169,10 +202,13 @@
                             <div class="box-content">
                                 <div class="form-inline" style="margin-bottom: 20px;">
                                     <form action="showQuickReport?page=1" method="post">
-                                        <label class="control-label" for="name2">编号：</label>
-                                        <input type="text" class="form-control" style="width: 300px;" id="name2" name="reportcode"value="${param.reportcode}">
+                                        <label class="control-label" for="name2">关键字：</label>
+                                        <input type="text" class="form-control" style="width: 300px;" id="name2"
+                                               name="reportcode" value="${param.reportcode}">
                                         <label class="control-label" for="time">时间：</label>
-                                        <input type="text" class="form-control" style="width: 300px;"onClick="WdatePicker()" id="time" name="uploadtime"value="${param.uploadtime}">
+                                        <input type="text" class="form-control" style="width: 300px;"
+                                               onClick="WdatePicker()" id="time" name="uploadtime"
+                                               value="${param.uploadtime}">
                                         <input type="submit" class="btn btn-primary" value="搜索">
                                     </form>
                                 </div>
@@ -193,13 +229,18 @@
                                             <td>${report.u.realname}</td>
                                             <td>${report.group.customid}</td>
                                             <td>${report.content}</td>
-                                            <td><sdf:formatDate value="${report.uploadtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>
+                                            <td><sdf:formatDate value="${report.uploadtime}"
+                                                                pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>
                                             <td>
-                                                <%--<shiro:hasPermission name="item:quickdetail">--%>
-                                                    <a class="btn btn-primary" href="javascript:void(0)" onclick="querybyquickid(${report.id})"><i class="glyphicon glyphicon-zoom-in icon-white"></i>详情</a>
-                                                <%--</shiro:hasPermission>--%>
+                                                    <%--<shiro:hasPermission name="item:quickdetail">--%>
+                                                <a class="btn btn-primary" href="javascript:void(0)"
+                                                   onclick="querybyquickid(${report.id})"><i
+                                                        class="glyphicon glyphicon-zoom-in icon-white"></i>详情</a>
+                                                    <%--</shiro:hasPermission>--%>
                                                 <shiro:hasPermission name="del:quick2">
-                                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="delbyquickid(${report.id})"><i class="glyphicon glyphicon-trash icon-white"></i>删除</a>
+                                                    <a class="btn btn-danger" href="javascript:void(0)"
+                                                       onclick="delbyquickid(${report.id})"><i
+                                                            class="glyphicon glyphicon-trash icon-white"></i>删除</a>
                                                 </shiro:hasPermission>
                                             </td>
                                         </tr>
@@ -234,22 +275,23 @@
 </div>
 
 
-<div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in" style="z-index: 0">
-    <div class="modal-dialog" style="z-index: 9999">
+<div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in"
+     style="z-index: 0">
+    <div class="modal-dialog" style="z-index: 9999;width: 60%;">
         <div class="modal-content" style="overflow: auto;">
             <div id="arealist">
                 <div class="modal-header">
                     <button data-dismiss="modal" class="close" type="button">×</button>
                     <h3>即拍即传</h3>
                 </div>
-                <div class="modal-body" style="border: 1px solid #F3F3F3; width: 600px;height:400px;float: left;">
-                    <div id="showerror"style="height: 30%;">
-                        <div style="width: 150px;float: left;height: 300px;overflow:auto;">
+                <div class="modal-body">
+                    <div id="showerror" style="height: 60%;">
+                        <div style="width: 150px;float: left;height: 100%;;overflow:auto;">
                             <ul class="list-group" id="errorul">
 
                             </ul>
                         </div>
-                        <div id="pic" style="border: 1px solid #F3F3F3; width: 400px;height:300px;float: left;">
+                        <div id="pic" style="border: 1px solid #F3F3F3; width: 600px;height: 100%;float: left;">
 
                         </div>
                         <div class="clearfix" style="display: none;"></div>

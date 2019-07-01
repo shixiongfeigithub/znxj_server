@@ -20,12 +20,8 @@ public class Admininfo {
     private Date expirydate;
 
     private Integer roleid;
+
     private Integer siteid;
-    private Integer failnums;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date freezetime;
-    
-    
     private Roles roles;
     private Siteareainfo site;
 
@@ -116,24 +112,7 @@ public class Admininfo {
     public void setSiteid(Integer siteid) {
         this.siteid = siteid;
     }
-    
-    public Integer getFailnums() {
-		return failnums;
-	}
-
-	public void setFailnums(Integer failnums) {
-		this.failnums = failnums;
-	}
-
-	public Date getFreezetime() {
-		return freezetime;
-	}
-
-	public void setFreezetime(Date freezetime) {
-		this.freezetime = freezetime;
-	}
-
-	public Admininfo() {
+    public Admininfo() {
     }
 
     public Admininfo(String username, String password) {

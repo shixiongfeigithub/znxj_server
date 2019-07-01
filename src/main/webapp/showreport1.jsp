@@ -13,7 +13,7 @@
             tasknum();
         })
         function deltaskreport(tempid,id){
-           if(id==undefined){
+           if(id==undefined || id==''|| id==null){
                id=0;
            }
             var isDel=confirm('确定删除吗？');
@@ -38,7 +38,7 @@
         }
         function showtask(){
             var tasktype=$("#tasktype").val();
-            window.location="showallreport1?page=1&tasktype="+tasktype;
+            window.location="/firstPage?page="+$("#page").val();
         }
         function showstop(tempid){
             $("#showstop").empty();
@@ -49,7 +49,7 @@
                 success: function (data) {
                     if (data !=null) {
                         $("#showstop").append("<p>终止原因："+data.reason+"</p>" +
-                                "<p>终止内容："+data.content+"</p><p>终止时间："+data.stoptime.toDateFromJson()+"</p>" +
+                                "<p>终止内容："+data.content+"</p><p>终止时间："+ data.stoptime2+"</p>" +
                                 "<p>班组名称："+data.classname+"</p><p>负责人名称："+data.directorname+"</p>");
                         $("#myModal").modal("show");
                     } else {
@@ -98,11 +98,20 @@
                 })
             }
         }
+//        function testrefurbish(){
+//            var tasktype = $("#tasktype").val();
+//            var taskCcode = $('#taskno option:selected').val();
+//            var time1 = $("#time1").val();
+//            var time2 = $("#time1").val();
+//            var operationstate = $("#operationstate option:selected").val();
+//            var siteid = $("#name2 option:selected").val();
+//            var searchtype = $("#status option:selected").val();
+//            window.location="/showallreport1?page=1&tasktype="+tasktype+"&taskCcode="+taskCcode+"&time1="+time1+"&time2="+time2+"&operationstate="+operationstate+"&siteid="+siteid+"&searchtype="+searchtype;
+//        }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container">
     <div class="row">
 
@@ -162,13 +171,13 @@
                                                 <c:if test="${roleid==null}">
                                                     <option ${searchtype eq ''?'selected':''} value="">所有任务</option>
                                                 </c:if>
-                                                <option ${searchtype eq '0'?'selected':''} value="0">日常巡检</option>
-                                                <option ${searchtype eq '1'?'selected':''} value="1">计划巡检</option>
-                                                <option ${searchtype eq '2'?'selected':''} value="2">隐患排查</option>
-                                                <option ${searchtype eq '3'?'selected':''} value="3">视频巡检</option>
-                                                <option ${searchtype eq '4'?'selected':''} value="4">临时任务</option>
+                                                <option ${searchtype eq '0'?'selected':''} ${type eq '0'?'selected':''} value="0">日常巡检</option>
+                                                <option ${searchtype eq '1'?'selected':''} ${type eq '1'?'selected':''} value="1">计划巡检</option>
+                                                <option ${searchtype eq '2'?'selected':''} ${type eq '2'?'selected':''} value="2">隐患排查</option>
+                                                <option ${searchtype eq '3'?'selected':''} ${type eq '3'?'selected':''} value="3">视频巡检</option>
+                                                <%--<option ${searchtype eq '4'?'selected':''} ${type eq '4'?'selected':''} value="4">临时任务</option>--%>
                                             </select>
-                                            <label class="control-label" for="taskno">任务编号：</label>
+                                            <label class="control-label" for="taskno">任务号：</label>
                                             <select class="form-control" id="taskno" name="taskCcode" >
                                                 <%--<c:if test="${taskCcode==null or taskCcode==''}">--%>
                                                     <%--<option value="" selected>所有任务</option>--%>
@@ -194,8 +203,38 @@
                                                 <option ${operationstate eq '5' ? 'selected' : ''} value="5">主动终止</option>
                                             </select><br>
                                             <label class="control-label" style="margin-top: 10px">报告完成时间：</label>
-                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px">
+                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
+                                            <%--<button  onclick="testrefurbish()" class="btn btn-primary" style="margin-left: 50px;margin-top: 10px">刷新</button>--%>
+                                                <script language="JavaScript">
+                                                    Date.prototype.format = function (format) {
+                                                        var args = {
+                                                            "M+": this.getMonth() + 1,
+                                                            "d+": this.getDate(),
+                                                            "h+": this.getHours(),
+                                                            "m+": this.getMinutes(),
+                                                            "s+": this.getSeconds(),
+                                                            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+
+                                                            "S": this.getMilliseconds()
+                                                        };
+                                                        if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                                                        for (var i in args) {
+                                                            var n = args[i];
+                                                            if (new RegExp("(" + i + ")").test(format)) format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+                                                        }
+                                                        return format;
+                                                    };
+                                                    $(function () {
+                                                        if($("#time1").val() == ""){
+                                                            $("#time1").val(new Date().format("yyyy-MM-dd"));
+                                                        }
+                                                        if($("#time2").val() == ""){
+                                                            $("#time2").val(new Date().format("yyyy-MM-dd"));
+                                                        }
+                                                    });
+                                                </script>
+
                                         </form>
                                     </div>
                                     <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
@@ -213,18 +252,25 @@
                                             <th>有无异常项</th>
                                             <th>责任人</th>
                                             <th>数据提交时间</th>
-
+                                            <th>复核状态</th>
                                         </tr>
                                         <c:forEach items="${pageBean.list}" var="report">
                                             <tr>
                                                 <td>
                                                     <shiro:hasPermission name="del:taskreport">
-                                                        <a href="javascript:void(0)" onclick="deltaskreport('${report.temp.id}',${report.id==null?null:report.id})">
+                                                        <%--<c:if test="${report.id==null}">--%>
+                                                            <a href="javascript:;" onclick="deltaskreport('${report.temp.id}','${report.id==null?'':report.id}')">
                                                             <i class="glyphicon glyphicon-trash"></i></a>
+                                                        <%--</c:if>--%>
+                                                        <%--<c:if test="${report.id!=null}">--%>
+                                                            <%--<a href="javascript:;" onclick="deltaskreport('${report.temp.id}',${report.id})">--%>
+                                                                <%--<i class="glyphicon glyphicon-trash"></i></a>--%>
+                                                        <%--</c:if>--%>
+
                                                     </shiro:hasPermission>
                                                     <c:if test="${report.id==null}"></c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <a href="querytaskreportdetail?id=${report.id}&type=${type}&type2=0">
+                                                        <a href="querytaskreportdetail?page=${pageBean.currentPage}&id=${report.id}&type=${type}&type2=1">
                                                             <i class="glyphicon glyphicon-info-sign blue "></i></a>
                                                     </c:if>
 
@@ -232,11 +278,7 @@
                                                 <td>
                                                     <c:if test="${report.id==null}">${fn:substring(report.temp.taskcode,0,report.temp.taskcode.indexOf('-'))}</c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <%--<a href="reportcount?page=1&taskid=${report.taskid}&type=${type}&type2=0&taskname=${fn:substring(report.taskcode,0,report.taskcode.indexOf('-'))}">--%>
-                                                                <%--${fn:substring(report.temp.taskcode,0,report.temp.taskcode.indexOf('-'))}--%>
-                                                        <%--</a>--%>
-
-                                                        <a href="reportcount2?taskid=${report.taskid}&donetime=<sdf:formatDate value="${report.donetime}" pattern="yyyy-MM-dd"></sdf:formatDate>&type=${type}&taskname=${fn:substring(report.taskcode,0,report.taskcode.indexOf('-'))}">
+                                                        <a href="reportcount2?taskid=${report.taskid}&page=${pageBean.currentPage}&donetime=<sdf:formatDate value="${report.temp.executetime}" pattern="yyyy-MM-dd"></sdf:formatDate>&type=${type}&taskname=${fn:substring(report.taskcode,0,report.taskcode.indexOf('-'))}">
                                                                 ${fn:substring(report.temp.taskcode,0,report.temp.taskcode.indexOf('-'))}
                                                         </a>
                                                     </c:if>
@@ -244,11 +286,16 @@
                                                 <td>
                                                     <c:if test="${report.id==null}">${report.temp.taskcode}</c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <a href="querytaskreportdetail?id=${report.id}&type=${type}&type=${type}">${report.temp.taskcode}</a>
+                                                        <a href="querytaskreportdetail?id=${report.id}&page=${pageBean.currentPage}&type=${type}&type2=1">${report.temp.taskcode}</a>
                                                     </c:if>
                                                 </td>
                                                 <td>
-                                                    <c:if test="${report.temp.state ==0}">未执行 </c:if>
+                                                    <c:if test="${report.temp.state ==0}">未执行
+                                                        <%--<c:if test="${report.temp.operationstate==0}">未执行</c:if>--%>
+                                                        <%--<c:if test="${report.temp.operationstate==1}">未执行(已漏检)</c:if>--%>
+                                                        <%--<c:if test="${report.temp.operationstate==2}">未执行(已跳检)</c:if>--%>
+                                                        <%--<c:if test="${report.temp.operationstate==3}">未执行(已完成)</c:if>--%>
+                                                    </c:if>
                                                     <c:if test="${report.temp.state ==1}">进行中 </c:if>
                                                     <c:if test="${report.temp.state ==2}">
                                                         <c:if test="${report.temp.operationstate==1}">已漏检</c:if>
@@ -264,14 +311,14 @@
                                                 </td>
                                                 <td>
                                                     <c:if test="${report.temp.state ==2}">
-                                                        <c:if test="${report.temp.operationstate==1}"><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
-                                                        <c:if test="${report.temp.operationstate==2}"><sdf:formatDate value="${report.donetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
-                                                        <c:if test="${report.temp.operationstate==3}"><sdf:formatDate value="${report.donetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
+                                                        <c:if test="${report.temp.operationstate==1}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
+                                                        <c:if test="${report.temp.operationstate==2}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
+                                                        <c:if test="${report.temp.operationstate==3}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
                                                     </c:if>
                                                     <c:if test="${report.temp.state ==3}">
-                                                        <c:if test="${report.temp.stopstate==2}"><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
+                                                        <c:if test="${report.temp.stopstate==2}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
                                                         <c:if test="${report.temp.stopstate==1}">
-                                                            <a href="javascript:void(0)"><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></a>
+                                                            <sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate>
                                                         </c:if>
                                                     </c:if>
                                                 </td>
@@ -285,22 +332,26 @@
                                                     <c:if test="${report.reportstate ==1}">有</c:if>
                                                 </td>
                                                 <td>${report.temp.user.realname}</td>
-                                                <td><sdf:formatDate value="${report.uploadtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>
-
+                                                <td><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>
+                                                <td>
+                                                    <c:if test="${report.examstate ==0}">待复核</c:if>
+                                                    <c:if test="${report.examstate ==1}">${report.examuser}</c:if>
+                                                    <c:if test="${report.examstate ==2}">自动复核</c:if>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                     </table>
                                     <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                                        <a href="showallreport1?page=1&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}">第一页</a>
+                                        <a href="showallreport1?page=1&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}&searchtype=${searchtype}">第一页</a>
                                         <c:if test="${pageBean.currentPage>1}">
-                                            <a href="showallreport1?page=${pageBean.currentPage-1}&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}">上一页</a>
+                                            <a href="showallreport1?page=${pageBean.currentPage-1}&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}&searchtype=${searchtype}">上一页</a>
                                         </c:if>
 
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                            <a href="showallreport1?page=${pageBean.currentPage+1}&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}">下一页</a>
+                                            <a href="showallreport1?page=${pageBean.currentPage+1}&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}&searchtype=${searchtype}">下一页</a>
                                         </c:if>
 
-                                        <a href="showallreport1?page=${pageBean.totalPage}&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}">最后一页</a>
+                                        <a href="showallreport1?page=${pageBean.totalPage}&tasktype=${type}&taskCcode=${taskCcode}&reportSstate=${reportSstate}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}&searchtype=${searchtype}">最后一页</a>
 
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
                                     </div>

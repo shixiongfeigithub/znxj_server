@@ -17,7 +17,9 @@
             var len=$("#statuslen").val();
             for(var i=0;i<len;i++){
                 if(i==0){
-                    x[0].colSpan="7";
+                    var colls = parseInt($("#count").val());
+//                    alert(colls);
+                    x[0].colSpan=colls;
                 }else
                     x[i].colSpan="2";
             }
@@ -48,53 +50,96 @@
 //            var donetime=$("#donetime").val();
             var time1=$("#time1").val();
             var time2=$("#time2").val();
-            window.location="exportExcel?type="+type+"&taskid="+taskid+"&taskname="+taskname+"&time1="+time1+"&time2="+time2;
+//            $.ajax({
+//                url:"exportExcel?type="+type+"&taskid="+taskid+"&taskname="+taskname+"&time1="+time1+"&time2="+time2,
+//                type: "GET",
+//                dataType: "json",
+//                success: function (data) {
+//                    if(data==0){
+//                        alert("该任务在这段时间没有报告");
+//                        return false;
+//                    }else
+//                        return true;
+//                }
+//            });
+            var exportcontentlist = "";
+            var temp = "";
+            var exportcontent = document.getElementsByName("exportcontent");
+            for ( var i = 0; i < exportcontent.length; i++) {
+                if (exportcontent[i].checked) {
+                    temp = exportcontent[i].value;
+                    exportcontentlist = exportcontentlist + "," +temp;
+                }
+            }
+            var checkedexportcontent = exportcontentlist.substring(1, exportcontentlist.length);
+            if (checkedexportcontent=="") {
+                alert("请选择导出的字段");
+                return false;
+            }else{
+                window.location="exportExcel?type="+type+"&taskid="+taskid+"&taskname="+taskname+"&time1="+time1+"&time2="+time2+"&checkcontent="+checkedexportcontent;
+                return true;
+            }
         }
         function showimg(img,audio,video){
+//            debugger;
             var imgs=new Array();
             var audios=new Array();
             var videos=new Array();
-            if(""!=img && img!="undefined"&&img!="null"){
-                imgs=JSON.parse(img);
+            if(""!=img && img!="undefined"&&img!="null"&&img!="[]"){
+                imgs=img;
             }else{
                 imgs="";
             }
 
             if(""!=audio && audio!="undefined"&&audio!="null"){
-                audios=JSON.parse(audio);
+                audios=audio;
             }else{
                 audios="";
             }
             if(""!=video && video!="undefined" &&video!="null"){
-                videos=JSON.parse(video);
+                videos=video;
             }else{
                 videos="";
             }
             var errorul=$("#errorul");
             errorul.empty();
-            if(imgs==""&&audios==""&&videos==""){
+            if((imgs=="" || imgs == null) && (audios=="" || audios == null) && (videos=="" || videos == null)){
                 alert("暂时没有其他异常信息");
-            }else {
+                return;
+            }
+            if(imgs!=null && imgs!= "") {
                 for (var i = 0; i < imgs.length; i++) {
                     var j = parseInt(i) + 1;
-                    errorul.append("<li class='list-group-item'  onclick=showimgs(this,'" + imgs[i] + "')>图片" + j + "</li>");
+                    errorul.append("<li id='imgLi"+i+"' class='list-group-item'  onclick=showimg(this,'" + imgs[i] + "')>图片" + j + "</li>");
                 }
+                var firstImgLi = document.getElementById("imgLi0");
+                showimg(firstImgLi,imgs[0]);
 
+            }
+            if(audios!=null && audios != ""){
                 for (var m = 0; m < audios.length; m++) {
                     var n = parseInt(m) + 1;
-                    errorul.append("<li class='list-group-item'  onclick=showaudio(this,'" + audios[m] + "')>音频" + n + "</li>");
+                    errorul.append("<li id='audios"+m+"' class='list-group-item'  onclick=showaudio(this,'" + audios[m] + "')>音频" + n + "</li>");
                 }
 
+                var firstAudioli = document.getElementById("audios0");
+                showaudio(firstAudioli,audios[0]);
+            }
+            if(videos!=null && videos != ""){
                 for (var a = 0; a < videos.length; a++) {
                     var b = parseInt(a) + 1;
-                    errorul.append("<li class='list-group-item'  onclick=showvideo(this,'" + videos[a] + "')>视频" + b + "</li>");
+                    errorul.append("<li id='video"+a+"' class='list-group-item'  onclick=showvideo(this,'" + videos[a] + "')>视频" + b + "</li>");
                 }
+
+                var firstVideosLi = document.getElementById("video0");
+                showvideo(firstVideosLi,videos[0]);
+            }
                 $("#myModal").modal("show");
                 $("#arealist").css("display","block");
                 $("#dotime").css("display","none");
-            }
+
         }
-        function showimgs(obj,imgs){
+        function showimg(obj,imgs){
             $(obj).siblings('li').removeClass('selected');  // 删除其他兄弟元素的样式
             $(obj).siblings('li').prop("selected", false);
             $(obj).addClass('selected');
@@ -143,11 +188,18 @@
 
             $("#pic")[0].appendChild(video);
         }
+        function selectAll(){
+            var isCheck=$("#sel_1").is(':checked');  //获得全选复选框是否选中
+            $("input[type='checkbox']").each(function() {
+                this.checked = isCheck;       //循环赋值给每个复选框是否选中
+            });
+        }
     </script>
 </head>
 <body>
 <%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
 <!-- topbar ends -->
+<input type="hidden" value="${count}" id="count">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -177,6 +229,7 @@
                                 <div class="box-content">
                                     <form action="reportcount2" method="post">
                                         <input type="hidden" id="taskid" name="taskid" value="${taskid}">
+                                        <input type="hidden" id="page" name="page" value="${page}">
                                         <input type="hidden" value="${type}" id="type" name="type">
                                         <input type="hidden" value="${taskname}" id="taskname" name="taskname">
                                         <span style="font-size: 15px;margin-top: 20px;margin-bottom: 20px">报告完成时间：</span>
@@ -247,11 +300,34 @@
             <div id="dotime">
                 <div class="modal-header">
                     <button data-dismiss="modal" class="close" type="button">×</button>
-                    <h3>选择时间</h3>
+                    <h3>选择时间和导出字段</h3>
                 </div>
                 <div class="modal-body">
                     开始时间：<input type="text" id="time1" name="time1" onClick="WdatePicker()" >
                     结束时间:<input type="text" id="time2" name="time2" onClick="WdatePicker()">
+                    选择导出字段:<br/>
+                    <input id="sel_1" onchange="selectAll()" type="checkbox" value="1"/>全选/全不选<br>
+                    <c:if test="${areaname==1}">
+                        区域<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="区域">
+                    </c:if>
+                    <c:if test="${equipname==1}">
+                        设备<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="设备">
+                    </c:if>
+                    <c:if test="${checkname==1}">
+                        巡检项<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="巡检项"><br>
+                    </c:if>
+                    <c:if test="${normalmin==1}">
+                        正常最低值<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="正常最低值">
+                    </c:if>
+                    <c:if test="${normalmax==1}">
+                        正常最高值<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="正常最高值">
+                    </c:if>
+                    <c:if test="${lowerwarning==1}">
+                        下限警告值<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="下限警告值"><br>
+                    </c:if>
+                    <c:if test="${upperwarning==1}">
+                        上限警告值<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="上限警告值">
+                    </c:if>
                 </div>
                 <div class="modal-footer">
                     <input type="button" id="btn2" value="添加" class="btn btn-primary" onclick="exportexce2(${taskid},${type})">

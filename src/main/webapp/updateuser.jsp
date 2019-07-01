@@ -34,6 +34,33 @@
                 }
             });
         }
+
+       /* function changeClassId() {
+            var username = $("#username").val();
+            var classid = $("#classid").val();
+            var id  = $("#id").val();
+            var oldClassId = $("#oldClassId").val();
+            $.ajax({
+                url:"isUserExist",
+                type:"post",
+                data:{
+                    userName:username,
+//                    classid:classid,
+                    id:id,
+//                    oldClassId:oldClassId
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data >0){
+                        alert("已存在登录名为"+username+"的用户");
+                        $("input[type='submit']").attr("disabled",true);
+                    }else{
+                        $("input[type='submit']").attr("disabled",false);
+                    }
+                }
+            })
+        }*/
+
     </script>
 </head>
 <body>
@@ -54,7 +81,9 @@
                         </div>
                         <div class="box-content">
                             <form action="upduser" method="post">
-                                <input type="hidden" name="id" value="${userinfo.id}">
+                                <input type="hidden" name="id" id="id" value="${userinfo.id}">
+                                <input type="hidden" name="page" value="${page}">
+                                <input hidden id="oldClassId" value="${userinfo.classid}"/>
                                 <input type="hidden" name="type" value="0">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
@@ -70,11 +99,11 @@
                                             <label class="control-label" for="site">所属厂区:</label>
                                             <select class="form-control" name="siteareaid" id="site" onchange="changesite()">
                                                 <c:forEach items="${siteareainfos}" var="sites">
-                                                    <option value="${sites.id}">${sites.customid}</option>
+                                                    <option ${classinfo.siteareaid eq sites.id ? 'selected' : ''} value="${sites.id}">${sites.customid}</option>
                                                 </c:forEach>
                                             </select>
                                             <label class="control-label">班组:</label>
-                                            <select name="classid" class="form-control" id="classid">
+                                            <select name="classid" class="form-control" id="classid" onchange="">
                                                 <c:forEach items="${classinfos}" var="c" >
                                                     <option ${userinfo.classid eq c.id ? 'selected' : ''} value="${c.id}">${c.customid}</option>
                                                 </c:forEach>

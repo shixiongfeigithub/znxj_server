@@ -71,8 +71,10 @@ public class DateRecordServiceImpl implements DateRecordService{
     }
 
     @Override
-    public List<Daterecordinfo> selectByExample() {
+    public List<Daterecordinfo> selectByExample(Integer recodeType) {
+        if(recodeType==null)recodeType=0;
         DaterecordinfoExample example=new DaterecordinfoExample();
+        example.createCriteria().andRecordtypeEqualTo(recodeType);
         return daterecordinfoMapper.selectByExample(example);
     }
 
@@ -93,4 +95,22 @@ public class DateRecordServiceImpl implements DateRecordService{
     public int countData2(HashMap<String, Object> map) {
         return daterecordinfoMapper.countData2(map);
     }
+
+    /**
+     * 判断该类型名称是否存在
+     * @param dateName
+     * @param id
+     * @return
+     */
+    @Override
+    public int isNameExist(String dateName, Integer id) {
+        DaterecordinfoExample daterecordinfoExample = new DaterecordinfoExample();
+        DaterecordinfoExample.Criteria criteria = daterecordinfoExample.createCriteria();
+        if(id != null){
+            criteria.andIdNotEqualTo(id);
+        }
+        criteria.andNameEqualTo(dateName);
+        return daterecordinfoMapper.countByExample(daterecordinfoExample);
+    }
+
 }

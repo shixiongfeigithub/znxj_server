@@ -49,13 +49,12 @@
             }
         }
         function showtask(){
-            window.location="showallclass?page=1";
+            window.location="showallclass?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -93,7 +92,7 @@
                                    <tr>
                                        <td>
                                            <shiro:hasPermission name="upd:class">
-                                                <a href="selectbyclassid?id=${c.id}"> <i class="glyphicon glyphicon-edit red "></i></a>
+                                                <a href="selectbyclassid?id=${c.id}&page=${pageBean.currentPage}"> <i class="glyphicon glyphicon-edit red "></i></a>
                                            </shiro:hasPermission>
                                            <shiro:hasPermission name="del:class">
                                                 <a href="javascript:void(0)" onclick="countuser(${c.id},'${c.customid}')"><i class="glyphicon glyphicon-trash"></i></a>

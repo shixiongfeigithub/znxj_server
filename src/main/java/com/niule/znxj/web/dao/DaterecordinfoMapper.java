@@ -1,13 +1,10 @@
 package com.niule.znxj.web.dao;
 
-import com.niule.znxj.web.model.Areainfo;
 import com.niule.znxj.web.model.Daterecordinfo;
 import com.niule.znxj.web.model.DaterecordinfoExample;
 
 import java.util.HashMap;
 import java.util.List;
-
-import com.niule.znxj.web.model.Positioninfo;
 import org.apache.ibatis.annotations.Param;
 
 public interface DaterecordinfoMapper {
@@ -36,7 +33,6 @@ public interface DaterecordinfoMapper {
     public List<Daterecordinfo> findByPageData(int page, int pagesize);
     public int countData();
 
-    public List<Daterecordinfo> findByPageData2(HashMap<String,Object> map);
-    public int countData2(HashMap<String,Object> map);
-
+    public List<Daterecordinfo> findByPageData2(HashMap<String, Object> map);
+    public int countData2(HashMap<String, Object> map);
 }

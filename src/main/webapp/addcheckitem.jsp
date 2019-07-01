@@ -9,24 +9,84 @@
         var op = $("#pwd2 option:selected");
         var state=$("#pwd2").val();
         if(op.val()==1){
-            $("#type")[0].style.visibility="hidden";
-            $("#type2")[0].style.visibility="hidden";
+            $("#type")[0].style.display="none";
+            $("#type2")[0].style.display="none";
         }else if(op.val()==2){
-            $("#type")[0].style.visibility="hidden";
-            $("#type2")[0].style.visibility="visible";
+            $("#type")[0].style.display="none";
+            $("#type2")[0].style.display="block";
+        }else if(op.val()==3){
+            $("#type")[0].style.display="none";
+            $("#type2")[0].style.display="block";
         }
     })
     function change(){
         var op = $("#pwd2 option:selected");
         var state=$("#pwd2").val();
         if(op.val()==1){
-            $("#type")[0].style.visibility="hidden";
-            $("#type2")[0].style.visibility="hidden";
+            $("#type")[0].style.display="none";
+            $("#type2")[0].style.display="none";
+
         }else if(op.val()==2){
-            $("#type")[0].style.visibility="hidden";
-            $("#type2")[0].style.visibility="visible";
+            $("#type")[0].style.display="none";
+            $("#type2")[0].style.display="block";
+            $("#type2").find('label').text('记录类型：');
+            $.ajax({
+                url:"queryRecordByType",
+                type:"post",
+                data:{
+                    recordType:1
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data!=null){
+                        var dynamicStateItem =  document.getElementById("jilutype");
+                        dynamicStateItem.innerHTML = "";
+                        for(var i=0;i<data.length;i++){
+                            var item = document.createElement("option");
+                            item.innerHTML = data[i].name+"&nbsp;&nbsp;("+data[i].unitname+")";
+                            item.value = data[i].id;
+                            dynamicStateItem.appendChild(item);
+                        }
+                        return true;
+                    }else{
+                        alert("没有数据。");
+                        return false;
+                    }
+                }
+            });
+
+        }
+        else if(op.val()!=1){
+            $("#type")[0].style.display="none";
+            $("#type2")[0].style.display="block";
+            $("#type2").find('label').text('枚举类型：');
+            $.ajax({
+                url:"queryRecordByType",
+                type:"post",
+                data:{
+                    recordType:2
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data!=null){
+                        var dynamicStateItem =  document.getElementById("jilutype");
+                        dynamicStateItem.innerHTML = "";
+                        for(var i=0;i<data.length;i++){
+                            var item = document.createElement("option");
+                            item.innerHTML = data[i].name+"&nbsp;&nbsp;("+data[i].state+")";
+                            item.value = data[i].id;
+                            dynamicStateItem.appendChild(item);
+                        }
+                        return true;
+                    }else{
+                        alert("没有数据。");
+                        return false;
+                    }
+                }
+            });
         }
     }
+
 </script>
 </head>
 <body>
@@ -72,6 +132,7 @@
                                            <select id="pwd2" name="type" onchange="change()">
                                                <option value="1">状态项</option>
                                                <option value="2">记录项</option>
+                                               <option value="3">枚举项</option>
                                            </select>
                                         </td>
                                     </tr>
@@ -81,11 +142,29 @@
                                             <select id="jilutype" name="recordid">
                                                 <option value="" selected>请选择</option>
                                                 <c:forEach items="${daterecordinfos}" var="daterecord">
-                                                    <option value="${daterecord.id}">${daterecord.name}&nbsp;${daterecord.unitname}</option>
+                                                    <%--<c:if test="${daterecord.unitname != null}">--%>
+                                                        <%--<option value="${daterecord.id}">${daterecord.name}(${daterecord.unitname})</option>--%>
+                                                    <%--</c:if>--%>
+                                                    <%--<c:if test="${daterecord.state != null}">--%>
+                                                        <%--<option value="${daterecord.id}">${daterecord.name}(${daterecord.state})</option>--%>
+                                                    <%--</c:if>--%>
+                                                    <option value="${daterecord.id}">${daterecord.name}(${daterecord.unitname})</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
+
                                     </tr>
+                                    <%--<tr>--%>
+                                    <%--<td class="form-inline" id="type3">--%>
+                                        <%--<label class="control-label" for="dynamicStateType">枚举类型:</label>--%>
+                                        <%--<select id="dynamicStateType" name="recordid">--%>
+                                            <%--<option value="" selected>请选择</option>--%>
+                                            <%--&lt;%&ndash;<c:forEach items="${daterecordinfos}" var="daterecord">&ndash;%&gt;--%>
+                                            <%--&lt;%&ndash;<option value="${daterecord.id}">${daterecord.name}&nbsp;${daterecord.unitname}</option>&ndash;%&gt;--%>
+                                            <%--&lt;%&ndash;</c:forEach>&ndash;%&gt;--%>
+                                        <%--</select>--%>
+                                    <%--</td>--%>
+                                    <%--</tr>--%>
                                     <tr id="type">
                                         <td>
                                             <span>范围:</span>

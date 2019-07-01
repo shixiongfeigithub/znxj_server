@@ -14,7 +14,7 @@ $(document).ready( function () {
 	oTest.fnTest( 
 		"Sorting Asc by default class applied",
 		null,
-		function () { return $('#example thead th:eq(0)').hasClass("sorting_asc"); }
+		function () { return $('#example thead th:eq(0)').hasClass("sorting_desc"); }
 	);
 	
 	oTest.fnTest(
@@ -26,7 +26,7 @@ $(document).ready( function () {
 	oTest.fnTest( 
 		"Sorting class removed from first column",
 		null,
-		function () { return $('#example thead th:eq(0)').hasClass("sorting_asc") != true; }
+		function () { return $('#example thead th:eq(0)').hasClass("sorting_desc") != true; }
 	);
 	
 	oTest.fnTest( 

@@ -1,5 +1,6 @@
 package com.niule.znxj.web.dao;
 
+import com.niule.znxj.web.model.Areainfo;
 import com.niule.znxj.web.model.Checkiteminfo;
 import com.niule.znxj.web.model.CheckiteminfoExample;
 
@@ -33,10 +34,12 @@ public interface CheckiteminfoMapper {
     public List<Checkiteminfo> findByPageCheck(int page, int pagesize);
     public int countCheck();
 
-    public List<Checkiteminfo> findByPageCheck2(HashMap<String,Object> map);
-    public int countCheck2(HashMap<String,Object> map);
+    public List<Checkiteminfo> findByPageCheck2(HashMap<String, Object> map);
+    public int countCheck2(HashMap<String, Object> map);
 
     Checkiteminfo queryByRecord(int record);
 
-    List<Checkiteminfo> getcheckinfo(HashMap<String,Object> map);
+    List<Checkiteminfo> getcheckinfo(HashMap<String, Object> map);
+
+    List<Areainfo> queryAllChickitem(Long siteId);
 }

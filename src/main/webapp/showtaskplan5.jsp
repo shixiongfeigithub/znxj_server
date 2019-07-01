@@ -319,7 +319,7 @@
                                     <th style="width: 12.5%">巡检项</th>
                                     <th style="width: 12.5%">巡检项类型</th>
                                     <th style="width: 12.5%">执行时间</th>
-                                    <th style="width: 12.5%">数值</th>
+                                    <th style="width: 12.5%">报告值</th>
                                     <th style="width: 12.5%">数据名称</th>
                                     <th style="width: 12.5%">单位</th>
                                 </tr>

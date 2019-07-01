@@ -32,6 +32,7 @@ public class ClassinfoServiceImpl implements ClassinfoService{
         return classinfoMapper.selectByExample(example);
     }
 
+
     @Override
     public List<Classinfo> queryclassbysiteid(Long siteid) {
         ClassinfoExample example=new ClassinfoExample();
@@ -84,5 +85,25 @@ public class ClassinfoServiceImpl implements ClassinfoService{
         ClassinfoExample classinfoExample=new ClassinfoExample();
         classinfoExample.createCriteria().andDirectoridEqualTo(directorid);
         return classinfoMapper.selectByExample(classinfoExample);
+    }
+
+    /**
+     * 判断该厂区下是否存在该班组
+     * @param customName 班组名
+     * @param siteareaid 厂区
+     * @param id
+     * @return
+     */
+    @Override
+    public int isClassIdExist(String customName, Long siteareaid, Long id) {
+        ClassinfoExample classinfoExample = new ClassinfoExample();
+        ClassinfoExample.Criteria criteria = classinfoExample.createCriteria();
+
+        if(id != null){
+            criteria.andIdNotEqualTo(id);
+        }
+        criteria.andCustomidEqualTo(customName).andSiteareaidEqualTo(siteareaid);
+
+        return classinfoMapper.countByExample(classinfoExample);
     }
 }

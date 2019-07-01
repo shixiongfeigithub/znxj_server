@@ -11,19 +11,6 @@
 <body>
 <%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
 <!-- topbar ends -->
-<script type="text/javascript">
-function validateForm(){
-    var pwd=$("#pwd").val();
-    //固定电话
-    var reg=/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/;
-    if(!reg.test(pwd)){
-        alert("密码必须包含字母、数字和特殊符号");
-        return false;
-    }else {
-        return true;
-    }
-}
-</script>
 <div class="ch-container">
     <div class="row">
 
@@ -38,8 +25,9 @@ function validateForm(){
                             </h2>
                         </div>
                         <div class="box-content">
-                            <form action="updateadmin" method="post" onsubmit="return validateForm()" >
+                            <form action="updateadmin" method="post">
                                 <input type="hidden" name="id" value="${ad.id}">
+                                <input type="hidden" name="page" value="${page}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">
@@ -67,7 +55,7 @@ function validateForm(){
                                         </td>
                                         <td class="form-inline">
                                             <label class="control-label" for="pwd">登录密码:</label>
-                                            <input type="password" class="form-control" style="width: 300px;" id="pwd" name="password" value="${ad.password}">
+                                            <input type="text" class="form-control" style="width: 300px;" id="pwd" name="password" value="${ad.password}">
                                         </td>
                                     </tr>
                                     <tr>

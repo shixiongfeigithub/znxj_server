@@ -59,6 +59,31 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="form-inline" >
+                                            <label class="control-label" for="sendexception">
+                                                <input name="sendexception" value="${editsendemail.sendexception}" hidden/>
+                                                <input type="checkbox" id="sendexception"  style="width: 15px;height: 15px;" >是否巡检异常推送</label>
+                                        </td>
+                                    </tr>
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            var sendException = $("input[name='sendexception']").val();
+                                            if(sendException == "1"){
+                                                $("#sendexception").prop("checked",true);
+                                            }else{
+                                                $("#sendexception").prop("checked",false);
+                                            }
+
+                                            $("#sendexception").click(function () {
+                                                if($("#sendexception").is(":checked")){
+                                                    $("input[name='sendexception']").attr("value","1");
+                                                }else{
+                                                    $("input[name='sendexception']").attr("value","0");
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    <tr>
                                         <td><h4>选择发送人:<input type="checkbox" name="role" id="role" onclick="selectallrole(this,'selectedpersion')" style="width: 16px;height: 16px;"> 全选/全不选</h4><br/>
                                             <c:forEach items="${contactinfos}" var="cont" varStatus="status">
                                                 <c:choose>
@@ -95,6 +120,18 @@
                                                 <option ${editsendemail.state eq 0 ?"selected":""} value="0">激活</option>
                                                 <option ${editsendemail.state eq 1 ?"selected":""} value="1">暂停</option>
                                             </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="smtpAddress">SMTP_ADDRESS：</label>
+                                            <input type="text" name="smtpAddress" value="${editsendemail.smtpAddress}" class="form-control" id="smtpAddress" placeholder="如：smtp.exmail.qq.com">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="smtpPort">SMTP_PORT：</label>
+                                            <input type="text" name="smtpPort" value="${editsendemail.smtpPort}" class="form-control" id="smtpPort" placeholder="如：465">
                                         </td>
                                     </tr>
                                     <tr>

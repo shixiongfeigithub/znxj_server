@@ -246,7 +246,7 @@
                     <div>
                         <ul id="myTab" class="nav nav-tabs">
                             <li >
-                                <a href="reportlist?page=1&type=0&tablestate=0" >任务情况列表</a>
+                                <a href="toreportlist?type=0" >任务情况列表</a>
                             </li>
                             <li class="active"><a href="taskfinalline.jsp"data-toggle="tab" style="background: #35A7E7;">任务情况报表</a></li>
                         </ul>

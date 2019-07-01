@@ -376,6 +376,7 @@
     <if test="customid!=''">
       and t.customid like #{customid}
     </if>
+    order by t.id desc
 
   </select>
   <select id="countNfc2" resultType="int">

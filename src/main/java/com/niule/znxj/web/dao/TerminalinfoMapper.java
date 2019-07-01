@@ -34,6 +34,6 @@ public interface TerminalinfoMapper {
     public List<Terminalinfo> findByPageTerminal(int page, int pagesize);
     public int countTerminal();
 
-    public List<Terminalinfo> findByPageTerminal2(HashMap<String,Object> map);
-    public int countTerminal2(HashMap<String,Object> map);
+    public List<Terminalinfo> findByPageTerminal2(HashMap<String, Object> map);
+    public int countTerminal2(HashMap<String, Object> map);
 }

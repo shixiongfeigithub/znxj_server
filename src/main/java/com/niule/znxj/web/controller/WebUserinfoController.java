@@ -8,6 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -160,31 +161,35 @@ public class WebUserinfoController {
         }else
             return 0;
     }
-    @RequestMapping("/querybyid")
+    @RequestMapping("/querybyUserId")
     @RequiresPermissions("upd:user")
-    public String querybyid(Long id,Model m){
+    public String querybyUserId(Long id,Model m,int page){
         Userinfo userinfo=userinfoService.selectByPrimaryKey(id);
+        userinfo.setClassid(userinfo.getGroup().getId());
+        userinfo.setPositionid(userinfo.getPos().getId());
         List<Classinfo> classinfos=classinfoMapper.queryCustomid();
         List<Positioninfo> positioninfos=positioninfoService.selectByExample();
         List<Terminalinfo> terminalinfos=terminalService.selectByexample();
         List<Siteareainfo> siteareainfos=siteService.queryAllSite();
-
+        Classinfo classinfo = classinfoMapper.selectByPrimaryKey(userinfo.getClassid());
         m.addAttribute("userinfo",userinfo);
+        m.addAttribute("classinfo",classinfo);
         m.addAttribute("classinfos",classinfos);
         m.addAttribute("positioninfos",positioninfos);
         m.addAttribute("terminalinfos",terminalinfos);
         m.addAttribute("siteareainfos",siteareainfos);
+        m.addAttribute("page",page);
         return "updateuser";
     }
     @RequestMapping("/upduser")
-    public String upduser(Userinfo userinfo,HttpSession session){
+    public String upduser(Userinfo userinfo,HttpSession session,int page){
        int updresult=userinfoService.updateByPrimaryKeySelective(userinfo);
         String name="修改用户"+userinfo.getRealname()+"的信息";
         Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
         String username=logadmininfo.getUsername();
         int addlogres=operateLogService.insertSelective(username,name);
         if(addlogres>0&&updresult>0){
-            return "redirect:showallusers?page=1";
+            return "redirect:showallusers?page="+page;
         }else
             return "taskfinalline";
 
@@ -197,4 +202,22 @@ public class WebUserinfoController {
         return "showuserdetail";
     }
 
+    /*@RequestMapping("isUserExist")
+    @ResponseBody
+    public int isUserExist(String userName,Long classid,Long id,Long oldClassId){
+        int count  = userinfoService.isUserExist(userName,classid,id,oldClassId);
+        if(count > 0 ){
+            return 1;
+        }
+        return 0;
+    }*/
+    @RequestMapping("isUserExist")
+    @ResponseBody
+    public int isUserExist(String userName,Long id){
+        int count  = userinfoService.isUserExist(userName,id);
+        if(count > 0 ){
+            return 1;
+        }
+        return 0;
+    }
 }

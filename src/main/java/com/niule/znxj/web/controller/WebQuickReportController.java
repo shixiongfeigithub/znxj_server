@@ -46,7 +46,7 @@ public class WebQuickReportController {
         HashMap<String,Object> map=new HashMap<>();
         map.put("page",page);
         map.put("size",size);
-        map.put("reportcode",reportcode==null?"":"%"+reportcode+"%");
+        map.put("reportcode",reportcode==null||reportcode.isEmpty()?"":"%"+reportcode+"%");
         map.put("time",uploadtime);
         map.put("siteid",admininfo.getSiteid());
         PageInfo<Quickreport> info=new PageInfo<>(quickReportService.showQuickreport2(map));

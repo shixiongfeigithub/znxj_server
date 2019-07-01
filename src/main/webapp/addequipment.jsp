@@ -25,6 +25,20 @@
                     }
                 })
             })
+
+
+            $("input[type='submit']").click(function () {
+                var siteName = $("#siteid").val();
+                if(siteName == null || siteName == undefined || siteName == ''){
+                    alert("您还没有选择厂区哟！！！");
+                    $("input[type='submit']").attr("disabled",true);
+                    $("#area1").empty();
+                }else{
+                    $("input[type='submit']").attr("disabled",false);
+                }
+            });
+
+
         })
         function shownfc(){
             $.ajax({
@@ -42,30 +56,40 @@
         }
         function sitechange(){
             var siteid = $("#siteid option:selected")[0].value;
-            $.ajax({
-                url:"queryareabysiteid",
-                type:"post",
-                data:{
-                    siteid:siteid,
-                },
-                dataType:"json",
-                success:function(data){
-                    if(data!=null){
-                        var areaselect =  document.getElementById("area1");
-                        areaselect.innerHTML = "";
-                        for(var i=0;i<data.length;i++){
-                            var areaop = document.createElement("option");
-                            areaop.innerHTML = data[i].customid;
-                            areaop.value = data[i].id;
-                            areaselect.appendChild(areaop);
+            var siteName = $("#siteid").val();
+            if(siteName == null || siteName == undefined || siteName == ''){
+                alert("您还没有选择厂区哟！！！");
+                $("input[type='submit']").attr("disabled",true);
+                $("#area1").empty();
+            }else{
+                $("input[type='submit']").attr("disabled",false);
+                $.ajax({
+                    url:"queryareabysiteid",
+                    type:"post",
+                    data:{
+                        siteid:siteid,
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data!=null){
+                            var areaselect =  document.getElementById("area1");
+                            areaselect.innerHTML = "";
+                            for(var i=0;i<data.length;i++){
+                                var areaop = document.createElement("option");
+                                areaop.innerHTML = data[i].customid;
+                                areaop.value = data[i].id;
+                                areaselect.appendChild(areaop);
+                            }
+                            return true;
+                        }else{
+                            alert("该厂区暂时没有区域");
+                            return false;
                         }
-                        return true;
-                    }else{
-                        alert("该厂区暂时没有区域");
-                        return false;
                     }
-                }
-            });
+                });
+            }
+
+
         }
     </script>
 </head>
@@ -141,13 +165,14 @@
                                         <td class="form-inline">
                                             <label class="control-label" for="siteid">厂区:</label>
                                             <select class="form-control" id="siteid" name="siteid" onchange="sitechange()">
+                                                <option selected="selected" value="" >--请选择厂区--</option>
                                                 <c:forEach items="${siteareainfos}" var="site">
                                                     <option value="${site.id}">${site.customid}</option>
                                                 </c:forEach>
-                                            </select>
+                                            </select> &nbsp;&nbsp;&nbsp;
                                             <label class="control-label" for="area1">选择区域:</label>
-                                            <select  id="area1" name="areaid">
-                                                <option selected="selected" value="" class="form-control" ></option>
+                                            <select  id="area1" name="areaid" required class="form-control" >
+                                                <option selected="selected" value="" >--请选择区域--</option>
                                                 <c:forEach items="${areainfos}" var="area">
                                                     <option value="${area.id}">${area.customid}</option>
                                                 </c:forEach>

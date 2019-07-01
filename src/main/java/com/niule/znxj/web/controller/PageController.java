@@ -1,10 +1,13 @@
 package com.niule.znxj.web.controller;
 
-import com.niule.znxj.core.entity.JSONResult;
-import com.niule.znxj.core.entity.Result;
+import com.niule.znxj.web.model.Systemsettinginfo;
+import com.niule.znxj.web.service.SystemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 视图控制器,返回jsp视图给前端
@@ -15,12 +18,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/page")
 public class PageController {
+    @Resource
+    private SystemService systemService;
 
     /**
      * 登录页
      */
     @RequestMapping("/login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+        List<Systemsettinginfo> systems=systemService.selectByExample();
+        for(Systemsettinginfo systemsettinginfo : systems){
+            if (systemsettinginfo.getKeyname().equals("SYSTEMVERSION"))
+                request.getSession().setAttribute(systemsettinginfo.getKeyname(), systemsettinginfo.getValue());
+        }
         return "login";
     }
 

@@ -30,25 +30,26 @@
                             <li>
                                 <a href="showsystem?type=2">一般性设置</a>
                             </li>
-                            <li class="active"><a href="showsystem?type=3">邮件服务器设置</a></li>
+                            <%--<li><a href="showsystem?type=3">邮件服务器设置</a></li>--%>
                             <li><a href="showsystem?type=4">图片|视频|音频服务器设置</a></li>
+                            <li  class="active"><a href="showsystem?type=3">报告波动值设置</a></li>
                             <li><shiro:hasPermission name="item:data"><a href="showdaterecord?page=1">可读数据管理</a></shiro:hasPermission></li>
                             <li><shiro:hasPermission name="item:apk"><a href="showappversion?page=1">Android APK更新</a></shiro:hasPermission></li>
                             <li><shiro:hasPermission name="item:warntype"><a href="showwarntype?page=1">隐患类型和终止原因设置</a></shiro:hasPermission></li>
+                            <li><a href="showReportSetting">显示单次任务报告设置</a></li>
+                            <li><a href="showDoubleReportSetting">显示任务报告汇总设置</a></li>
                         </ul>
                         <div id="myTabContent" class="tab-content">
                             <div class="tab-pane fade in active" id="email">
                                 <div style="margin-bottom: 20px;margin-left: 25px;">
-                                    <h3>邮件服务器设置</h3><hr>
+                                    <h3>报告波动值设置</h3><hr>
                                     <form action="updsystem" method="post" id="form">
                                         <input type="hidden" name="type" value="${type}">
                                         <table class="table table-striped table-bordered bootstrap-datatable datatable responsive dataTable">
                                             <tr>
-                                                <td colspan="2">邮件服务器:<input type="text" value="${EMAIL}" name="EMAIL"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>邮件账号:<input type="text" value="${EMAILNUM}" name="EMAILNUM"></td>
-                                                <td>登陆密码:<input type="text" value="${EMAILPWD}" name="EMAILPWD"></td>
+                                                <td class="form-inline"><label class="control-label" for="num">报告波动值：</label>
+                                                    <input type="text" class="form-control" style="width: 300px;" id="num"value="${FLUCTUATE}" name="FLUCTUATE">
+                                                </td>
                                             </tr>
                                         </table>
                                     </form>

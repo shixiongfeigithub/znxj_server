@@ -30,10 +30,11 @@ public interface ClassinfoMapper {
 
     int updateByPrimaryKey(Classinfo record);
    /* List<Classinfo> findByPageClass(int page, int pagesize,List ids);*/
-    List<Classinfo> findByPageClass(HashMap<String,Object> map);
-    int countClass(HashMap<String,Object> map);
-    List<Classinfo>siteclass(HashMap<String,Object> map);
+    List<Classinfo> findByPageClass(HashMap<String, Object> map);
+    int countClass(HashMap<String, Object> map);
+    List<Classinfo>siteclass(HashMap<String, Object> map);
     List<Classinfo> queryCustomid();
 
     List<Classinfo> queryusername(int uid);
+
 }

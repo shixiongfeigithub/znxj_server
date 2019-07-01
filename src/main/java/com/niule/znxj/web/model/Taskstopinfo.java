@@ -16,8 +16,16 @@ public class Taskstopinfo {
     private String classname;
 
     private String directorname;
+    private String stoptime2;
 
-    /*private Tasktempinfo tem;*/
+    public String getStoptime2() {
+        return stoptime2;
+    }
+
+    public void setStoptime2(String stoptime2) {
+        this.stoptime2 = stoptime2;
+    }
+/*private Tasktempinfo tem;*/
 
     /*public Tasktempinfo getTem() {
         return tem;

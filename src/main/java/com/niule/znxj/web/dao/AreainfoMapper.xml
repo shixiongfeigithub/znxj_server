@@ -117,6 +117,7 @@
         #{siteid}
       </foreach>
     </if>
+    order by a.id desc
      limit #{page},#{size}
   </select>
   <select id="countArea" resultType="int" parameterType="map">
@@ -144,6 +145,7 @@
         #{siteid}
       </foreach>
     </if>
+    order by a.id desc
     limit #{page},#{size}
   </select>
   <select id="countArea2" resultType="int" parameterType="int">

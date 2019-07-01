@@ -30,7 +30,7 @@
         }
         function showtask(){
             var tasktype=$("#tasktype").val();
-            window.location="showtaskplan?page=1&type="+tasktype;
+            window.location="showtaskplan?page="+$("#page").val()+"&type="+tasktype;
         }
         function refer(){
             location.reload();
@@ -38,8 +38,7 @@
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -55,7 +54,7 @@
                             <%--<li><a href="showstoptask?page=1&state=3&type=${type}">终止任务</a></li>--%>
                             <li>
                                 <shiro:hasPermission name="item:taskreport">
-                                    <a href="showallreport1?page=1&tasktype=${type}">任务报告</a>
+                                    <a href="toshowreport?page=1&tasktype=${type}">任务报告</a>
                                 </shiro:hasPermission>
                             </li>
                             <c:if test="${type==2}">
@@ -104,7 +103,7 @@
                                                 </shiro:hasPermission>
                                             </c:if>
                                             <c:if test="${type==2}">
-                                                <shiro:hasPermission name="add:hsetask">
+                                                <shiro:hasPermission name="add:errortask">
                                                     <a href="toaddtaskplan?type=${type}" style="margin-left:250px;">
                                                         <input type="button" class="btn btn-primary" value="新任务"></a>
                                                 </shiro:hasPermission>
@@ -137,7 +136,7 @@
                                                 <td>
                                                     <c:if test="${type==0}">
                                                         <shiro:hasPermission name="upd:usualtask">
-                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}">
+                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}&page=${pageBean.currentPage}">
                                                                 <i class="glyphicon glyphicon-edit red "></i>
                                                             </a>
                                                         </shiro:hasPermission>
@@ -149,7 +148,7 @@
                                                     </c:if>
                                                     <c:if test="${type==1}">
                                                         <shiro:hasPermission name="update:plantask">
-                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}">
+                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}&page=${pageBean.currentPage}">
                                                                 <i class="glyphicon glyphicon-edit red "></i>
                                                             </a>
                                                         </shiro:hasPermission>
@@ -161,7 +160,7 @@
                                                     </c:if>
                                                     <c:if test="${type==2}">
                                                         <shiro:hasPermission name="update:hsetask">
-                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}">
+                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}&page=${pageBean.currentPage}">
                                                                 <i class="glyphicon glyphicon-edit red "></i>
                                                             </a>
                                                         </shiro:hasPermission>
@@ -173,7 +172,7 @@
                                                     </c:if>
                                                     <c:if test="${type==3}">
                                                         <shiro:hasPermission name="update:videotask">
-                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}">
+                                                            <a href="querybytaskid?id=${task.id}&type=${task.type}&page=${pageBean.currentPage}">
                                                                 <i class="glyphicon glyphicon-edit red "></i>
                                                             </a>
                                                         </shiro:hasPermission>

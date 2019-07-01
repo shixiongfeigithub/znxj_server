@@ -14,8 +14,6 @@
 
     <result column="siteid" property="siteid" jdbcType="INTEGER" />
     <result column="customid" property="site.customid" jdbcType="VARCHAR" />
-    <result column="failnums" property="failnums" jdbcType="INTEGER" />
-    <result column="freezetime" property="freezetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -84,7 +82,9 @@
       distinct
     </if>
     a.id,a.username,a.password,a.state,a.createuser,a.createdate,a.expirydate,a.roleid,r.rolename,s.customid
-    from admininfo a left join roles r on a.roleid=r.roleid left join siteareainfo s on s.id=a.siteid
+    from admininfo a
+    left join roles r on a.roleid=r.roleid
+    left join siteareainfo s on s.id=a.siteid
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -259,13 +259,7 @@
       <if test="roleid != null" >
         roleid = #{roleid,jdbcType=INTEGER},
       </if>
-      <if test="siteid != null" >
         siteid = #{siteid,jdbcType=INTEGER},
-      </if>
-      <if test="failnums != null" >
-        failnums = #{failnums,jdbcType=INTEGER},
-      </if>
-      freezetime = #{freezetime,jdbcType=TIMESTAMP},
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -289,5 +283,8 @@
   </select>
   <select id="admincount" resultType="int" parameterType="int">
     select count(id) from admininfo where roleid=#{0}
+  </select>
+  <select id="queryUserIsExistPower" parameterType="string" resultMap="BaseResultMap">
+    select * from admininfo where username=#{0} and password=#{1}
   </select>
 </mapper>

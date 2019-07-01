@@ -373,6 +373,136 @@ public class DaterecordinfoExample {
             addCriterion("defaultvalue not between", value1, value2, "defaultvalue");
             return (Criteria) this;
         }
+
+        public Criteria andRecordtypeIsNull() {
+            addCriterion("recordType is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeIsNotNull() {
+            addCriterion("recordType is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeEqualTo(Integer value) {
+            addCriterion("recordType =", value, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeNotEqualTo(Integer value) {
+            addCriterion("recordType <>", value, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeGreaterThan(Integer value) {
+            addCriterion("recordType >", value, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("recordType >=", value, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeLessThan(Integer value) {
+            addCriterion("recordType <", value, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeLessThanOrEqualTo(Integer value) {
+            addCriterion("recordType <=", value, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeIn(List<Integer> values) {
+            addCriterion("recordType in", values, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeNotIn(List<Integer> values) {
+            addCriterion("recordType not in", values, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeBetween(Integer value1, Integer value2) {
+            addCriterion("recordType between", value1, value2, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordtypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("recordType not between", value1, value2, "recordtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIsNull() {
+            addCriterion("state is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIsNotNull() {
+            addCriterion("state is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateEqualTo(String value) {
+            addCriterion("state =", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotEqualTo(String value) {
+            addCriterion("state <>", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateGreaterThan(String value) {
+            addCriterion("state >", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateGreaterThanOrEqualTo(String value) {
+            addCriterion("state >=", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateLessThan(String value) {
+            addCriterion("state <", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateLessThanOrEqualTo(String value) {
+            addCriterion("state <=", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateLike(String value) {
+            addCriterion("state like", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotLike(String value) {
+            addCriterion("state not like", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIn(List<String> values) {
+            addCriterion("state in", values, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotIn(List<String> values) {
+            addCriterion("state not in", values, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateBetween(String value1, String value2) {
+            addCriterion("state between", value1, value2, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotBetween(String value1, String value2) {
+            addCriterion("state not between", value1, value2, "state");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

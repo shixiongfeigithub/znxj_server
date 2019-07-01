@@ -694,7 +694,7 @@
 
 
 <div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in" style="z-index: 0">
-    <div class="modal-dialog" style="z-index: 9999">
+    <div class="modal-dialog" style="z-index: 9999;width:800px">
         <div class="modal-content" style="overflow: auto;">
             <div id="arealist">
                 <div class="modal-header">

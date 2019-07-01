@@ -17,7 +17,7 @@ $(document).ready( function () {
 	oTest.fnWaitTest( 
 		"Sorting Asc by default class applied",
 		null,
-		function () { return $('#example thead th:eq(0)').hasClass("sorting_asc"); }
+		function () { return $('#example thead th:eq(0)').hasClass("sorting_desc"); }
 	);
 	
 	oTest.fnWaitTest(
@@ -29,13 +29,13 @@ $(document).ready( function () {
 	oTest.fnWaitTest( 
 		"Sorting class removed from first column",
 		null,
-		function () { return $('#example thead th:eq(0)').hasClass("sorting_asc") != true; }
+		function () { return $('#example thead th:eq(0)').hasClass("sorting_desc") != true; }
 	);
 	
 	oTest.fnWaitTest( 
 		"Sorting asc class applied to second column",
 		null,
-		function () { return $('#example thead th:eq(1)').hasClass("sorting_asc"); }
+		function () { return $('#example thead th:eq(1)').hasClass("sorting_desc"); }
 	);
 	
 	oTest.fnWaitTest(
@@ -47,7 +47,7 @@ $(document).ready( function () {
 	oTest.fnWaitTest( 
 		"Sorting acs class removed from second column",
 		null,
-		function () { return $('#example thead th:eq(1)').hasClass("sorting_asc") != true; }
+		function () { return $('#example thead th:eq(1)').hasClass("sorting_desc") != true; }
 	);
 	
 	oTest.fnWaitTest( 

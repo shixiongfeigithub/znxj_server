@@ -21,13 +21,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -48,7 +51,9 @@ public class WebKnowledgeCtrl {
     @Resource
     private OperateLogService operateLogService;
 
-    @RequestMapping("showknowledge")
+    private String ip = Resources.ApplicationResources.getString("ip");
+
+    @RequestMapping(" showknowledge")
     @RequiresPermissions("item:knowledge")
     public  String showknowledge(int page,Model m,String title,HttpServletRequest request){
         if(page<=0){page=1;}
@@ -577,6 +582,42 @@ public class WebKnowledgeCtrl {
         Knowledge knowledge=konwledgeService.selectByPrimaryKey(id);
 
         m.addAttribute("knowledge",knowledge);
+        m.addAttribute("ip",ip.toString());
         return "knowledge/showknowledgedetail";
     }
+
+    /*@RequestMapping("/downLoadFile")
+    public String downLoadFile(String filename,HttpServletRequest request,HttpServletResponse response) throws IOException{//获取文件下载路径
+        //处理get请求过来的中文乱码
+        filename=new String(filename.getBytes("ISO-8859-1"), "UTF-8");
+        //设置下载中文乱码
+        response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode(filename, "UTF-8"));
+
+
+        //创建输入流
+
+//        String savePath;
+//        savePath = Resources.ApplicationResources.getString("file.path");
+        String path="http://localhost:8089/"+filename;
+        File f=new File(path);
+        InputStream is=new FileInputStream(f);
+        //创建响应输出流
+        OutputStream os=response.getOutputStream();
+
+        //边读边写
+        byte[] bt=new byte[1024];//存放每次读取的内容，1024代表每次最多读取1KB
+        int size=0;
+        while( (size=is.read(bt))!=-1 ){//读
+            //写
+            os.write(bt, 0, size);//读多少写多少
+            bt=new byte[1024];//避免出现重复数据
+        }
+
+        //关闭流
+        os.close();
+        is.close();
+        return null;
+
+
+    }*/
 }

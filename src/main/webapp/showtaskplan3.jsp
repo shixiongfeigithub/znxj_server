@@ -220,7 +220,8 @@
                                     <input type="hidden" id="createdate${status.index}"
                                            value="<sdf:formatDate value='${report.temp.executetime}' pattern='yyyy-MM-dd HH:mm'></sdf:formatDate>">
                                     <tr>
-                                        <td><a href="querytaskreportdetail?id=${report.id}&type=${report.tasktype}&type2=1">${report.taskcode}</a></td>
+                                        <%--<td><a href="querytaskreportdetail?id=${report.id}&type=${report.tasktype}&type2=1">${report.taskcode}</a></td>--%>
+                                        <td><a href="querytaskreportdetail?id=${report.id}&type=${report.tasktype}&page=1&type2=2">${report.taskcode}</a></td>
                                         <td>
                                             <c:if test="${report.tasktype ==0}">日常巡检 </c:if>
                                             <c:if test="${report.tasktype ==1}">计划巡检 </c:if>

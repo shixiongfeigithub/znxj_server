@@ -35,7 +35,6 @@ import java.util.*;
  * Created by MrD on 2017/3/22.
  */
 @Controller
-@RequestMapping("/app")
 public class AppController {
     @Resource
     private CommonService commonService;
@@ -71,14 +70,14 @@ public class AppController {
     /**
      * 获取任务列表
      * @param type 任务类型  0日常巡检 1计划巡检 2隐患排查 3视频巡检 4临时任务
-     * @param state 执行状态 0 未执行 1 进行中 2 已完成 3
+     * @param state 执行状态 0 未执行 1 进行中 2 已完成 3 已终止
      * @param classId 所属班组id
      * @param userId 用户id
      */
     @RequestMapping(value = "/task/getTasks",method = RequestMethod.GET)
     @ResponseBody
-    public Result getTasks(Long userId,Long classId, Integer type ,Integer state){
-        return commonService.getTasks(userId,classId,type,state);
+        public Result getTasks(Long userId,Long classId, Integer type ,Integer state ,Integer page,Integer size){
+        return commonService.getTasks(userId,classId,type,state,page,size);
     }
 
     /**
@@ -115,6 +114,15 @@ public class AppController {
     }
 
     /**
+     * 点击开始执行任务 生成执行中子任务
+     */
+    @RequestMapping(value = "/task/doTask",method = RequestMethod.POST)
+    @ResponseBody
+    public Result doTask(Long userId ,Long taskId){
+        return commonService.doTask(userId,taskId);
+    }
+
+    /**
      * 设置终止任务
      * @param userId 用户id
      * @param tempId 任务id
@@ -134,14 +142,19 @@ public class AppController {
         commonService.generate();
         return new JSONResult<>();
     }
+
+
     /**
      * 上传任务报告
      */
     @RequestMapping(value = "/task/uploadReport",method = RequestMethod.POST)
     @ResponseBody
-    public Result uploadReport(@RequestBody Taskreportinfo taskreportinfo){
+    public Result uploadReport(@RequestBody Taskreportinfo taskreportinfo)throws Exception{
+        System.out.printf("areainouttime:"+taskreportinfo.getAreainouttime());
         return commonService.uploadReport(taskreportinfo);
     }
+
+
     /**
      * 上传任务报告-即拍即传
      */
@@ -411,8 +424,6 @@ public class AppController {
         commonService.generate();
         return new JSONResult<>();
     }
-
-
 
 }
 

@@ -14,7 +14,7 @@
 <div style="text-align: center;vertical-align: middle">
     <img alt="Charisma Logo" src="/charisma/img/znxj.png" class="hidden-xs" style="width: 150px;margin-top: 50px"/>
     <div style="font-size: 3ch;margin-top: 50px">智能巡检平台管理系统</div>
-    <div style="font-size: 4ch;margin-top: 15px">v 2.2</div>
+    <div style="font-size: 4ch;margin-top: 15px">v ${SYSTEMVERSION}</div>
 </div>
 </body>
 </html>

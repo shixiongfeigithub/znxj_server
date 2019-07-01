@@ -20,7 +20,6 @@ public class WebWarnType {
     private WarnTypeService warnTypeService;
 
     @RequestMapping("showwarntype")
-    @RequiresPermissions("item:warntype")
     public String showwarntype(int page, Model m){
         PageInfo<Warningtasktype> info=new PageInfo<>(warnTypeService.showAllWarnType(page,15));
 
@@ -45,16 +44,17 @@ public class WebWarnType {
     }
 
     @RequestMapping("querywarnbyid")
-    public  String qerywarnbyid(int id,Model m){
+    public  String qerywarnbyid(int id,Model m,int page){
         Warningtasktype warningtasktype= warnTypeService.selectByPrimaryKey(id);
         m.addAttribute("warntype",warningtasktype);
+        m.addAttribute("page",page);
         return "warn/updwarn";
     }
     @RequestMapping("updwarntype")
-    public String updwarntype(Warningtasktype warningtasktype){
+    public String updwarntype(Warningtasktype warningtasktype,int page){
         int updwarnresult=warnTypeService.updateByPrimaryKeySelective(warningtasktype);
         if(updwarnresult>0){
-            return "redirect:/showwarntype?page=1";
+            return "redirect:/showwarntype?page="+page;
         }else
             return "taskfinalline";
     }

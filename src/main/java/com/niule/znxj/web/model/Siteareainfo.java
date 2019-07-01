@@ -3,11 +3,11 @@ package com.niule.znxj.web.model;
 public class Siteareainfo {
     private Long id;
 
-    private String customid;
+    private String customid; //厂区名称
 
-    private String desccontent;
+    private String desccontent; //厂区描述
 
-    private String remark;
+    private String remark; //厂区备注
 
     public Long getId() {
         return id;

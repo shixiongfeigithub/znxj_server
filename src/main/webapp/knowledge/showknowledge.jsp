@@ -36,6 +36,7 @@
             var files=new Array();
             for(var i=0; i<parseInt(errorlen); i++){
                 files=JSON.parse($("#allattachs"+i).val());
+
                 $("#attach"+i).text(files.length);
                /* var istr = allattach.length;
                 var str1 = allattach.replace(",","");

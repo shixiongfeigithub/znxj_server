@@ -7,7 +7,6 @@
         function addappversion(){
             var form = document.getElementById("form");
             var formData = new FormData(form);
-            $('#myModal').modal('show');
             $.ajax({
                 url:"/addappversion",
                 type:"post",
@@ -17,18 +16,13 @@
                 contentType: false,
                 success: function(data) {
                     if(data>0){
-                        $('#myModal').modal('hide');
                         alert("添加成功");
                         showappversion();
                     }else{
-                        $('#myModal').modal('hide');
                         alert("添加失败");
                         return false;
                     }
                 },
-                complete: function(XMLHttpRequest) {
-                    $('#myModal').modal('hide');
-                }
             });
 
         }

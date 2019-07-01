@@ -40,13 +40,27 @@ public class CheckInfoServiceImpl implements CheckInfoService{
     @Override
     public List<Checkiteminfo> selectByExample() {
         CheckiteminfoExample example=new CheckiteminfoExample();
-        return checkiteminfoMapper.selectByExample(example);
+        List<Checkiteminfo> list=checkiteminfoMapper.selectByExample(example);
+        Checkiteminfo info=list.get(list.size()-1);
+        System.out.printf(info.toString());
+        return list;
     }
     @Override
     public int selectByExample2(Long recordid) {
         CheckiteminfoExample example=new CheckiteminfoExample();
         example.createCriteria().andRecordidEqualTo(recordid);
         return checkiteminfoMapper.selectByRecordid(example).size();
+    }
+
+    @Override
+    public int selectByExample3(Long id) {
+        //判断巡检项是否被使用了， 如果有就不允许删除   2018年7月16日16:46:40
+        CheckitemTaskExample example = new CheckitemTaskExample();
+        example.createCriteria().andCheckitemidEqualTo(id);
+        List<CheckitemTask> checkitemTasks = checkitemTaskMapper.selectByExample(example);
+        if (checkitemTasks != null && checkitemTasks.size() > 0)
+            return checkitemTasks.size();
+        return 0;
     }
 
     @Override
@@ -119,30 +133,40 @@ public class CheckInfoServiceImpl implements CheckInfoService{
 
     @Override
     public int deleteByPrimaryKey(Long id) {
-        CheckitemTaskExample example =  new CheckitemTaskExample();
+        //删除所有有无的巡检项
+//        CheckitemTaskExample example =  new CheckitemTaskExample();
+//        example.createCriteria().andCheckitemidEqualTo(id);
+//        List<CheckitemTask> checkitemTasks = checkitemTaskMapper.selectByExample(example);
+//        for(CheckitemTask checkitemTask : checkitemTasks){
+//            //找出关联任务
+//            Taskplaninfo task =taskplaninfoMapper.selectByPrimaryKey(checkitemTask.getTaskid());
+//            TaskContent content = JsonUtil.toObject(task.getTaskcontent(), TaskContent.class);
+//            //遍历任务区域
+//            for (TaskArea area : content.getAreas()) {
+//                List<TaskCheckItem> taskCheckItems = new ArrayList<>();
+//                for (int i = 0; i < area.getEquipments().size(); i++) {
+//                    for (int j = 0; j < area.getEquipments().get(i).getCheckItems().size(); j++) {
+//                        if (!area.getEquipments().get(i).getCheckItems().get(j).getItem().getId().equals(id)) {
+//                            taskCheckItems.add(area.getEquipments().get(i).getCheckItems().get(j));
+//                        }
+//                    }
+//                    area.getEquipments().get(i).setCheckItems(taskCheckItems);
+//                }
+//            }
+//            task.setTaskcontent(JsonUtil.toJSON(content));
+//            taskplaninfoMapper.updateByPrimaryKeySelective(task);
+//        }
+//        //删除 equiment_task 表中相关信息
+//        checkitemTaskMapper.deleteByExample(example);
+
+
+
+        //判断巡检项是否被使用了， 如果有就不允许删除   2018年7月16日16:46:40
+        CheckitemTaskExample example = new CheckitemTaskExample();
         example.createCriteria().andCheckitemidEqualTo(id);
         List<CheckitemTask> checkitemTasks = checkitemTaskMapper.selectByExample(example);
-        for(CheckitemTask checkitemTask : checkitemTasks){
-            //找出关联任务
-            Taskplaninfo task =taskplaninfoMapper.selectByPrimaryKey(checkitemTask.getTaskid());
-            TaskContent content = JsonUtil.toObject(task.getTaskcontent(), TaskContent.class);
-            //遍历任务区域
-            for (TaskArea area : content.getAreas()) {
-                List<TaskCheckItem> taskCheckItems = new ArrayList<>();
-                for (int i = 0; i < area.getEquipments().size(); i++) {
-                    for (int j = 0; j < area.getEquipments().get(i).getCheckItems().size(); j++) {
-                        if (!area.getEquipments().get(i).getCheckItems().get(j).getItem().getId().equals(id)) {
-                            taskCheckItems.add(area.getEquipments().get(i).getCheckItems().get(j));
-                        }
-                    }
-                    area.getEquipments().get(i).setCheckItems(taskCheckItems);
-                }
-            }
-            task.setTaskcontent(JsonUtil.toJSON(content));
-            taskplaninfoMapper.updateByPrimaryKeySelective(task);
-        }
-        //删除 equiment_task 表中相关信息
-        checkitemTaskMapper.deleteByExample(example);
+        if (checkitemTasks != null && checkitemTasks.size() > 0)
+            return 2;
         return checkiteminfoMapper.deleteByPrimaryKey(id);
     }
 

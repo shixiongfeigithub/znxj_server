@@ -46,7 +46,7 @@ public class WebPositioninfoController {
             page=1;
         }
         page = PageBean.countCurrentPage(page);
-        List<Positioninfo> positioninfos = positioninfoService.findByPagePos(page,5);
+        List<Positioninfo> positioninfos = positioninfoService.findByPagePos(page,15);
         int rows = positioninfoService.countPos();
         long totalpage = PageBean.counTotalPage(5, rows);
 
@@ -107,21 +107,22 @@ public class WebPositioninfoController {
 
     @RequestMapping("/selectbyposid")
     @RequiresPermissions("upd:pos")
-    public String selectbyposid(Long id,Model m){
+    public String selectbyposid(Long id,Model m,int page){
         Positioninfo positioninfo=positioninfoService.selectByPrimaryKey(id);
+        m.addAttribute("page",page);
         if(positioninfo!=null)
             m.addAttribute("positioninfo",positioninfo);
         return "updatepos";
     }
     @RequestMapping("/updpos")
-    public String updpos(Positioninfo positioninfo,HttpSession session){
+    public String updpos(Positioninfo positioninfo,HttpSession session,int page){
         int updresult=positioninfoService.updateByPrimaryKey(positioninfo);
         String name="修改了岗位"+positioninfo.getPositionname()+"的信息";
         Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
         String username=logadmininfo.getUsername();
         int addlogres=operateLogService.insertSelective(username,name);
         if(updresult>0&&addlogres>0){
-            return "redirect:showposition?page=1";
+            return "redirect:showposition?page="+page;
         }
         return "updatepos";
     }

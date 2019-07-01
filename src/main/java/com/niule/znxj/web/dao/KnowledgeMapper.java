@@ -18,7 +18,7 @@ public interface KnowledgeMapper {
 
     int insertSelective(Knowledge record);
 
-    List<Knowledge> selectByExample(HashMap<String,Object> map);
+    List<Knowledge> selectByExample(HashMap<String, Object> map);
 
     Knowledge selectByPrimaryKey(Integer id);
 

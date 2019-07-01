@@ -32,6 +32,34 @@
                 }
             });
         }
+
+        $(function () {
+            $("#username").blur(function(){
+                var username = $("#username").val();
+                var classid = $("#classid").val();
+                $.ajax({
+                    url:"isUserExist",
+                    type:"post",
+                    data:{
+                        userName:username,
+//                        classid:classid,
+                        id:null,
+//                        oldClassId:null
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data >0){
+                            alert("已存在登录名为"+username+"的用户");
+                            $("input[type='submit']").attr("disabled",true);
+                        }else{
+                            $("input[type='submit']").attr("disabled",false);
+                        }
+                    }
+                })
+            });
+        });
+
+
     </script>
 </head>
 <body>

@@ -401,6 +401,7 @@
         #{classid}
       </foreach>
     </if>
+    order by u.id desc
      limit  #{page},#{pagesize}
   </select>
   <select id="countUser" resultType="int" parameterType="map">
@@ -437,6 +438,7 @@
     <if test="userstate!=''">
       and u.userstate=#{userstate}
     </if>
+    order by u.id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countUser2" resultType="int">

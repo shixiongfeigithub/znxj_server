@@ -4,7 +4,9 @@ import com.niule.znxj.web.model.Taskstopinfo;
 import com.niule.znxj.web.model.TaskstopinfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface TaskstopinfoMapper {
     int countByExample(TaskstopinfoExample example);
 
@@ -28,7 +30,7 @@ public interface TaskstopinfoMapper {
 
     int updateByPrimaryKey(Taskstopinfo record);
 
-    List<Taskstopinfo> getStopTask(int state,int type);
+    List<Taskstopinfo> getStopTask(int state, int type);
 
     Taskstopinfo queryStopByTempid(int tempid);
 }

@@ -5,14 +5,12 @@
 <head>
     <title>智能巡检系统</title>
     <%@ include file="/WEB-INF/pages/common/header.jsp"%>
-
+    <style>
+        .selected{background: #35A7E7;
+            color: white;}
+    </style>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<style>
-    .selected{background: #35A7E7;
-        color: white;}
-</style>
 <script src="${pageContext.request.contextPath}/js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
     function sitechange(){
@@ -109,9 +107,20 @@
             return false;
         }
        changeradio();
+        if($("#weeklytime").val() == "[]" || $("#listtime").val() == "[]"){
+            $("#radio1").attr("checked","checked");
+            $("#radio0").attr("checked",false);
+            $("#timeSystem").hide();
+        }else{
+            $("#radio0").attr("checked","checked");
+            $("#radio1").attr("checked",false);
+            $("#timeSystem").show();
+        }
+
         $("#first").css('display','none');
         $("#second").css('display','none');
         $("#third").css('display','block');
+
     }
     function changeradio(){
         $("#name4").empty();
@@ -323,7 +332,7 @@
                         for (var i = 0; i < data.length; i++) {
                             dty=data[i].type;
                             html += "<tr><td><input type='checkbox' name='allcheckitem'></td>" +
-                                    "<td>" + data[i].customid + "</td><td>"+(data[i].type==1?'状态项':'记录项')+"</td><td>" + data[i].itemname +
+                                    "<td>" + data[i].customid + "</td><td width='30%'>"+(data[i].type==1?'状态项':data[i].type==2?'记录项':'枚举项')+"</td><td>" + data[i].itemname +
                                     "</td><td style='display: none;'>" + data[i].id + "</td></tr>";
                         }
                     }
@@ -522,6 +531,12 @@
             if(data.recordid==null){
                 datarecord.append("<p>类型："+(data.type==1?'状态项':'记录项')+"</p>");
             }else{
+                if(data.daterecord.recordtype==2){
+                    datarecord.append("<p>类型：枚举项</p>" +
+                        "<p>数据名称："+data.daterecord.name+"</p>" +
+                        "<p>枚举项："+data.daterecord.state+"</p>");
+                    return;
+                }
                 var min;var max;var upper;var lower;
                 if(data.normalmin==null){
                     min="";
@@ -673,9 +688,11 @@
         $("#listtime").val(JSON.stringify(timeslist));
         /*验证任务执行时间*/
         var listtime=$("#listtime").val();
-        if(listtime=="[]"){
-            alert("执行时间不能为空哟");
-            return false;
+        if($("#timeSystem").is(":visible")){
+            if(listtime=="[]"){
+                alert("执行时间不能为空哟");
+                return false;
+            }
         }
         /*将周循环转换成jsonarray格式*/
         var chk_value=new Array();
@@ -684,10 +701,16 @@
         })
         $("#weeklytime").val(JSON.stringify(chk_value));
         var weeklytime=$("#weeklytime").val();
-        if(weeklytime=="[]"){
-            alert("请选择周循环");
-            return false;
+        if($("#timeSystem").is(":visible")){
+            if(weeklytime=="[]"){
+                alert("请选择周循环");
+                return false;
+            }
+        }else{
+            $("#listtime").val("[]");
+            $("#weeklytime").val("[]");
         }
+//        debugger;
         var val1=$("#zhixing option:selected").val();
         var val2=$("#nfc option:selected").val();
         if(val1==0&&val2==0){
@@ -718,7 +741,7 @@
     }
     function showtask(){
         var tasktype=$("#tasktype").val();
-        window.location="showtaskplan?page=1&type="+tasktype;
+        window.location="showtaskplan?page="+$("#page").val()+"&type="+tasktype;
     }
     function areadataupper(){
         var selectindex = $("#areaul").find(".selected").attr("areaindex");
@@ -801,7 +824,6 @@
     }
 </script>
 
-<!-- topbar ends -->
 <div class="ch-container">
     <div class="row">
 
@@ -822,6 +844,7 @@
                         <div class="box-content">
                             <form action="" method="post" id="tasksubmit">
                                 <input type="hidden" name="id" value="${taskplaninfo.id}">
+                                <input type="hidden" name="page" id="page" value="${page}">
                                 <div id="first">
                                     <input type="hidden" name="type" value="${type}" id="tasktype">
                                     <input type="hidden" name="state" value="1">
@@ -932,14 +955,14 @@
                                             <td class="form-inline">
                                                 <label class="control-label" for="nfc">扫描nfc:</label>
                                                 <select name="nfc" class="form-control"  id="nfc">
-                                                    <c:if test="${taskplaninfo.issequentially==0}"><option value="0" selected >否</option><option value="1">是</option></c:if>
-                                                    <c:if test="${taskplaninfo.issequentially ==2}"><option value="1" selected>是</option><option value="1">否</option></c:if>
-                                                    <c:if test="${taskplaninfo.issequentially ==1}"><option value="0" selected>否</option><option value="0">是</option></c:if>
-                                                    <c:if test="${taskplaninfo.issequentially ==3}"><option value="1" selected>是</option><option value="0">否</option></c:if>
-                                                   <%-- <option ${taskplaninfo.issequentially eq 0 ? 'selected' : ''} value="0">否</option>
-                                                    <option ${taskplaninfo.issequentially eq 2 ? 'selected' : ''} value="1">是</option>
-                                                    <option ${taskplaninfo.issequentially eq 1 ? 'selected' : ''} value="0">否</option>
-                                                    <option ${taskplaninfo.issequentially eq 3 ? 'selected' : ''} value="1">是</option>--%>
+                                                    <%--<c:if test="${taskplaninfo.issequentially==0}"><option value="0" selected >否</option><option value="1">是</option></c:if>--%>
+                                                    <%--<c:if test="${taskplaninfo.issequentially ==2}"><option value="1" selected>是</option><option value="1">否</option></c:if>--%>
+                                                    <%--<c:if test="${taskplaninfo.issequentially ==1}"><option value="0" selected>否</option><option value="0">是</option></c:if>--%>
+                                                    <%--<c:if test="${taskplaninfo.issequentially ==3}"><option value="1" selected>是</option><option value="0">否</option></c:if>--%>
+                                                    <option ${taskplaninfo.issequentially eq 0 || taskplaninfo.issequentially eq 1? 'selected' : ''} value="0">否</option>
+                                                    <option ${taskplaninfo.issequentially eq 2 || taskplaninfo.issequentially eq 3? 'selected' : ''} value="1">是</option>
+                                                    <%--<option ${taskplaninfo.issequentially eq 1 ? 'selected' : ''} value="0">否</option>--%>
+                                                    <%--<option ${taskplaninfo.issequentially eq 3 ? 'selected' : ''} value="1">是</option>--%>
                                                 </select>
                                             </td>
                                         </tr>
@@ -1022,46 +1045,52 @@
                                     </div>
                                 </div>
                                 <div id="third" style="display: none">
-                                    <div style="border: 1px solid gray;width: 800px;" id="checkedradio">
-                                        <input type="hidden"  id="listtime" name="implementtime" value='${taskplaninfo.implementtime}'>
-                                        <%--<div class="form-inline" >
-                                            <input id="radion1" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '1' ? 'checked':''} value="1" onclick="changeradio()" style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日单次执行<br/>
-                                            <label class="control-label" for="name2" style="margin-left: 25px;">执行时间:</label>
-                                            <input type="text" class="form-control" id="name2" placeholder="格式为：00:00 小时：分钟">
-
-                                        </div>--%>
-                                        <div class="form-inline"style="margin-top: 25px;margin-bottom: 25px;">
-                                           <%-- <input id="radion2" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '0' ? 'checked':''} value="0" onclick="changeradio()" style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日多次执行<br/>
-                                            <label class="control-label" for="name1"style="margin-left: 25px;" >起始时间：</label>
-                                            <input type="text" name="starttime" id="name1" disabled class="form-control" value="${taskplaninfo.starttime}" placeholder="格式为：00:00 小时：分钟">
-
-                                            <label class="control-label" for="name3">终止时间:</label>
-                                            <input type="text" id="name3" name="endtime" class="form-control"id="endtime" value="${taskplaninfo.endtime}" placeholder="格式为：00:00 小时：分钟"><br>
---%>
-
-                                            <div style="margin-left: 25px;font-size:15px;position:relative;float: left;margin-top: 60px;">执行列表：</div>
-                                            <div id="name4" style="position:relative;float: left;margin-top: 25px;width:350px;height:150px;border: 1px solid gray;overflow: auto"></div>
-
-                                            <div style="position:relative;float: left;margin-top: 40px;margin-left: 25px;">
-                                                <input type="button" id="addtimee" value="添加" class="btn btn-inverse btn-default btn-lg" onclick="addtime()"><br>
-                                                <input type="button" id="deltime" value="删除" class="btn btn-inverse btn-default btn-lg" style="margin-top:15px;" onclick="deltime1()">
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
+                                    <div style="margin-top: 20px;">
+                                        <label><input type="radio" value="0" id="radio0"  checked>循环执行设置</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label><input type="radio" value="1" id="radio1">无循环执行设置</label>
                                     </div>
-                                    <div style="margin-top:35px;margin-left: 15px;">
-                                        周循环：
-                                        <input type="checkbox" id="c1" name="week1" value="周一">周一
-                                        <input type="checkbox" id="c2" name="week1" value="周二">周二
-                                        <input type="checkbox" id="c3"name="week1" value="周三">周三
-                                        <input type="checkbox" id="c4" name="week1" value="周四">周四
-                                        <input type="checkbox" id="c5"name="week1" value="周五">周五
-                                        <input type="checkbox" id="c6"name="week1" value="周六">周六
-                                        <input type="checkbox" id="c7"name="week1" value="周日">周日
+                                    <div style="margin-top: 20px;" id="timeSystem">
+                                        <div style="border: 1px solid gray;width: 800px;" id="checkedradio">
+                                            <input type="hidden"  id="listtime" name="implementtime" value='${taskplaninfo.implementtime}'>
+                                            <%--<div class="form-inline" >
+                                                <input id="radion1" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '1' ? 'checked':''} value="1" onclick="changeradio()" style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日单次执行<br/>
+                                                <label class="control-label" for="name2" style="margin-left: 25px;">执行时间:</label>
+                                                <input type="text" class="form-control" id="name2" placeholder="格式为：00:00 小时：分钟">
 
-                                        <input type="hidden" name="weeklytime" value='${taskplaninfo.weeklytime}' id="weeklytime"><br>
+                                            </div>--%>
+                                            <div class="form-inline"style="margin-top: 25px;margin-bottom: 25px;">
+                                               <%-- <input id="radion2" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '0' ? 'checked':''} value="0" onclick="changeradio()" style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日多次执行<br/>
+                                                <label class="control-label" for="name1"style="margin-left: 25px;" >起始时间：</label>
+                                                <input type="text" name="starttime" id="name1" disabled class="form-control" value="${taskplaninfo.starttime}" placeholder="格式为：00:00 小时：分钟">
 
-                                        是否立即生效：<input type="radio" name="isfinal" value="0" checked>是<input type="radio" name="isfinal" value="1">否
+                                                <label class="control-label" for="name3">终止时间:</label>
+                                                <input type="text" id="name3" name="endtime" class="form-control"id="endtime" value="${taskplaninfo.endtime}" placeholder="格式为：00:00 小时：分钟"><br>
+        --%>
+
+                                                <div style="margin-left: 25px;font-size:15px;position:relative;float: left;margin-top: 60px;">执行列表：</div>
+                                                <div id="name4" style="position:relative;float: left;margin-top: 25px;width:350px;height:150px;border: 1px solid gray;overflow: auto"></div>
+
+                                                <div style="position:relative;float: left;margin-top: 40px;margin-left: 25px;">
+                                                    <input type="button" id="addtimee" value="添加" class="btn btn-inverse btn-default btn-lg" onclick="addtime()"><br>
+                                                    <input type="button" id="deltime" value="删除" class="btn btn-inverse btn-default btn-lg" style="margin-top:15px;" onclick="deltime1()">
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top:35px;margin-left: 15px;">
+                                            周循环：
+                                            <input type="checkbox" id="c1" name="week1" value="周一">周一
+                                            <input type="checkbox" id="c2" name="week1" value="周二">周二
+                                            <input type="checkbox" id="c3"name="week1" value="周三">周三
+                                            <input type="checkbox" id="c4" name="week1" value="周四">周四
+                                            <input type="checkbox" id="c5"name="week1" value="周五">周五
+                                            <input type="checkbox" id="c6"name="week1" value="周六">周六
+                                            <input type="checkbox" id="c7"name="week1" value="周日">周日
+
+                                            <input type="hidden" name="weeklytime" value='${taskplaninfo.weeklytime}' id="weeklytime"><br>
+
+                                            是否立即生效：<input type="radio" name="isfinal" value="0" checked>是<input type="radio" name="isfinal" value="1">否
+                                        </div>
                                     </div>
                                     <div style="margin-top: 25px;">
                                         <a href="#" style="margin-left: 35px;">
@@ -1083,74 +1112,99 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    $(function(){
+        $("#radio0").click(function () {
+            $("#radio0").attr("checked","checked");
+            $("#radio1").attr("checked",false);
+            $("#timeSystem").show();
+        });
+        $("#radio1").click(function () {
+            $("#radio1").attr("checked","checked");
+            $("#radio0").attr("checked",false);
+            $("#timeSystem").hide();
+        });
+//        });
+    });
+</script>
 
 <div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in" style="z-index: 0">
-    <div class="modal-dialog" style="z-index: 9999">
+    <div class="modal-dialog" style="z-index: 9999;width:800px">
         <div class="modal-content" style="overflow: auto;">
             <div id="arealist"  style="height:500px;overflow: auto;">
                 <div class="modal-header">
                     <button data-dismiss="modal" class="close" type="button">×</button>
                     <h3>区域列表</h3>
                 </div>
-                <div class="modal-body">
-                    <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable" id="area">
-                        <tr>
-                            <th><input type="checkbox" name="selectallarea" id="selectallarea" onclick="selectallarea(this,'allarea')"> 全选/全不选</th>
-                            <th>区域编号</th>
-                            <th>区域名称</th>
-                            <th>区域描述</th>
-                        </tr>
-                    </table>
-                </div>
                 <div class="modal-footer">
                     <input type="button" id="btn" value="添加" class="btn btn-primary" onclick="addarea()">
                     <a data-dismiss="modal" class="btn btn-default" href="#">取消</a>
                 </div>
+                <div class="modal-body">
+                    <div style="height:500px;width:100%;margin:5px 10px;overflow: scroll;overflow-x:hidden;">
+                        <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable" id="area">
+                            <tr>
+                                <th><input type="checkbox" name="selectallarea" id="selectallarea" onclick="selectallarea(this,'allarea')"> 全选/全不选</th>
+                                <th>区域编号</th>
+                                <th>区域名称</th>
+                                <th>区域描述</th>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
             <div id="equipmentlist"  style="height:700px;overflow: auto;">
                 <div class="modal-header">
                     <button data-dismiss="modal" class="close" type="button">×</button>
                     <h3>设备列表</h3>
                 </div>
-                <div class="modal-body">
-                    <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable" id="equipment">
-                        <tr>
-                            <th><input type="checkbox" name="allequip" id="selectsllequip" onclick="selectallarea(this,'allequip')">全选/全不选</th>
-                            <th>设备编号</th>
-                            <th>设备名称</th>
-                            <th>设备描述</th>
-                        </tr>
-                    </table>
-                </div>
                 <div class="modal-footer">
                     <input type="button" value="添加" class="btn btn-primary" onclick="addequip()">
                     <a data-dismiss="modal" class="btn btn-default" href="#">取消</a>
                 </div>
+                <div class="modal-body">
+                    <div style="height:500px;width:100%;margin:5px 10px;overflow: scroll;overflow-x:hidden;">
+                        <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable" id="equipment">
+                            <tr>
+                                <th><input type="checkbox" name="allequip" id="selectsllequip" onclick="selectallarea(this,'allequip')">全选/全不选</th>
+                                <th>设备编号</th>
+                                <th>设备名称</th>
+                                <th>设备描述</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
             </div>
             <div id="checklist"  style="height:700px;overflow: auto;">
                 <div class="modal-header">
                     <button data-dismiss="modal" class="close" type="button">×</button>
                     <h3>巡检项列表</h3>
                 </div>
-                <div class="modal-body">
-                    <table class="table table-bordered" id="check">
-                        <tr>
-                            <th><input type="checkbox" name="allcheckitem" id="selectallcheck" onclick="selectallarea(this,'allcheckitem')">全选/全不选</th>
-                            <th>编号</th>
-                            <th>类型</th>
-                            <th>名称</th>
-                         <%--   <th>最低值</th>
-                            <th>最高值</th>
-                            <th>上限警告值</th>
-                            <th>下限警告值</th>--%>
-                        </tr>
-                    </table>
-                </div>
                 <div class="modal-footer">
                     <input type="button" value="添加" class="btn btn-primary" onclick="addcheck()">
                     <a data-dismiss="modal" class="btn btn-default" href="#">取消</a>
                 </div>
+                <div class="modal-body">
+                    <div style="height:500px;width:100%;margin:5px 10px;overflow: scroll;overflow-x:hidden;">
+                        <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable" id="check">
+                            <tr>
+                                <th><input type="checkbox" name="allcheckitem" id="selectallcheck" onclick="selectallarea(this,'allcheckitem')">全选/全不选</th>
+                                <th>编号</th>
+                                <th>类型</th>
+                                <th>名称</th>
+                                <%--   <th>最低值</th>
+                                   <th>最高值</th>
+                                   <th>上限警告值</th>
+                                   <th>下限警告值</th>--%>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
             <div id="dotime">
                 <div class="modal-header">

@@ -1,4 +1,4 @@
-//package com.niule.znxj.core.common;
+package com.niule.znxj.core.common;//package com.niule.znxj.core.common;
 //
 //import com.niule.znxj.web.model.Tokeninfo;
 //import com.niule.znxj.web.service.TokenInfoService;

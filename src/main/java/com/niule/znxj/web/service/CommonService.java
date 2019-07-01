@@ -18,16 +18,19 @@ public interface CommonService {
     //获取登陆配置
     Result getLoginConfig();
     //获取任务列表
-    Result getTasks(Long userId ,Long classId, Integer type ,Integer state);
+    Result getTasks(Long userId, Long classId, Integer type, Integer state, Integer page, Integer size);
 
     //设置任务状态
-    Result setTaskState(Long userId, Long tempId ,Integer state,Integer operationstate,Integer stopstate);
+    Result setTaskState(Long userId, Long tempId, Integer state, Integer operationstate, Integer stopstate);
 
     void generate();
+
+    void doGenerate();
+
     void generateByTask(Taskplaninfo info);
 
 
-    Result uploadReport(Taskreportinfo taskreportinfo);
+    Result uploadReport(Taskreportinfo taskreportinfo)throws Exception;
 
     Result uploadQuickReport(Quickreport quickreport);
 
@@ -36,7 +39,7 @@ public interface CommonService {
     List<Warningtasktype> getWarningTypeOrLevels(int type);
 
     /*任务终止执行*/
-    Result taskStop(Long userId ,Long tempId , String reason ,String conten,String classname,String directornamet);
+    Result taskStop(Long userId, Long tempId, String reason, String conten, String classname, String directornamet);
 
     //查看任务的状态
     Result getTaskTempState(String taskcode);
@@ -48,7 +51,7 @@ public interface CommonService {
 
     Result getLastestAppVersion();
 
-    Result getTaskSimpleReport(String taskCode,Long taskid);
+    Result getTaskSimpleReport(String taskCode, Long taskid);
 
     /*获取知识库类别*/
     List<Knowledgetype> getKnowledgeType();
@@ -60,8 +63,11 @@ public interface CommonService {
     List<Tasktempinfo> selectByExample(Long taskid);
     //定时发送日报
     void senddayreport();
-
     void sendweekemail();
     void sendmonthemail();
+    void automaticExamine();
+
+    Result doTask(Long userId, Long taskId);
+
 }
 

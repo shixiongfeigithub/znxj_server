@@ -23,6 +23,7 @@ public class Checkiteminfo {
 
     private Daterecordinfo daterecord;
 
+
     public Daterecordinfo getDaterecord() {
         return daterecord;
     }

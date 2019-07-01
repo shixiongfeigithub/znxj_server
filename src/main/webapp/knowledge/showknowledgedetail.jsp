@@ -5,6 +5,7 @@
 <head>
     <title>智能巡检系统</title>
     <%@ include file="/WEB-INF/pages/common/header.jsp"%>
+
     <style>
         .fileinput-button {
             position: relative;
@@ -22,6 +23,13 @@
         }
         .selected{background: #35A7E7;
             color: white;}
+        a{
+            text-decoration:none;
+            color:black;
+        }
+        a:hover{
+            text-decoration: none;
+        }
     </style>
     <script type="text/javascript">
         function selectfile(obj){
@@ -30,10 +38,37 @@
             $(obj).addClass('selected');
             $(obj).prop("selected", true);
         }
+
+        // function downLoadFile(obj,i) {
+        //     var fileName = $('#fileName'+i).val();
+        //     alert(fileName);
+        //     $.ajax({
+        //         url: "/downLoadFile?filename=" + fileName,
+        //         type: "post",
+        //         datatype: "json",
+        //         success: function (data) {
+        //             if (data > 0) {
+        //                 alert("下载成功");
+        //                 // showtask();
+        //                 return;
+        //             } else {
+        //                 alert("下载失败");
+        //                 return false;
+        //             }
+        //         }
+        //     });
+        //
+        //
+        //     return;
+        //
+        // }
         $(function(){
+            <%--var  ipAddress = ${ip};--%>
             var attach=JSON.parse($("#attach").val());
             for(var i=0;i<attach.length;i++){
-                $("#file").append("<li class='list-group-item' onclick='selectfile(this)'>"+attach[i].substring(attach[i].lastIndexOf("/")+1)+"</li>");
+                $("#file").append("<a href='"+ "/report" +attach[i]+"' download=''>" +
+                    "<li class='list-group-item' onclick='selectfile(this)'>"+attach[i].substring(attach[i].lastIndexOf("_")+1)+"</li></a>");
+                // $("#file").append("<li class='list-group-item'><input hidden value='"+attach[i]+"' id='fileName"+i+"'/><span >"+attach[i].substring(attach[i].lastIndexOf("/")+1)+"</span>&nbsp;&nbsp;&nbsp;<input class='btn btn-primary' type='button' onclick='downLoadFile(this,"+i+");' value='下载'/></li>");
             }
         })
     </script>

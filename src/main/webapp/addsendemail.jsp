@@ -51,11 +51,29 @@
                                         <td class="form-inline"><label class="control-label" for="taskid">选择发送任务:</label>
                                             <select name="taskid" class="form-control" id="taskid">
                                                 <c:forEach items="${taskplaninfos}" var="task" varStatus="taskstatus">
-                                                <option value="${task.id}">${task.customid }</option>
+                                                    <option value="${task.id}">${task.customid }</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label">
+                                                <input type="checkbox" name="sendexception" id="sendexception" style="width: 15px;height: 15px;">是否巡检异常推送</label>
+                                        </td>
+                                    </tr>
+                                    
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            $("#sendexception").click(function () {
+                                                if($("#sendexception").is(":checked")){
+                                                    $("#sendexception").attr("value","1");
+                                                }else{
+                                                    $("#sendexception").attr("value","0");
+                                                }
+                                            });
+                                        });
+                                    </script>
                                     <tr>
                                         <td><h4>选择发送人:<input type="checkbox" name="role" id="role" onclick="selectallrole(this,'selectedpersion')" style="width: 16px;height: 16px;"> 全选/全不选</h4><br/>
                                             <c:forEach items="${contactinfos}" var="c" varStatus="status">

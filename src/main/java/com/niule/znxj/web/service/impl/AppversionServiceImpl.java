@@ -42,6 +42,7 @@ public class AppversionServiceImpl implements AppversionService{
     public List<Appversion> selectByExample(int page,int size) {
         PageHelper.startPage(page,size);
         AppversionExample example=new AppversionExample();
+        example.setOrderByClause("id desc");
         return appversionMapper.selectByExample(example);
     }
 }

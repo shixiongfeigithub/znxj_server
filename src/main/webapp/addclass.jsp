@@ -18,6 +18,31 @@
                 pickerPosition:"bottom-left",
                 minuteStep: 10
             });
+
+
+            //判断是否存在同名班组
+            $("#pwd4").change(function () {
+                var customid = $("#idc").val();
+                var siteareaid = $("#pwd4").val();
+                $.ajax({
+                    url:"isClassIdExist",
+                    type:"post",
+                    data:{
+                        customName:customid,
+                        siteareaid:siteareaid,
+                        id:null
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data >0){
+                            alert("该厂区下已存在班组名为"+customid+"的班组");
+                            $("input[type='submit']").attr("disabled",true);
+                        }else{
+                            $("input[type='submit']").attr("disabled",false);
+                        }
+                    }
+                })
+            });
         });
        /* $('.form_datetime').datetimepicker({
             format: 'yyyy-MM-dd hh:ii',
@@ -81,6 +106,19 @@
                                             </select>
                                         </td>
                                     </tr>
+                                    <%--<tr>--%>
+                                        <%--<td class="form-inline">--%>
+                                            <%--<label class="control-label" for="pwd3">复核责任人:</label><br>--%>
+                                                <%--<c:forEach items="${userinfos}" var="user" varStatus="status">--%>
+                                                     <%--<span style="display:inline-block;width: 155px;margin-left: 5px;margin-top: 20px;">--%>
+                                                         <%--<input type="checkbox" name="checkuserid" value="${user.id}" style="height: 15px">${user.realname}--%>
+                                                     <%--</span>--%>
+                                                    <%--<c:if test="${status.count%8==0}">--%>
+                                                        <%--<br>--%>
+                                                    <%--</c:if>--%>
+                                                <%--</c:forEach>--%>
+                                        <%--</td>--%>
+                                    <%--</tr>--%>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="pwd4">所属厂区:</label>

@@ -68,6 +68,18 @@
     }
     function third(){
         changeradio();
+        debugger;
+        if($("#weeklytime").val() == "[]" || $("#listtime").val() == "[]"){
+            $("#radio1").attr("checked","checked");
+            $("#radio0").attr("checked",false);
+            $("#timeSystem").hide();
+        }else{
+            $("#radio0").attr("checked","checked");
+            $("#radio1").attr("checked",false);
+            $("#timeSystem").show();
+        }
+        $("#radio0").attr("disabled","disabled");
+        $("#radio1").attr("disabled","disabled");
         $("#first").css('display','none');
         $("#second").css('display','none');
         $("#third").css('display','block');
@@ -658,47 +670,53 @@
                                     </div>
                                 </div>
                                 <div id="third" style="display: none">
-                                    <div style="border: 1px solid gray;width: 800px;" id="checkedradio">
-                                        <input type="hidden"  id="listtime" name="implementtime" value='${taskplaninfo.implementtime}'>
-                                        <%--<div class="form-inline" >
-                                            <input id="radion1" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '1' ? 'checked' : ''} value="1"  style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日单次执行<br/>
-
-                                            <label class="control-label" for="name2" style="margin-left: 25px;">执行时间:</label>
-                                            <input type="text" class="form-control" id="name2">
-
-                                        </div>--%>
-                                        <div class="form-inline"style="margin-top: 25px;margin-bottom: 25px;">
-
-                                            <%--<input id="radion2" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '0' ? 'checked' : ''} value="0"  style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日多次执行<br/>
-
-                                            <label class="control-label" for="name1"style="margin-left: 25px;" >起始时间：</label>
-                                            <input type="text" name="starttime" id="name1" disabled class="form-control" value="${taskplaninfo.starttime}" readonly>
-
-                                            <label class="control-label" for="name3">终止时间:</label>
-                                            <input type="text" id="name3" name="endtime" class="form-control"id="endtime" value="${taskplaninfo.endtime}" readonly><br>
---%>
-
-                                            <div style="margin-left: 25px;font-size:15px;position:relative;float: left;margin-top: 60px;">执行列表：</div>
-                                            <div id="name4" style="position:relative;float: left;margin-top: 25px;width:350px;height:150px;border: 1px solid gray;overflow: auto"></div>
-
-                                            <div style="position:relative;float: left;margin-top: 40px;margin-left: 25px;">
-                                                <input type="button" id="addtimee" value="添加" class="btn btn-inverse btn-default btn-lg"><br>
-                                                <input type="button" id="deltime" value="删除" class="btn btn-inverse btn-default btn-lg" style="margin-top:15px;">
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
+                                    <div style="margin-top: 20px;">
+                                        <label><input type="radio" value="0" id="radio0" checked>循环执行设置</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label><input type="radio" value="1" id="radio1">无循环执行设置</label>
                                     </div>
-                                    <div style="margin-top:35px;margin-left: 15px;">
-                                        周循环：
-                                        <input type="checkbox" id="c1" name="week1" value="周一"  disabled="disabled">周一
-                                        <input type="checkbox" id="c2" name="week1" value="周二"  disabled="disabled">周二
-                                        <input type="checkbox" id="c3"name="week1" value="周三"  disabled="disabled">周三
-                                        <input type="checkbox" id="c4" name="week1" value="周四"  disabled="disabled">周四
-                                        <input type="checkbox" id="c5"name="week1" value="周五"  disabled="disabled">周五
-                                        <input type="checkbox" id="c6"name="week1" value="周六"  disabled="disabled">周六
-                                        <input type="checkbox" id="c7"name="week1" value="周日"  disabled="disabled">周日
+                                    <div style="margin-top: 20px;" id="timeSystem">
+                                        <div style="border: 1px solid gray;width: 800px;" id="checkedradio">
+                                            <input type="hidden"  id="listtime" name="implementtime" value='${taskplaninfo.implementtime}'>
+                                            <%--<div class="form-inline" >
+                                                <input id="radion1" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '1' ? 'checked' : ''} value="1"  style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日单次执行<br/>
 
-                                        <input type="hidden" name="weeklytime" value='${taskplaninfo.weeklytime}' id="weeklytime">
+                                                <label class="control-label" for="name2" style="margin-left: 25px;">执行时间:</label>
+                                                <input type="text" class="form-control" id="name2">
+
+                                            </div>--%>
+                                            <div class="form-inline"style="margin-top: 25px;margin-bottom: 25px;">
+
+                                                <%--<input id="radion2" type="radio" name="issingletime" ${taskplaninfo.issingletime eq '0' ? 'checked' : ''} value="0"  style="margin-top:15px;margin-left: 15px;margin-bottom: 25px;">单日多次执行<br/>
+
+                                                <label class="control-label" for="name1"style="margin-left: 25px;" >起始时间：</label>
+                                                <input type="text" name="starttime" id="name1" disabled class="form-control" value="${taskplaninfo.starttime}" readonly>
+
+                                                <label class="control-label" for="name3">终止时间:</label>
+                                                <input type="text" id="name3" name="endtime" class="form-control"id="endtime" value="${taskplaninfo.endtime}" readonly><br>
+                --%>
+
+                                                <div style="margin-left: 25px;font-size:15px;position:relative;float: left;margin-top: 60px;">执行列表：</div>
+                                                <div id="name4" style="position:relative;float: left;margin-top: 25px;width:350px;height:150px;border: 1px solid gray;overflow: auto"></div>
+
+                                                <div style="position:relative;float: left;margin-top: 40px;margin-left: 25px;">
+                                                    <input type="button" id="addtimee" value="添加" class="btn btn-inverse btn-default btn-lg"><br>
+                                                    <input type="button" id="deltime" value="删除" class="btn btn-inverse btn-default btn-lg" style="margin-top:15px;">
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top:35px;margin-left: 15px;">
+                                            周循环：
+                                            <input type="checkbox" id="c1" name="week1" value="周一"  disabled="disabled">周一
+                                            <input type="checkbox" id="c2" name="week1" value="周二"  disabled="disabled">周二
+                                            <input type="checkbox" id="c3"name="week1" value="周三"  disabled="disabled">周三
+                                            <input type="checkbox" id="c4" name="week1" value="周四"  disabled="disabled">周四
+                                            <input type="checkbox" id="c5"name="week1" value="周五"  disabled="disabled">周五
+                                            <input type="checkbox" id="c6"name="week1" value="周六"  disabled="disabled">周六
+                                            <input type="checkbox" id="c7"name="week1" value="周日"  disabled="disabled">周日
+
+                                            <input type="hidden" name="weeklytime" value='${taskplaninfo.weeklytime}' id="weeklytime">
+                                        </div>
                                     </div>
                                     <div style="margin-top: 25px;">
                                         <a href="#" style="margin-left: 35px;">

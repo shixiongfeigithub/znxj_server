@@ -7,6 +7,19 @@
 
 
     <script type="text/javascript">
+
+        $(function () {
+            $("#pwd").change(function () {
+                var customid = $("#pwd").val();
+                if(customid == null || customid == undefined || customid == ''){
+                    alert("您还没有选择厂区哟！！！");
+                    $("input[type='submit']").attr("disabled",true);
+                }else{
+                    $("input[type='submit']").attr("disabled",false);
+                }
+                // alert(customid);
+            });
+        });
         function model(){
             $("#myModal").modal("show");
         }
@@ -73,7 +86,9 @@
                                         <td class="form-inline">
                                             <label class="control-label" for="pwd">厂区:</label>
                                            <select name="plant" id="pwd" required="required">
+                                               <option value="">--请选择--</option>
                                                <c:forEach items="${siteareainfos}" var="site">
+
                                                    <option value="${site.id}">${site.customid}</option>
                                                </c:forEach>
                                            </select>
@@ -130,7 +145,7 @@
     </div>
 </div>
 <div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in" style="z-index: 0">
-    <div class="modal-dialog" style="z-index: 9999">
+    <div class="modal-dialog" style="z-index: 9999;width:800px">
         <div class="modal-content">
             <form action="addnfcajax" method="post" id="form1">
                 <div class="modal-header">

@@ -9,6 +9,10 @@ public class Daterecordinfo {
 
     private String defaultvalue;
 
+    private Integer recordtype;
+
+    private String state;
+
     public Integer getId() {
         return id;
     }
@@ -39,5 +43,21 @@ public class Daterecordinfo {
 
     public void setDefaultvalue(String defaultvalue) {
         this.defaultvalue = defaultvalue == null ? null : defaultvalue.trim();
+    }
+
+    public Integer getRecordtype() {
+        return recordtype;
+    }
+
+    public void setRecordtype(Integer recordtype) {
+        this.recordtype = recordtype;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
     }
 }

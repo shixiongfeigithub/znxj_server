@@ -1,23 +1,44 @@
 package com.niule.znxj.web.model;
 
+import com.niule.znxj.core.util.json.JsonUtil;
+import com.niule.znxj.web.model.taskcontent.TaskContent;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 public class Areainfo {
     private Long id;
 
     private String customid;
 
-    private String longitude;
+    private String longitude; //经度
 
-    private String latitude;
+    private String latitude; //纬度
 
-    private Long plant;
+    private Long plant; //厂区id
 
-    private Long nfctag;
+    private Long nfctag; //nfc标签id
 
-    private String desccontent;
+    private String desccontent; //区域描述
 
-    private Double radiusnumber;
+    private Double radiusnumber; //覆盖半径
     private Siteareainfo site;
     private Nfcinfo nfc;
+
+    private Boolean isChecked;
+
+    public Boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(Boolean checked) {
+        isChecked = checked;
+    }
 
     public Siteareainfo getSite() {
         return site;
@@ -99,4 +120,6 @@ public class Areainfo {
     public void setRadiusnumber(Double radiusnumber) {
         this.radiusnumber = radiusnumber;
     }
+
+
 }

@@ -183,6 +183,7 @@
                 type: "post",
                 dataType: "json",
                 success: function (data) {
+                    debugger
                     checkitemdata = data;
                     var first = $("#check tr:first");
                     $("#check").empty();
@@ -393,12 +394,22 @@
         var selectminute=$("#minute").find("option:selected").text();
         $("#name4").append("<p onclick='selectp(this)'>"+selecthour+":"+selectminute+"</p>");
         $("#myModal").modal("hide");
+
+        //按照时间大小重新排序
+
+    }
+    function sortTime(){
+        var pTime = $("#name4 p:eq(0)").val();
+        alert(pTime);
     }
     function selectp(obj){
+        debugger;
         $(obj).siblings('p').removeClass('selected');  // 删除其他兄弟元素的样式
         $(obj).siblings('p').prop("selected", false);
         $(obj).addClass('selected');
         $(obj).prop("selected", true);
+        var pTime = $("#name4 p:eq(0)").val();
+        sortTime();
     }
     function deltime(){
         var $li = $("#name4").find("p:selected");
@@ -694,7 +705,7 @@
 
 
 <div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in" style="z-index: 0">
-    <div class="modal-dialog" style="z-index: 9999">
+    <div class="modal-dialog" style="z-index: 9999;width:800px">
         <div class="modal-content" style="overflow: auto;">
             <div id="arealist">
                 <div class="modal-header">

@@ -31,7 +31,7 @@ public interface SiteareainfoMapper {
     int updateByPrimaryKeySelective(Siteareainfo record);
 
     int updateByPrimaryKey(Siteareainfo record);
-    public List<Siteareainfo> findByPageSite(HashMap<String,Object> map);
+    public List<Siteareainfo> findByPageSite(HashMap<String, Object> map);
 //    public int countSite();
 
 }

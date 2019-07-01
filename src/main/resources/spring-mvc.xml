@@ -39,7 +39,7 @@
         <!--&lt;!&ndash; 如果不加默认到 使用classpath下的 ValidationMessages.properties &ndash;&gt;-->
         <!--<property name="validationMessageSource" ref="messageSource"/>-->
     <!--</bean>-->
-    <!--<bean id="tokenInfoService" class="com.niule.znxj.web.service.impl.TokenInfoServiceImpl" />-->
+    <bean id="commonService" class="com.niule.znxj.web.service.impl.CommonServiceImpl" />
     <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
     <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
         <!--<property name="basenames">-->

@@ -4,6 +4,7 @@
 <head>
     <title>智能巡检系统</title>
     <%@ include file="/WEB-INF/pages/common/header.jsp"%>
+
 </head>
 <body>
 <%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
@@ -24,6 +25,7 @@
                         <div class="box-content">
                             <form action="updarea" method="post" id="form2">
                                 <input type="hidden" name="id" value="${areainfo.id}">
+                                <input type="hidden" name="page" value="${page}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">

@@ -1,5 +1,8 @@
 package com.niule.znxj.web.model;
 
+import com.niule.znxj.core.util.json.JsonUtil;
+import com.niule.znxj.web.model.taskresponse.TaskTempRes;
+
 import java.util.List;
 
 /**
@@ -15,4 +18,6 @@ public class TaskReportRes{
     public void setRes(List<TaskReportContent> res) {
         this.res = res;
     }
+
+
 }

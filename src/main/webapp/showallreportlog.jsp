@@ -31,7 +31,7 @@
             }
         }
         function showtask(){
-            window.location="gettaskreportlog?page=1";
+            window.location="gettaskreportlog?page="+$("#page").val();
         }
         function getreportlog(id){
             $("#reportlog").empty();
@@ -57,8 +57,7 @@
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" value="${allreport.pageNum}" id="page">
 <div class="ch-container">
     <div class="row">
     <%--    <%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>

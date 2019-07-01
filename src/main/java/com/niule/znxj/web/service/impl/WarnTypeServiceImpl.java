@@ -21,6 +21,7 @@ public class WarnTypeServiceImpl implements WarnTypeService{
     public List<Warningtasktype> showAllWarnType(int page, int size) {
         PageHelper.startPage(page,size);
         WarningtasktypeExample warningtasktypeExample=new WarningtasktypeExample();
+        warningtasktypeExample.setOrderByClause("id desc");
         return warningtasktypeMapper.selectByExample(warningtasktypeExample);
     }
 

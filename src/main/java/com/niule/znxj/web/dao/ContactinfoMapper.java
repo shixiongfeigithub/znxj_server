@@ -33,6 +33,6 @@ public interface ContactinfoMapper {
     public List<Contactinfo> findByPageCon(int page, int pagesize);
     public int countCon();
 
-    public List<Contactinfo> findByPageCon2(HashMap<String,Object> map);
-    public int countCon2(HashMap<String,Object> map);
+    public List<Contactinfo> findByPageCon2(HashMap<String, Object> map);
+    public int countCon2(HashMap<String, Object> map);
 }

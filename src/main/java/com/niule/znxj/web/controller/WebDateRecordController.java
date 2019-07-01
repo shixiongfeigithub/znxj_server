@@ -48,7 +48,7 @@ public class WebDateRecordController {
         if(page<=0){
             page=1;
         }
-        int pagesieze=15;
+        int pagesieze=10;
         page = PageBean.countCurrentPage(page);
         List<Daterecordinfo> daterecordinfos =null;
         long totalpage=0;
@@ -72,9 +72,10 @@ public class WebDateRecordController {
         m.addAttribute("name",name);
         return "showdaterecord";
     }
-    @RequestMapping("addrecord")
+   /* @RequestMapping("addrecord")
     @RequiresPermissions("add:data")
     public String addrecord(Daterecordinfo daterecordinfo,HttpSession session){
+        daterecordinfo.setUnitname(null);
         int addresult=dateRecordService.insert(daterecordinfo);
         String name="新增了可读数据"+daterecordinfo.getName();
         Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
@@ -84,6 +85,40 @@ public class WebDateRecordController {
             return "redirect:showdaterecord?page=1";
         }
         return "adddaterecord";
+    }*/
+   @RequestMapping("addrecord")
+   @RequiresPermissions("add:data")
+   @ResponseBody
+   public int addrecord(Daterecordinfo daterecordinfo,HttpSession session){
+       if(daterecordinfo.getRecordtype() == 2){
+           daterecordinfo.setUnitname(null);
+       }
+       int addresult=dateRecordService.insert(daterecordinfo);
+       String name="新增了可读数据"+daterecordinfo.getName();
+       Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
+       String username=logadmininfo.getUsername();
+       int addlog=operateLogService.insertSelective(username,name);
+       if(addresult>0&&addlog>0){
+           return 1;
+       }
+       return 0;
+   }
+
+    @RequestMapping("isNameExist")
+    @ResponseBody
+    public String  isNameExist(String dateName,Integer id){
+        int count  = dateRecordService.isNameExist(dateName,id);
+        if(count > 0 ){
+            return  "1";
+        }
+        return "0";
+    }
+
+    @RequestMapping("queryRecordByType")
+    @ResponseBody
+    public List<Daterecordinfo> queryRecordByType(Integer recordType){
+        List<Daterecordinfo> daterecordinfos=dateRecordService.selectByExample(recordType);
+        return daterecordinfos;
     }
     @RequestMapping("delrecord")
     @RequiresPermissions("del:data")
@@ -105,24 +140,39 @@ public class WebDateRecordController {
     }
     @RequestMapping("querybydateid")
     @RequiresPermissions("upd:data")
-    public String querybydateid(int id,Model m){
+    public String querybydateid(int id,Model m,int page){
         Daterecordinfo daterecordinfo=dateRecordService.selectByPrimaryKey(id);
+        m.addAttribute("page",page);
         if(daterecordinfo!=null){
             m.addAttribute("daterecordinfo",daterecordinfo);
             return "updatedaterecord";
         }
-        return "redirect:showdaterecord?page=1";
+        return "redirect:showdaterecord?page="+page;
     }
+
     @RequestMapping("updrecord")
-    public String updrecord(Daterecordinfo daterecordinfo, HttpSession session){
+    @ResponseBody
+    public int updrecord(Daterecordinfo daterecordinfo, HttpSession session,int page){
         int updresult=dateRecordService.updateByPrimaryKeySelective(daterecordinfo);
         String info="修改了可读数据"+daterecordinfo.getName();
         Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
         String username=logadmininfo.getUsername();
         int addlog=operateLogService.insertSelective(username,info);
         if(updresult>0&&addlog>0){
-            return "redirect:showdaterecord?page=1";
+            return 1;
+        }
+        return 0;
+    }
+    /*@RequestMapping("updrecord")
+    public String updrecord(Daterecordinfo daterecordinfo, HttpSession session,int page){
+        int updresult=dateRecordService.updateByPrimaryKeySelective(daterecordinfo);
+        String info="修改了可读数据"+daterecordinfo.getName();
+        Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
+        String username=logadmininfo.getUsername();
+        int addlog=operateLogService.insertSelective(username,info);
+        if(updresult>0&&addlog>0){
+            return "redirect:showdaterecord?page="+page;
         }
         return "redirect:querybydateid?id="+daterecordinfo.getId();
-    }
+    }*/
 }

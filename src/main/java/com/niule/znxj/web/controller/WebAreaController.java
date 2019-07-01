@@ -44,6 +44,14 @@ public class WebAreaController {
         this.pageBean = pageBean;
     }
 
+    /**
+     * 显示区域列表
+     * @param page 当前页
+     * @param name 区域名
+     * @param m
+     * @param request
+     * @return
+     */
     @RequestMapping("showallarea")
     @RequiresPermissions("item:area")
     public String showallarea(int page, String name, Model m, HttpServletRequest request){
@@ -91,8 +99,15 @@ public class WebAreaController {
         m.addAttribute("name",name);
         return "showarea";
     }
+
+    /**
+     * 跳转到添加区域页面
+     * @param m
+     * @param request
+     * @return
+     */
     @RequestMapping("toaddarea")
-    @RequiresPermissions("add:area")
+//    @RequiresPermissions("add:area")
     public String toaddarea(Model m,HttpServletRequest request){
         List<Nfcinfo> nfcinfos=nfcService.queryAllNfc();
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
@@ -102,6 +117,13 @@ public class WebAreaController {
         m.addAttribute("siteareainfos",siteareainfos);
         return "addarea";
     }
+
+    /**
+     * 添加区域
+     * @param areainfo
+     * @param session
+     * @return
+     */
     @RequestMapping("addarea")
     public String addarea(Areainfo areainfo, HttpSession session){
         //添加区域
@@ -126,6 +148,14 @@ public class WebAreaController {
         }
         return "addarea";
     }
+
+    /**
+     * 删除区域
+     * @param id 区域ID
+     * @param request
+     * @param session
+     * @return
+     */
     @RequestMapping("delarea")
     @RequiresPermissions("del:area")
     @ResponseBody
@@ -154,7 +184,7 @@ public class WebAreaController {
     }
     @RequestMapping("findbyareaid")
     @RequiresPermissions("upd:area")
-    public String findbyareaid(Long id,Model m,HttpServletRequest request){
+    public String findbyareaid(Long id,Model m,HttpServletRequest request,int page){
         Areainfo areainfo=areaService.selectByPrimaryKey(id);
         List<Nfcinfo> nfcinfos=nfcService.queryAllNfc();
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
@@ -163,10 +193,11 @@ public class WebAreaController {
         m.addAttribute("nfcinfos",nfcinfos);
         m.addAttribute("siteareainfos",siteareainfos);
         m.addAttribute("areainfo",areainfo);
+        m.addAttribute("page",page);
         return "updatearea";
     }
     @RequestMapping("updarea")
-    public String updarea(Areainfo areainfo, Model model,HttpSession session){
+    public String updarea(Areainfo areainfo, Model model,HttpSession session,int page){
         int updresult2=0;
         Long areaid=areainfo.getId();
         if(areainfo.getNfctag()!=null){
@@ -188,9 +219,9 @@ public class WebAreaController {
         String username=logadmininfo.getUsername();
         int addlog=operateLogService.insertSelective(username,info);
         if(updresult1>0 && updresult2>0&&addlog>0){
-            return "redirect:showallarea?page=1";
+            return "redirect:showallarea?page="+page;
         }
-        return "redirect:findbyareaid?id=" + areaid;
+        return "redirect:findbyareaid?id="+ areaid+"&page="+page;
     }
     @RequestMapping("queryareadetail")/*
     @RequiresPermissions("item:areadetail")*/

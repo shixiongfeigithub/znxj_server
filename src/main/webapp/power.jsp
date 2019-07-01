@@ -31,7 +31,7 @@
                             </h2>
                         </div>
                         <div class="box-content">
-                            <form action="login.jsp" method="post">
+                            <form action="login1.jsp" method="post">
                                 <input type="button" class="btn btn-primary" value="管理员" id="manager">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <input type="button" class="btn btn-primary" value="系统维护员" id="admin">
                                 <table id="list" class="table table-striped table-bordered bootstrap-datatable datatable responsive dataTable" style="width: 500px;">

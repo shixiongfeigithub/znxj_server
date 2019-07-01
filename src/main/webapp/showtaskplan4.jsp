@@ -7,6 +7,24 @@
 <head>
     <title>智能巡检系统</title>
     <%@ include file="/WEB-INF/pages/common/header.jsp"%>
+    <style>
+        .selected {
+            background: #35A7E7;
+            color: white;
+        }
+
+        .fontcenter {
+            text-align: center !important;
+            vertical-align: middle;
+        }
+
+        #testalert {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 200px;
+        }
+    </style>
     <script type="text/javascript">
         function querywarningdetail(id){
             $.ajax({
@@ -35,6 +53,7 @@
                     }
                     if(imgs==""&&audios==""&&videos==""){
                         alert("暂时没有其他异常信息");
+                        return;
                     }else{
                         showquickdetail(imgs,data.content,audios,videos);
                     }
@@ -46,21 +65,31 @@
             var errorul=$("#errorul");
             errorul.empty();
            /* errorul.append("<li class='list-group-item'  onclick=showtext(this,'"+val3+"')>文字</li>");*/
-            for(var i=0;i<imgs.length;i++){
-                var j=parseInt(i)+1;
-                errorul.append("<li class='list-group-item'  onclick=showimg(this,'"+imgs[i]+"')>图片"+j+"</li>");
+            if (imgs != null && "" != imgs) {
+                for (var i = 0; i < imgs.length; i++) {
+                    var j = parseInt(i) + 1;
+                    errorul.append("<li class='list-group-item'  onclick=showimg(this,'" + imgs[i] + "')>图片" + j + "</li>");
+                }
+                showimg(this, imgs[0]);
             }
-
-            for(var m=0;m<audios.length;m++){
-                var n=parseInt(m)+1;
-                errorul.append("<li class='list-group-item'  onclick=showaudio(this,'"+audios[m]+"')>音频"+n+"</li>");
+            if (audios != null && "" != audios) {
+                for (var m = 0; m < audios.length; m++) {
+                    var n = parseInt(m) + 1;
+                    errorul.append("<li class='list-group-item'  onclick=showaudio(this,'" + audios[m] + "')>音频" + n + "</li>");
+                }
+                if (imgs == null && imgs == undefined) {
+                    showaudio(this, audios[0]);
+                }
             }
-
-            for(var a=0;a<videos.length;a++){
-                var b=parseInt(a)+1;
-                errorul.append("<li class='list-group-item'  onclick=showvideo(this,'"+videos[a]+"')>视频"+b+"</li>");
+            if (videos != null && "" != videos) {
+                for (var a = 0; a < videos.length; a++) {
+                    var b = parseInt(a) + 1;
+                    errorul.append("<li class='list-group-item'  onclick=showvideo(this,'" + videos[a] + "')>视频" + b + "</li>");
+                }
+                if (imgs == null && imgs == undefined && audios == null && audios == undefined) {
+                    showvideo(this, videos[0]);
+                }
             }
-
             $("#myModal").modal("show");
         }
         /*显示图片*/
@@ -277,7 +306,7 @@
 
 
 <div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in" style="z-index: 0">
-    <div class="modal-dialog" style="z-index: 9999">
+    <div class="modal-dialog" style="z-index: 9999;width: 60%;">
         <div class="modal-content" style="overflow: auto;">
             <div id="arealist">
                 <div class="modal-header">
@@ -285,13 +314,13 @@
                     <h3>显示异常</h3>
                 </div>
                 <div class="modal-body">
-                    <div id="showerror"style="height: 30%;">
-                        <div style="width: 150px;float: left;height: 300px;overflow:auto;">
+                    <div id="showerror"style="height: 60%;">
+                        <div style="width: 150px;float: left;height: 100%;;overflow:auto;">
                             <ul class="list-group" id="errorul">
 
                             </ul>
                         </div>
-                        <div id="pic" style="border: 1px solid #F3F3F3; width: 400px;height: 100%;float: left;">
+                        <div id="pic" style="border: 1px solid #F3F3F3; width: 600px;height: 100%;float: left;">
 
                         </div>
                         <div class="clearfix" style="display: none;"></div>

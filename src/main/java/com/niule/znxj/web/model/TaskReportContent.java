@@ -28,6 +28,53 @@ public class TaskReportContent {
     private float normalmin;
     private float upperwarning;
     private Date operationtime;
+    private String checkvalue;
+    private String enumitem;
+    private String equipinouttime;
+    private Long userid;
+
+    public Long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Long userid) {
+        this.userid = userid;
+    }
+
+    public String getEnumitem() {
+        return enumitem;
+    }
+
+    public void setEnumitem(String enumitem) {
+        this.enumitem = enumitem;
+    }
+
+    public String getEquipinouttime() {
+        return equipinouttime;
+    }
+
+    public void setEquipinouttime(String equipinouttime) {
+        this.equipinouttime = equipinouttime;
+    }
+
+    public String getAreainouttime() {
+        return areainouttime;
+    }
+
+    public void setAreainouttime(String areainouttime) {
+        this.areainouttime = areainouttime;
+    }
+
+    private String areainouttime;
+
+
+    public String getCheckvalue() {
+        return checkvalue;
+    }
+
+    public void setCheckvalue(String checkvalue) {
+        this.checkvalue = checkvalue;
+    }
 
     public Date getOperationtime() {
         return operationtime;

@@ -693,6 +693,66 @@ public class SendemailExample {
             addCriterion("smtp_port not between", value1, value2, "smtpPort");
             return (Criteria) this;
         }
+
+        public Criteria andSendexceptionIsNull() {
+            addCriterion("sendException is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionIsNotNull() {
+            addCriterion("sendException is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionEqualTo(Integer value) {
+            addCriterion("sendException =", value, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionNotEqualTo(Integer value) {
+            addCriterion("sendException <>", value, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionGreaterThan(Integer value) {
+            addCriterion("sendException >", value, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sendException >=", value, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionLessThan(Integer value) {
+            addCriterion("sendException <", value, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionLessThanOrEqualTo(Integer value) {
+            addCriterion("sendException <=", value, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionIn(List<Integer> values) {
+            addCriterion("sendException in", values, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionNotIn(List<Integer> values) {
+            addCriterion("sendException not in", values, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionBetween(Integer value1, Integer value2) {
+            addCriterion("sendException between", value1, value2, "sendexception");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendexceptionNotBetween(Integer value1, Integer value2) {
+            addCriterion("sendException not between", value1, value2, "sendexception");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

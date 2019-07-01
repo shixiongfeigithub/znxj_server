@@ -35,7 +35,9 @@
                         if(task[i].id==taskid){
                             $("#taskno").append("<option  value='"+task[i].id+"' selected>"+task[i].identifyingid+"</option>");
                         }else{
-                            $("#taskno").append("<option  value='"+task[i].id+"' >"+task[i].identifyingid+"</option>");
+                            if(task[i].identifyingid!=undefined){
+                                $("#taskno").append("<option  value='"+task[i].id+"' >"+task[i].identifyingid+"</option>");
+                            }
                         }
                     }
                 }
@@ -120,13 +122,20 @@
                                             <tr>
                                                 <td>${task.task.site.customid}</td>
                                                 <td>
-                                                    <c:if test="${task.tasktype ==0}">日常巡检 </c:if>
-                                                    <c:if test="${task.tasktype ==1}">计划巡检 </c:if>
-                                                    <c:if test="${task.tasktype ==2}">隐患排查 </c:if>
-                                                    <c:if test="${task.tasktype ==3}">视频巡检</c:if>
-                                                    <c:if test="${task.tasktype ==4}">临时任务</c:if>
+                                                    <c:if test="${task.temp.type ==0}">日常巡检 </c:if>
+                                                    <c:if test="${task.temp.type ==1}">计划巡检 </c:if>
+                                                    <c:if test="${task.temp.type ==2}">隐患排查 </c:if>
+                                                    <c:if test="${task.temp.type ==3}">视频巡检</c:if>
+                                                    <c:if test="${task.temp.type ==4}">临时任务</c:if>
                                                 </td>
-                                                <td><a href="querytaskreportdetail?id=${task.id}&type=${task.tasktype}&type2=1">${task.taskcode}</a></td>
+                                                <%--<td><a href="querytaskreportdetail?id=${task.id}&type=${task.tasktype}&type2=1">${task.taskcode}</a></td>--%>
+                                                <td>
+                                                    <c:if test="${task.id==null}">${task.temp.taskcode}</c:if>
+                                                    <c:if test="${task.id!=null}">
+                                                        <a href="querytaskreportdetail?id=${task.id}&type=${task.temp.type}&page=1&type2=2">${task.temp.taskcode}</a>
+                                                    </c:if>
+
+                                                </td>
                                                 <td>
                                                     <c:if test="${task.temp.state ==0}">未执行 </c:if>
                                                     <c:if test="${task.temp.state ==1}">进行中 </c:if>
@@ -154,16 +163,16 @@
                                        </c:forEach>
                                     </table>
                                     <div style="height: 50px;width: 500px;margin-left: 300px;" id="table2">
-                                        <a href="reportlist?page=1&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&time1=${time1}&time2=${time2}&type=0">第一页</a>
+                                        <a href="reportlist?page=1&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&taskid=${taskid}&time1=${time1}&time2=${time2}&type=0">第一页</a>
                                         <c:if test="${reports.pageNum>1}">
-                                            <a href="reportlist?page=${reports.pageNum-1}&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&time1=${time1}&time2=${time2}&type=0">上一页</a>
+                                            <a href="reportlist?page=${reports.pageNum-1}&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&taskid=${taskid}&time1=${time1}&time2=${time2}&type=0">上一页</a>
                                         </c:if>
 
                                         <c:if test="${reports.pageNum<reports.pages}">
-                                            <a href="reportlist?page=${reports.pageNum+1}&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&time1=${time1}&time2=${time2}&type=0">下一页</a>
+                                            <a href="reportlist?page=${reports.pageNum+1}&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&taskid=${taskid}&time1=${time1}&time2=${time2}&type=0">下一页</a>
                                         </c:if>
 
-                                        <a href="reportlist?page=${reports.pages}&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&time1=${time1}&time2=${time2}&type=0">最后一页</a>
+                                        <a href="reportlist?page=${reports.pages}&tasktype=${tasktype}&worker=${worker}&siteid=${siteid}&taskid=${taskid}&time1=${time1}&time2=${time2}&type=0">最后一页</a>
 
                                         第${reports.pageNum}页/共${reports.pages}页
                                     </div>

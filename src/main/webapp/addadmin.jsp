@@ -15,6 +15,7 @@
             url:"queryexistname?username="+uname,
             type:"post",
             dataType:"json",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success:function(data){
                 if(data=="0"){
                     $("#existuser").css("display","none");
@@ -23,18 +24,6 @@
                 }
             }
         })
-    }
-    
-    function validateForm(){
-        var pwd=$("#pwd").val();
-        //固定电话
-        var reg=/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/;
-        if(!reg.test(pwd)){
-            alert("密码必须包含字母、数字和特殊符号");
-            return false;
-        }else {
-            return true;
-        }
     }
 </script>
 <!-- topbar ends -->
@@ -51,7 +40,7 @@
                             </h2>
                         </div>
                         <div class="box-content">
-                            <form id="sub" action="addadmin" method="post" onsubmit="return validateForm()">
+                            <form id="sub" action="addadmin" method="post">
                                 <input type="hidden" class="form-control" style="width: 300px;" name="createuser" required="required" value="${userInfo.id}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
@@ -95,6 +84,9 @@
                                             <input type="radio" name="state" value="0">禁用
                                             <input type="radio" name="state" value="1" checked>启用
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="http://localhost:8080/report/images/2017/10/10/092bf524-5e57-4829-b34a-7f5a667c6fb7_IMG_20171010_105354.jpg"></td>
                                     </tr>
 
                                     <tr>

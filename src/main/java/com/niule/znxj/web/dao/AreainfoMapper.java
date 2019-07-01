@@ -31,10 +31,10 @@ public interface AreainfoMapper {
 
     int updateByPrimaryKey(Areainfo record);
 
-    public List<Areainfo> findByPageArea(HashMap<String,Object> map);
-    public int countArea(HashMap<String,Object> map);
+    public List<Areainfo> findByPageArea(HashMap<String, Object> map);
+    public int countArea(HashMap<String, Object> map);
 
-    public List<Areainfo> findByPageArea2(HashMap<String,Object> map);
-    public int countArea2(HashMap<String,Object> map);
-    List<Areainfo>sitearea(HashMap<String,Object> map);
+    public List<Areainfo> findByPageArea2(HashMap<String, Object> map);
+    public int countArea2(HashMap<String, Object> map);
+    List<Areainfo>sitearea(HashMap<String, Object> map);
 }

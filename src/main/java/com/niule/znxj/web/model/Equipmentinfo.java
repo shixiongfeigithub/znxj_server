@@ -23,6 +23,16 @@ public class Equipmentinfo {
 
     private Areainfo areainfo;
 
+    private Boolean isChecked;
+
+    public Boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(Boolean checked) {
+        isChecked = checked;
+    }
+
     public Areainfo getAreainfo() {
         return areainfo;
     }

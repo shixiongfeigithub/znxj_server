@@ -46,7 +46,7 @@ public class WebRolesCtrl {
     @RequestMapping("showroles")
     @RequiresPermissions("item:roles")
     public String showroles( int page,Model m){
-        int size=15;
+        int size=10;
         PageInfo info = new PageInfo<>(rolesService.selectByExample(page,size));
         List<Roles> roles = info.getList();
         List<RoleRes> res = new ArrayList<>();
@@ -106,8 +106,8 @@ public class WebRolesCtrl {
             return "taskfinalline";
     }
     @RequestMapping("getrolebyroleid")
-    @RequiresPermissions("upd:roles")
-    public String getrolebyroleid(int roleid,Model m){
+//    @RequiresPermissions("upd:roles")
+    public String getrolebyroleid(int roleid,Model m,int page){
         //根据角色编号查询当前角色
         Roles roles  = rolesService.selectByPrimaryKey(roleid);
         //根据角色编号查询当前角色的所有权限
@@ -134,12 +134,13 @@ public class WebRolesCtrl {
 
 
         m.addAttribute("roles",roles);
+        m.addAttribute("page",page);
         m.addAttribute("userPermission", userPermission);
 
         return "updrole2";
     }
     @RequestMapping("updroles")
-    public String updroles(Roles roles,String selectedpowers,HttpSession session){
+    public String updroles(Roles roles,String selectedpowers,HttpSession session,int page){
         int updresult=rolesService.updateByPrimaryKeySelective(roles);
         int rows=0;
         if(selectedpowers!="" && selectedpowers!=null) {
@@ -156,9 +157,9 @@ public class WebRolesCtrl {
             }
         }else{
             //删除角色权限表中的信息
-            RolesandpromissExample example = new RolesandpromissExample();
-            example.createCriteria().andRoleidEqualTo(roles.getRoleid());
-            rolesandpromissMapper.deleteByExample(example);
+            RoleandpowerExample example = new RoleandpowerExample();
+            example.createCriteria().andRoleidEqualTo(Long.valueOf(roles.getRoleid()));
+            roleandpowerMapper.deleteByExample(example);
             rows=1;
         }
         String info="修改角色"+roles.getRolename();
@@ -166,13 +167,8 @@ public class WebRolesCtrl {
         String username=logadmininfo.getUsername();
         int addlog=operateLogService.insertSelective(username,info);
 
-//        Rolesandpromiss rolesandpromiss = new Rolesandpromiss();
-//        rolesandpromiss.setRoleid(roles.getRoleid());
-//        rolesandpromiss.setPromissid(1);
-//        int res=rolesandpromissMapper.insert(rolesandpromiss);
-
         if (rows > 0&&updresult>0&&addlog>0) {
-            return "redirect:showroles?page=1";
+            return "redirect:showroles?page="+page;
         } else {
             return "taskfinalline";
         }
@@ -196,7 +192,7 @@ public class WebRolesCtrl {
         Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
         String username=logadmininfo.getUsername();
         int addlog=operateLogService.insertSelective(username,info);
-        if(del1>0&&del2>0&&addlog>0){
+        if(del1>0&&addlog>0){
             return 1;
         }else
             return 0;

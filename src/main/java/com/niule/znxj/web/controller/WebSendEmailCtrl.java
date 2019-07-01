@@ -1,19 +1,22 @@
 package com.niule.znxj.web.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.niule.znxj.web.model.Contactinfo;
-import com.niule.znxj.web.model.Sendemail;
-import com.niule.znxj.web.model.Taskplaninfo;
-import com.niule.znxj.web.model.TaskplaninfoExample;
+import com.niule.znxj.core.common.Resources;
+import com.niule.znxj.core.util.json.JsonUtil;
+import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.ContactinfoService;
 import com.niule.znxj.web.service.SendEmailService;
+import com.niule.znxj.web.service.SiteService;
 import com.niule.znxj.web.service.TaskPlanService;
+import net.sf.json.JSONArray;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,11 +31,31 @@ public class WebSendEmailCtrl {
     @Resource
     private TaskPlanService taskPlanService;
 
+    @Resource
+    private SiteService siteService;
+
+    private String ip = Resources.ApplicationResources.getString("ip");
+
     @RequestMapping("showsendemaillist")
-    public String showsendemaillist(int page,Model m){
+    public String showsendemaillist(int page, Model m, HttpServletRequest request){
         if(page<=0){page=1;}
         int size=15;
-        PageInfo pageInfo=new PageInfo<>(sendEmailService.showSendEmail(page,size));
+        Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
+        List ids  = new ArrayList();
+        if(admininfo.getSiteid() == null){
+            List<Siteareainfo> siteareainfos = siteService.queryAllSite();
+            if(siteareainfos.size() > 0){
+                for(Siteareainfo siteareainfo : siteareainfos){
+                    ids.add(siteareainfo.getId());
+                }
+            }else{
+                ids = null;
+            }
+        }else{
+            ids.add(admininfo.getSiteid());
+        }
+
+        PageInfo pageInfo=new PageInfo<>(sendEmailService.showSendEmail(page,size,ids));
         m.addAttribute("pageInfo",pageInfo);
         return "showsendemail";
     }
@@ -75,5 +98,37 @@ public class WebSendEmailCtrl {
     @ResponseBody
     public int delsendemail(Long id){
         return sendEmailService.delSendEmail(id);
+    }
+
+    @RequestMapping("/toException")
+    public  String toException(String img,String audio,String video ,Model model){
+
+        model.addAttribute("ip",ip );
+//        model.addAttribute("img", getStringToReport(img));
+//        model.addAttribute("audio",getStringToReport(audio));
+//        model.addAttribute("video",getStringToReport(video));
+        model.addAttribute("img", img);
+        model.addAttribute("audio",audio);
+        model.addAttribute("video",video);
+        return "exception";
+    }
+
+    //给路径加上 /report 的
+    public String getStringToReport(String str) {
+        JSONArray pathList = new JSONArray();
+        if (str != null && !str.equals("null")&&!str.equals("[]")) {
+            JSONArray list = JSONArray.fromObject(str);
+            for (Object aList : list) {
+                if(!aList.toString().contains("report")) {
+                    String path = "/report" + aList.toString();
+                    pathList.add(path);
+                }else {
+                    pathList.add(aList.toString());
+                }
+            }
+            str = pathList.toString();
+//            System.out.println(str);
+        }
+        return str;
     }
 }

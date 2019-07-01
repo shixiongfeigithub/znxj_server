@@ -4,6 +4,36 @@
 <head>
     <title>智能巡检系统</title>
     <%@ include file="/WEB-INF/pages/common/header.jsp"%>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#username").blur(function () {
+                var customid = $("#username").val();
+                var id = $("#id").val();
+                $.ajax({
+                    url:"isSiteExist",
+                    data:{
+                        customName:customid,
+                        id:id
+                    },
+                    type:"post",
+                    dataType:"json",
+                    success:function(data){
+                        if(data == "1"){
+                            $("#existuser").css("display","block");
+                            $("input[type='submit']").attr("disabled",true);
+                        }else{
+                            $("#existuser").css("display","none");
+                            $("input[type='submit']").attr("disabled",false);
+                        }
+                    }
+                })
+                // $("input[name='addSite']").setAttribute('disabled',true);
+
+            });
+        });
+
+    </script>
 </head>
 <body>
 <%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
@@ -23,12 +53,14 @@
                         </div>
                         <div class="box-content">
                             <form action="/updsite" method="post">
-                                <input type="hidden" name="id" value="${siteareainfo.id}">
+                                <input type="hidden" name="id" id="id" value="${siteareainfo.id}">
+                                <input type="hidden" name="page" value="${page}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="username">厂区名称:</label>
                                             <input type="text" class="form-control" style="width: 300px;" id="username" name="customid" value="${siteareainfo.customid}">
+                                            <span style="display: none;color: red;" id="existuser">该厂区已存在！！！</span>
                                         </td>
                                     </tr>
                                     <tr>

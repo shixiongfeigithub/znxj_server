@@ -6,7 +6,9 @@ import com.niule.znxj.web.model.OperatelogExample;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface OperatelogMapper {
     int countByExample(OperatelogExample example);
 
@@ -30,5 +32,5 @@ public interface OperatelogMapper {
 
     int updateByPrimaryKey(Operatelog record);
 
-    List<Operatelog> findByPage(HashMap<String,Object> map);
+    List<Operatelog> findByPage(HashMap<String, Object> map);
 }

@@ -2,17 +2,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="sdf" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <title>智能巡检系统</title>
-    <%@ include file="/WEB-INF/pages/common/header.jsp"%>
+    <%@ include file="/WEB-INF/pages/common/header.jsp" %>
     <script>
-        function delsendemail(id){
-            var isDel=confirm('确定删除吗？');
-            if (isDel!=true) {
+        function delsendemail(id) {
+            var isDel = confirm('确定删除吗？');
+            if (isDel != true) {
                 return false;
-            }else {
+            } else {
                 $.ajax({
                     url: "delsendemail?id=" + id,
                     type: "post",
@@ -29,36 +29,35 @@
                 });
             }
         }
-        function showtask(){
-            window.location="showsendemaillist?page=1";
+        function showtask() {
+            window.location = "showsendemaillist?page=" + $("#page").val();
         }
-        $(function(){
-            var send=$("#send").val();
-            for(var i=0;i<send;i++){
-                var contact=$("#contact"+i).val();
-                var  name="";
+        $(function () {
+            var send = $("#send").val();
+            for (var i = 0; i < send; i++) {
+                var contact = $("#contact" + i).val();
+                var name = "";
                 $.ajax({
-                    url:"showsendname",
-                    type:"post",
-                    data:{contactid:contact},
-                    async:false,
+                    url: "showsendname",
+                    type: "post",
+                    data: {contactid: contact},
+                    async: false,
                     dataType: "json",
-                    success: function(data){
-                        for(var j=0;j<data.length;j++){
-                            name+=data[j].name+",";
+                    success: function (data) {
+                        for (var j = 0; j < data.length; j++) {
+                            name += data[j].name + ",";
                         }
                     }
                 })
-                var connames=name.substring(0,name.length-1);
-                $("#conname"+i).text(connames);
+                var connames = name.substring(0, name.length - 1);
+                $("#conname" + i).text(connames);
             }
         })
     </script>
 
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageInfo.pageNum}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -87,13 +86,14 @@
                                     <th>状态</th>
                                     <th>发送人邮箱</th>
                                     <th>发送人邮箱授权码</th>
+                                    <th>异常触发</th>
                                     <th>操作</th>
                                 </tr>
                                 <c:forEach items="${pageInfo.list}" var="send" varStatus="status">
                                     <input type="hidden" id="contact${status.index}" value="${send.contactid}">
                                     <tr>
                                         <td>
-                                            ${send.task.customid}
+                                                ${send.task.customid}
                                             <c:if test="${send.task.type == 0}">日常巡检</c:if>
                                             <c:if test="${send.type == 1}">计划巡检</c:if>
                                             <c:if test="${send.task.type == 2}">隐患排查</c:if>
@@ -116,13 +116,18 @@
                                         <td>${send.email}</td>
                                         <td>${send.pwd}</td>
                                         <td>
+                                            <c:if test="${send.sendexception == 0}">否</c:if>
+                                            <c:if test="${send.sendexception == 1}">是</c:if>
+                                        </td>
+                                        <td>
                                             <shiro:hasPermission name="upd:sendemail">
                                                 <a class="btn btn-primary" href="querysendbyid?id=${send.id}">
                                                     <i class="glyphicon glyphicon-edit icon-white"></i>编辑
                                                 </a>
                                             </shiro:hasPermission>
                                             <shiro:hasPermission name="del:sendemail">
-                                                <a class="btn btn-danger" href="javascript:void(0);" onclick="delsendemail(${send.id})">
+                                                <a class="btn btn-danger" href="javascript:void(0);"
+                                                   onclick="delsendemail(${send.id})">
                                                     <i class="glyphicon glyphicon-trash icon-white"></i>删除
                                                 </a>
                                             </shiro:hasPermission>

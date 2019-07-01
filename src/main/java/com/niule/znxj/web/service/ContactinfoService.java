@@ -23,8 +23,8 @@ public interface ContactinfoService {
     int updateByPrimaryKey(Contactinfo record);
 
 
-    public List<Contactinfo> findByPageCon2(HashMap<String,Object> map);
-    public int countCon2(HashMap<String,Object> map);
+    public List<Contactinfo> findByPageCon2(HashMap<String, Object> map);
+    public int countCon2(HashMap<String, Object> map);
 
     public List<Contactinfo> sendAllPersion();
 

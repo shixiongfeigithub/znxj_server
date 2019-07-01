@@ -50,13 +50,12 @@
         }
     }
     function showtask(){
-        window.location="showroles?page=1";
+        window.location="showroles?page="+$("#page").val();
     }
 </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${res.pageNum}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -91,7 +90,7 @@
                                     <tr>
                                         <td>
                                             <shiro:hasPermission name="upd:roles">
-                                            <a href="getrolebyroleid?roleid=${roleres.roles.roleid}"> <i class="glyphicon glyphicon-edit red "></i></a>
+                                            <a href="getrolebyroleid?roleid=${roleres.roles.roleid}&page=${res.pageNum}"> <i class="glyphicon glyphicon-edit red "></i></a>
                                             </shiro:hasPermission>
                                             <shiro:hasPermission name="del:roles">
                                             <a href="javascript:void(0)" onclick="admincount(${roleres.roles.roleid},'${roleres.roles.rolename}')"><i class="glyphicon glyphicon-trash"></i></a>

@@ -153,7 +153,7 @@ public class WebEquipmentController {
     }
     @RequestMapping("findbyequip")
     @RequiresPermissions("upd:equip")
-    public String findbyequip(Long id,Model m,HttpServletRequest request){
+    public String findbyequip(Long id,Model m,HttpServletRequest request,int page){
         Equipmentinfo equipmentinfo=equipmentService.selectByPrimaryKey(id);
         List<Nfcinfo> nfcinfos=nfcService.queryAllNfc();
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
@@ -164,12 +164,13 @@ public class WebEquipmentController {
         m.addAttribute("nfcinfos",nfcinfos);
         m.addAttribute("areainfos",areainfos);
         m.addAttribute("siteareainfos",siteareainfos);
+        m.addAttribute("page",page);
 
         return "updateequipment";
     }
 
     @RequestMapping("updequipment")
-    public String updequipment(Equipmentinfo equipmentinfo,HttpSession session){
+    public String updequipment(Equipmentinfo equipmentinfo,HttpSession session,int page){
         int updresult2=0;
         Long equipmentid=equipmentinfo.getId();
         if(equipmentinfo.getNfcid()!=null){
@@ -188,9 +189,9 @@ public class WebEquipmentController {
         String username=logadmininfo.getUsername();
         int addlogres=operateLogService.insertSelective(username,name);
         if(updresult1>0 && updresult2>0&&addlogres>0){
-            return "redirect:showallequipment?page=1";
+            return "redirect:showallequipment?page="+page;
         }
-        return "redirect:findbyequip?id=" + equipmentid;
+        return "redirect:findbyequip?id=" + equipmentid+"&page="+page;
     }
     @RequestMapping("queryequipdetail")
     /*@RequiresPermissions("item:equipdetail")*/

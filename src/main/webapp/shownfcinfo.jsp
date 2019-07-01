@@ -29,13 +29,12 @@
             }
         }
         function showtask(){
-            window.location="showallnfc?page=1";
+            window.location="showallnfc?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.pageNum}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -85,7 +84,7 @@
                                 <tr>
                                     <td>
                                         <shiro:hasPermission name="upd:nfc">
-                                            <a href="querybynfcid?id=${nfc.id}"><i class="glyphicon glyphicon-edit red "></i></a>
+                                            <a href="querybynfcid?id=${nfc.id}&page=${pageBean.pageNum}"><i class="glyphicon glyphicon-edit red "></i></a>
                                         </shiro:hasPermission>
                                         <shiro:hasPermission name="del:nfc">
                                             <a href="javascript:void(0)" onclick="delnfc(${nfc.id},'${nfc.customid}')"><i class="glyphicon glyphicon-trash"></i></a>

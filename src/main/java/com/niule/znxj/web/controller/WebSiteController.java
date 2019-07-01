@@ -47,9 +47,6 @@ public class WebSiteController {
         int size=15;
         HashMap<String,Object> map=new HashMap<>();
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
-//        map.put("page",page);
-//        map.put("size",size);
-//        map.put("siteid",admininfo.getSiteid());
         List<Siteareainfo> siteareainfos = siteService.queryAllSite2(page,size);
         model.addAttribute("pageBean",new PageInfo<Siteareainfo>(siteareainfos));
         model.addAttribute("siteid",admininfo.getSiteid());
@@ -86,13 +83,14 @@ public class WebSiteController {
     }
     @RequestMapping("findbysiteid")
     @RequiresPermissions("upd:site")
-    public String findbysiteid(Long id,Model m){
+    public String findbysiteid(Long id,Model m,int page){
         Siteareainfo siteareainfo=siteService.selectByPrimaryKey(id);
         m.addAttribute("siteareainfo",siteareainfo);
+        m.addAttribute("page",page);
         return "updatesitearea";
     }
     @RequestMapping("updsite")
-    public String updsite(Siteareainfo siteareainfo,HttpSession session){
+    public String updsite(Siteareainfo siteareainfo,HttpSession session,int page){
         Long siteid=siteareainfo.getId();
         int updresult=siteService.updateByPrimaryKeySelective(siteareainfo);
         String info="修改了厂区"+siteareainfo.getCustomid();
@@ -100,7 +98,7 @@ public class WebSiteController {
         String username=logadmininfo.getUsername();
         int addlog=operateLogService.insertSelective(username,info);
         if(updresult>0&&addlog>0){
-            return "redirect:showsite?page=1";
+            return "redirect:showsite?page="+page;
         }
         return "redirect:findbysiteid?id="+siteid;
     }
@@ -111,4 +109,21 @@ public class WebSiteController {
         m.addAttribute("siteareainfo",siteareainfo);
         return "showsitedetail";
     }
+
+    /**
+     * 判断是否已经存在厂区
+     * @param customName
+     * @param id
+     * @return
+     */
+    @RequestMapping("isSiteExist")
+    @ResponseBody
+    public String  isSiteExist(String customName,Long id){
+        int count  = siteService.isSiteExist(customName,id);
+        if(count > 0 ){
+            return  "1";
+        }
+        return "0";
+    }
+
 }

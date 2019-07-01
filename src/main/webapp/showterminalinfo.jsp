@@ -29,13 +29,12 @@
             }
         }
         function showtask(){
-            window.location="showallterm?page=1";
+            window.location="showallterm?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -84,8 +83,12 @@
                             <c:forEach items="${pageBean.list}" var="term">
                                 <tr>
                                     <td>
-                                        <shiro:hasPermission name="upd:ter"><a href="querybytermid?id=${term.id}"><i class="glyphicon glyphicon-edit red "></i></a></shiro:hasPermission>
-                                        <shiro:hasPermission name="del:ter"><a href="javascript:void(0)" onclick="delterminal(${term.id},'${term.customid}')"><i class="glyphicon glyphicon-trash"></i></a></shiro:hasPermission>
+                                        <shiro:hasPermission name="upd:ter">
+                                            <a href="querybytermid?id=${term.id}&page=${pageBean.currentPage}"><i class="glyphicon glyphicon-edit red "></i></a>
+                                        </shiro:hasPermission>
+                                        <shiro:hasPermission name="del:ter">
+                                            <a href="javascript:void(0)" onclick="delterminal(${term.id},'${term.customid}')"><i class="glyphicon glyphicon-trash"></i></a>
+                                        </shiro:hasPermission>
                                         <a href="querytermdetail?id=${term.id}"><i class="glyphicon glyphicon-info-sign blue "></i></a>
                                     </td>
                                     <td>${term.customid}</td>

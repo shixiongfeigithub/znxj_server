@@ -37,6 +37,12 @@ public class Taskreportinfo {
 
     private String content;
 
+    private Date examtime;
+
+    private Integer examstate;
+
+    private String examuser;
+
     private Userinfo user;
 
     private Terminalinfo ter;
@@ -47,28 +53,30 @@ public class Taskreportinfo {
 
     private Tasktempinfo temp;
 
-    public Taskstopinfo getStop() {
-        return stop;
+    private String areainouttime;
+
+    public String getAreainouttime() {
+        return areainouttime;
     }
 
-    public void setStop(Taskstopinfo stop) {
-        this.stop = stop;
+    public void setAreainouttime(String areainouttime) {
+        this.areainouttime = areainouttime;
     }
 
-    public Tasktempinfo getTemp() {
-        return temp;
+    public String getLogcat() {
+        return logcat;
     }
 
-    public void setTemp(Tasktempinfo temp) {
-        this.temp = temp;
+    public void setLogcat(String logcat) {
+        this.logcat = logcat;
     }
 
-    public Taskplaninfo getTask() {
-        return task;
+    public String getContent() {
+        return content;
     }
 
-    public void setTask(Taskplaninfo task) {
-        this.task = task;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Userinfo getUser() {
@@ -87,6 +95,29 @@ public class Taskreportinfo {
         this.ter = ter;
     }
 
+    public Taskplaninfo getTask() {
+        return task;
+    }
+
+    public void setTask(Taskplaninfo task) {
+        this.task = task;
+    }
+
+    public Taskstopinfo getStop() {
+        return stop;
+    }
+
+    public void setStop(Taskstopinfo stop) {
+        this.stop = stop;
+    }
+
+    public Tasktempinfo getTemp() {
+        return temp;
+    }
+
+    public void setTemp(Tasktempinfo temp) {
+        this.temp = temp;
+    }
 
     public Long getId() {
         return id;
@@ -200,19 +231,57 @@ public class Taskreportinfo {
         this.endtime = endtime;
     }
 
-    public String getLogcat() {
-        return logcat;
+    public Date getExamtime() {
+        return examtime;
     }
 
-    public void setLogcat(String logcat) {
-        this.logcat = logcat == null ? null : logcat.trim();
+    public void setExamtime(Date examtime) {
+        this.examtime = examtime;
     }
 
-    public String getContent() {
-        return content;
+    public Integer getExamstate() {
+        return examstate;
     }
 
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+    public void setExamstate(Integer examstate) {
+        this.examstate = examstate;
+    }
+
+    public String getExamuser() {
+        return examuser;
+    }
+
+    public void setExamuser(String examuser) {
+        this.examuser = examuser == null ? null : examuser.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Taskreportinfo{" +
+                "id=" + id +
+                ", taskid=" + taskid +
+                ", donetime=" + donetime +
+                ", uploadedtime=" + uploadedtime +
+                ", uploadtime=" + uploadtime +
+                ", userid=" + userid +
+                ", termimalid=" + termimalid +
+                ", tasktype=" + tasktype +
+                ", reportstate=" + reportstate +
+                ", worker='" + worker + '\'' +
+                ", operationstate=" + operationstate +
+                ", taskcode='" + taskcode + '\'' +
+                ", starttime=" + starttime +
+                ", endtime=" + endtime +
+                ", logcat='" + logcat + '\'' +
+                ", content='" + content + '\'' +
+                ", examtime=" + examtime +
+                ", examstate=" + examstate +
+                ", examuser='" + examuser + '\'' +
+                ", user=" + user +
+                ", ter=" + ter +
+                ", task=" + task +
+                ", stop=" + stop +
+                ", temp=" + temp +
+                '}';
     }
 }

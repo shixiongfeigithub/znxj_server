@@ -80,4 +80,30 @@ public class UserinfoServiceImpl implements UserinfoService{
         example.createCriteria().andClassidEqualTo(classid);
         return userinfoMapper.selectByExample(example).size();
     }
+
+    /**
+     * 判断该班组下是否已存在该用户
+     * @param userName 用户名
+     * @return
+     */
+   /* @Override
+    public int isUserExist(String userName, Long classid,Long id,Long oldClassId) {
+        UserinfoExample userinfoExample = new UserinfoExample();
+        UserinfoExample.Criteria criteria = userinfoExample.createCriteria();
+        if(id != null && classid == oldClassId){
+           criteria.andIdNotEqualTo(id);
+        }
+        criteria.andClassidEqualTo(classid).andUsernameEqualTo(userName);
+        return userinfoMapper.countByExample(userinfoExample);
+    }*/
+    @Override
+    public int isUserExist(String userName, Long id) {
+        UserinfoExample userinfoExample = new UserinfoExample();
+        UserinfoExample.Criteria criteria = userinfoExample.createCriteria();
+        if(id != null){
+           criteria.andIdNotEqualTo(id);
+        }
+        criteria.andUsernameEqualTo(userName);
+        return userinfoMapper.countByExample(userinfoExample);
+    }
 }

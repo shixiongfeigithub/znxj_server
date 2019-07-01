@@ -92,7 +92,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select c.id,c.customid,c.classdesc,c.directorid,c.workendtime,c.workstarttime,u.realname,s.id,s.customid sitename
+    select c.id,c.customid,c.classdesc,c.directorid,c.workendtime,c.workstarttime,u.realname,s.id as siteareaid,s.customid sitename
     from classinfo c left join userinfo u on c.directorid=u.id left join siteareainfo s on c.siteareaid=s.id
     where c.id = #{id,jdbcType=BIGINT}
   </select>
@@ -110,6 +110,7 @@
        #{siteid}
       </foreach>
    </if>
+    order by c.id desc
     limit #{page},#{size}
   </select>
   <select id="countClass" resultType="int" parameterType="map">

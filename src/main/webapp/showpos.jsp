@@ -29,13 +29,12 @@
             }
         }
         function showtask(){
-            window.location="showposition?page=1";
+            window.location="showposition?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -65,8 +64,12 @@
                                 <c:forEach items="${pageBean.list}" var="pos">
                                     <tr>
                                         <td>
-                                            <shiro:hasPermission name="upd:pos"><a href="selectbyposid?id=${pos.id}"> <i class="glyphicon glyphicon-edit red "></i></a></shiro:hasPermission >
-                                            <shiro:hasPermission name="del:pos"><a href="#" onclick="delpos(${pos.id},'${pos.positionname}')"> <i class="glyphicon glyphicon-trash"></i></a></shiro:hasPermission>
+                                            <shiro:hasPermission name="upd:pos">
+                                                <a href="selectbyposid?id=${pos.id}&page=${pageBean.currentPage}"> <i class="glyphicon glyphicon-edit red "></i></a>
+                                            </shiro:hasPermission >
+                                            <shiro:hasPermission name="del:pos">
+                                                <a href="#" onclick="delpos(${pos.id},'${pos.positionname}')"> <i class="glyphicon glyphicon-trash"></i></a>
+                                            </shiro:hasPermission>
                                             <a href="queryposdetailbyid?id=${pos.id}"><i class="glyphicon glyphicon-info-sign blue "></i></a>
                                         </td>
                                         <td>${pos.positionname}</td>

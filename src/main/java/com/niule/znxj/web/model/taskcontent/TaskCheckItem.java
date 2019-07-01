@@ -15,4 +15,13 @@ public class TaskCheckItem {
     public void setItem(Checkiteminfo item) {
         this.item = item;
     }
+    private Boolean isChecked;
+
+    public Boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(Boolean checked) {
+        isChecked = checked;
+    }
 }

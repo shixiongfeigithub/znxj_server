@@ -40,7 +40,7 @@
     <id column="tempid" property="tempid" jdbcType="BIGINT" />
     <result column="userid" property="userid" jdbcType="BIGINT" />
     <result column="executetime" property="executetime" jdbcType="TIMESTAMP" />
-    <result column="taskcode" property="taskcode" jdbcType="TIMESTAMP" />
+    <result column="taskcode" property="taskcode" jdbcType="VARCHAR" />
     <result column="operationstate" property="operationstate" jdbcType="INTEGER" />
     <result column="stopstate" property="stopstate" jdbcType="INTEGER" />
 
@@ -75,6 +75,8 @@
     <result column="endtime" property="endtime" jdbcType="VARCHAR" />
     <result column="implementtime" property="implementtime" jdbcType="VARCHAR" />
     <result column="weeklytime" property="weeklytime" jdbcType="VARCHAR" />
+    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -173,6 +175,36 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="selectTempResByExample" resultMap="TaskResultMap" parameterType="com.niule.znxj.web.model.TaskplaninfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from taskplaninfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectTaskTempRes" resultMap="TaskResultMap" parameterType="map">
+    select tp.*,u.realname,u.id,c.id,c.customid as classname from taskplaninfo tp LEFT JOIN userinfo u on u.id = tp.directorid
+    left join classinfo c on c.id = tp.classid
+    <where>
+      <if test="type!=null">
+        and tp.type = #{type}
+      </if>
+      <if test="classId!=null">
+        and tp.classid = #{classId}
+      </if>
+      and  tp.state = 1  and tp.implementtime = '[]' and tp.weeklytime = '[]' order by tp.updatetime desc
+    </where>
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -679,7 +711,7 @@
         #{sid}
       </foreach>
     </if>
-    order by t.createtime DESC limit #{page},#{size}
+    order by t.id DESC limit #{page},#{size}
   </select>
   <select id="countTask" resultType="int" parameterType="map">
     select count(t.id) from taskplaninfo t
@@ -711,7 +743,7 @@
         #{sid}
       </foreach>
     </if>
-    order by t.createtime DESC
+    order by t.id DESC
     limit #{page},#{size}
   </select>
   <select id="countTask2" resultType="int" parameterType="map">
@@ -745,7 +777,7 @@
     WHERE t2.`classid` = #{0} AND t2.`type`=#{1} AND t1.`state`=#{2}
   </select>
 
-  <select id="getTakTempsExecuting" resultMap="TaskResultMap">
+  <select id="getTakTempsExecuting" resultMap="TaskResultMap" >
     SELECT t1.id AS tempid,t1.executetime ,t1.taskcode,t1.operationstate,t1.stopstate,
     t2.id,t2.identifyingid,t2.customid,t2.type,t2.taskcontent,t2.taskdesc,t2.starttime,t2.endtime,t2.classid,t2.issequentially,t2.maxduration,
     t2.directorid,c.customid classname,u.realname
@@ -755,7 +787,50 @@
     WHERE t2.`classid` = #{0} AND t2.`type`=#{1} AND t1.`state`=#{2} AND t1.userid = #{3}
   </select>
 
+
+  <select id="getTakTempsExecutingByExample" resultMap="TaskResultMap" parameterType="com.niule.znxj.web.model.TasktempinfoExample" >
+    SELECT t1.id AS tempid,t1.executetime ,t1.taskcode,t1.operationstate,t1.stopstate,
+    t2.id,t2.identifyingid,t2.customid,t2.type,t2.taskcontent,t2.taskdesc,t2.starttime,t2.endtime,
+    t2.classid,t2.issequentially,t2.maxduration,
+    t2.directorid,c.customid classname,u.realname
+    FROM tasktempinfo t1 LEFT JOIN taskplaninfo t2 ON t1.`taskid` = t2.`id`
+    left join classinfo c on t2.classid=c.id
+    left join userinfo u on t2.directorid=u.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="getPartTask" resultMap="TaskResultMap" parameterType="map">
+    SELECT t1.id AS tempid,t1.executetime ,t1.taskcode,t1.operationstate,t1.stopstate,
+    t2.id,t2.identifyingid,t2.customid,t2.type,t2.taskcontent,t2.taskdesc,t2.starttime,t2.endtime,
+    t2.classid,t2.issequentially,t2.maxduration,
+    t2.directorid,c.customid classname,u.realname
+    FROM tasktempinfo t1 LEFT JOIN taskplaninfo t2 ON t1.`taskid` = t2.`id`
+    left join classinfo c on t2.classid=c.id
+    left join userinfo u on t2.directorid=u.id
+    <where>
+      <if test="type!=null">
+        and t2.type=#{type}
+      </if>
+      <if test="classId!=null">
+        and t2.classid=#{classId}
+      </if>
+      <if test="state!=null">
+        and t1.state=#{state}
+      </if>
+        and t1.operationstate=5
+    </where>
+  </select>
+
   <update id="updatestate" parameterType="int">
     update taskplaninfo set state=0 where id=#{0}
   </update>
+
+    <select id="selectTaskId" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.TaskplaninfoExample">
+    select taskcontent from taskplaninfo where ( id = #{0} and state =1)
+    </select>
 </mapper>

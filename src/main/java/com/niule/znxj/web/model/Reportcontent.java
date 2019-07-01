@@ -47,7 +47,31 @@ public class Reportcontent {
 
     private String img;
 
+    private String checkvalue;
+
+    private String enumitem;
+
+
+    private String firstValue;
+
     private Taskreportinfo report;
+
+    private Long userid;
+
+    public Long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Long userid) {
+        this.userid = userid;
+    }
+
+    public String getFirstValue() {
+        return firstValue;
+    }
+    public void setFirstValue(String firstValue) {
+        this.firstValue = firstValue;
+    }
 
     public Taskreportinfo getReport() {
         return report;
@@ -56,6 +80,34 @@ public class Reportcontent {
     public void setReport(Taskreportinfo report) {
         this.report = report;
     }
+    public Reportcontent(String areaname, String equipname, String checkname, String checktype, String numvalue, String recordname, String unitname, String reportstate, String errcontent, Integer areaskip, Integer equipmentskip, String areaskipdesc, String equipmentskipdesc, String operationtime, Long reportid, String lowerwarning, String normalmax, String normalmin, String upperwarning, String video, String audio, String img, String enumitem, String equipinouttime, String areainouttime,Long userid) {
+        this.areaname = areaname;
+        this.equipname = equipname;
+        this.checkname = checkname;
+        this.checktype = checktype;
+        this.numvalue = numvalue;
+        this.recordname = recordname;
+        this.unitname = unitname;
+        this.reportstate = reportstate;
+        this.errcontent = errcontent;
+        this.areaskip = areaskip;
+        this.equipmentskip = equipmentskip;
+        this.areaskipdesc = areaskipdesc;
+        this.equipmentskipdesc = equipmentskipdesc;
+        this.operationtime = operationtime;
+        this.reportid = reportid;
+        this.lowerwarning = lowerwarning;
+        this.normalmax = normalmax;
+        this.normalmin = normalmin;
+        this.upperwarning = upperwarning;
+        this.video = video;
+        this.audio = audio;
+        this.img = img;
+        this.enumitem = enumitem;
+        this.userid=userid;
+    }
+
+
 
     public Integer getId() {
         return id;
@@ -241,9 +293,44 @@ public class Reportcontent {
         this.img = img == null ? null : img.trim();
     }
 
-    public Reportcontent() {
+    public String getCheckvalue() {
+        return checkvalue;
     }
 
+    public void setCheckvalue(String checkvalue) {
+        this.checkvalue = checkvalue == null ? null : checkvalue.trim();
+    }
+
+    public String getEnumitem() {
+        return enumitem;
+    }
+
+    public void setEnumitem(String enumitem) {
+        this.enumitem = enumitem == null ? null : enumitem.trim();
+    }
+    public Reportcontent(String areaname, String equipname, String checkname, String checktype, String numvalue, String recordname, String unitname, String reportstate, String errcontent, Integer areaskip, Integer equipmentskip, String areaskipdesc, String equipmentskipdesc, Long reportid, String lowerwarning, String normalmax, String normalmin, String upperwarning, String video, String audio, String img) {
+        this.areaname = areaname;
+        this.equipname = equipname;
+        this.checkname = checkname;
+        this.checktype = checktype;
+        this.numvalue = numvalue;
+        this.recordname = recordname;
+        this.unitname = unitname;
+        this.reportstate = reportstate;
+        this.errcontent = errcontent;
+        this.areaskip = areaskip;
+        this.equipmentskip = equipmentskip;
+        this.areaskipdesc = areaskipdesc;
+        this.equipmentskipdesc = equipmentskipdesc;
+        this.reportid = reportid;
+        this.lowerwarning = lowerwarning;
+        this.normalmax = normalmax;
+        this.normalmin = normalmin;
+        this.upperwarning = upperwarning;
+        this.video = video;
+        this.audio = audio;
+        this.img = img;
+    }
     public Reportcontent(String areaname, String equipname, String checkname, String checktype, String numvalue, String recordname, String unitname, String reportstate, String errcontent, Integer areaskip, Integer equipmentskip, String areaskipdesc, String equipmentskipdesc, String operationtime, Long reportid, String lowerwarning, String normalmax, String normalmin, String upperwarning, String video, String audio, String img) {
         this.areaname = areaname;
         this.equipname = equipname;
@@ -268,28 +355,5 @@ public class Reportcontent {
         this.audio = audio;
         this.img = img;
     }
-
-    public Reportcontent(String areaname, String equipname, String checkname, String checktype, String numvalue, String recordname, String unitname, String reportstate, String errcontent, Integer areaskip, Integer equipmentskip, String areaskipdesc, String equipmentskipdesc, Long reportid, String lowerwarning, String normalmax, String normalmin, String upperwarning, String video, String audio, String img) {
-        this.areaname = areaname;
-        this.equipname = equipname;
-        this.checkname = checkname;
-        this.checktype = checktype;
-        this.numvalue = numvalue;
-        this.recordname = recordname;
-        this.unitname = unitname;
-        this.reportstate = reportstate;
-        this.errcontent = errcontent;
-        this.areaskip = areaskip;
-        this.equipmentskip = equipmentskip;
-        this.areaskipdesc = areaskipdesc;
-        this.equipmentskipdesc = equipmentskipdesc;
-        this.reportid = reportid;
-        this.lowerwarning = lowerwarning;
-        this.normalmax = normalmax;
-        this.normalmin = normalmin;
-        this.upperwarning = upperwarning;
-        this.video = video;
-        this.audio = audio;
-        this.img = img;
-    }
+    public Reportcontent(){};
 }

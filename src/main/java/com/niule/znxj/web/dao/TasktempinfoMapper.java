@@ -4,7 +4,9 @@ import com.niule.znxj.web.model.Tasktempinfo;
 import com.niule.znxj.web.model.TasktempinfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface TasktempinfoMapper {
     int countByExample(TasktempinfoExample example);
 

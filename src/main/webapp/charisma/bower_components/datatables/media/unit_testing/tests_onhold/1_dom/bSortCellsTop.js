@@ -9,7 +9,7 @@ $(document).ready( function () {
 	oTest.fnTest( 
 		"Sorting class is on the bottom cells by default",
 		null,
-		function () { return $('#example thead tr:eq(1) th:eq(0)').hasClass('sorting_asc'); }
+		function () { return $('#example thead tr:eq(1) th:eq(0)').hasClass('sorting_desc'); }
 	);
 	
 	oTest.fnTest( 
@@ -45,7 +45,7 @@ $(document).ready( function () {
 				"bSortCellsTop": true
 			} );
 		},
-		function () { return $('#example thead tr:eq(0) th:eq(0)').hasClass('sorting_asc'); }
+		function () { return $('#example thead tr:eq(0) th:eq(0)').hasClass('sorting_desc'); }
 	);
 	
 	oTest.fnTest( 

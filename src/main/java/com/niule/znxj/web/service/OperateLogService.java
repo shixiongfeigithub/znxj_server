@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface OperateLogService {
     PageInfo<Operatelog> findByPage1(int page, int size);
-    PageInfo<Operatelog> findByPage2(HashMap<String,Object> map);
+    PageInfo<Operatelog> findByPage2(HashMap<String, Object> map);
     int deleteByPrimaryKey(Integer logid);
-    int insertSelective(String username,String operate);
+    int insertSelective(String username, String operate);
 }

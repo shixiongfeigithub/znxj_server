@@ -302,6 +302,7 @@
         #{siteid}
       </foreach>
     </if>
+    order by e.id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countEquipment"  resultType="int" parameterType="map">
@@ -327,6 +328,7 @@
     <if test="name!=''">
       and e.name like #{name}
     </if>
+    order by e.id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countEquipment2"  resultType="int" parameterType="map">

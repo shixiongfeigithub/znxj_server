@@ -30,5 +30,5 @@ public interface CheckitemTaskMapper {
 
     int updateByPrimaryKey(CheckitemTask record);
 
-    List<CheckitemTask> getcheckid(HashMap<String,Object> map);
+    List<CheckitemTask> getcheckid(HashMap<String, Object> map);
 }

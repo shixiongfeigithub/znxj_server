@@ -33,13 +33,13 @@ public interface NfcinfoMapper {
     public List<Nfcinfo> findByPageNfc(int page, int pagesize);
     public int countNfc();
 
-    public List<Nfcinfo> findByPageNfc2(HashMap<String,Object> map);
-    public int countNfc2(HashMap<String,Object> map);
+    public List<Nfcinfo> findByPageNfc2(HashMap<String, Object> map);
+    public int countNfc2(HashMap<String, Object> map);
 
     List<Nfcinfo> queryAllNfc();
 
-    int updateareaid(Long areaid,Long nfcid);
-    int updateequipmentid(Long equipmentid,Long nfcid);
+    int updateareaid(Long areaid, Long nfcid);
+    int updateequipmentid(Long equipmentid, Long nfcid);
 
     int updatebyareaid(Long areaid);
     int updatebyequipmentid(Long equipmentid);

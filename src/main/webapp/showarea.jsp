@@ -46,13 +46,12 @@
             }
         }
         function showtask(){
-            window.location="showallarea?page=1";
+            window.location="showallarea?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container" style="overflow: hidden">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -99,7 +98,7 @@
                                     <tr>
                                         <td>
                                             <shiro:hasPermission name="upd:area">
-                                                <a href="findbyareaid?id=${area.id}"><i class="glyphicon glyphicon-edit red "></i></a>
+                                                <a href="findbyareaid?id=${area.id}&page=${pageBean.currentPage}"><i class="glyphicon glyphicon-edit red "></i></a>
                                             </shiro:hasPermission>
                                             <shiro:hasPermission name="del:area">
                                                 <a href="javascript:void(0)" onclick="getequipcount(${area.id},'${area.customid}')"><i class="glyphicon glyphicon-trash"></i></a>

@@ -180,6 +180,11 @@ public class TasktempinfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andTaskidNoAliasEqualTo(Long value) {
+            addCriterion("taskid =", value, "taskid");
+            return (Criteria) this;
+        }
+
         public Criteria andTaskidNotEqualTo(Long value) {
             addCriterion("taskid <>", value, "taskid");
             return (Criteria) this;
@@ -239,6 +244,10 @@ public class TasktempinfoExample {
             addCriterion("date_format(t1.executetime, '%Y-%m-%d' )  =", value, "executetime");
             return (Criteria) this;
         }
+        public Criteria andExecutetimeDoTaskEqualTo(String value) {
+            addCriterion("date_format(executetime, '%Y-%m-%d' )  =", value, "executetime");
+            return (Criteria) this;
+        }
 
         public Criteria andExecutetimeNotEqualTo(Date value) {
             addCriterion("executetime <>", value, "executetime");
@@ -246,7 +255,7 @@ public class TasktempinfoExample {
         }
 
         public Criteria andExecutetimeGreaterThan(Date value) {
-            addCriterion("executetime >", value, "executetime");
+            addCriterion("t1.executetime >", value, "executetime");
             return (Criteria) this;
         }
 
@@ -297,6 +306,11 @@ public class TasktempinfoExample {
 
         public Criteria andStateEqualTo(Integer value) {
             addCriterion("t1.state =", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andState2EqualTo(Integer value) {
+            addCriterion("state =", value, "state");
             return (Criteria) this;
         }
 
@@ -356,7 +370,7 @@ public class TasktempinfoExample {
         }
 
         public Criteria andUseridEqualTo(Long value) {
-            addCriterion("userid =", value, "userid");
+            addCriterion("t1.userid =", value, "userid");
             return (Criteria) this;
         }
 
@@ -486,7 +500,12 @@ public class TasktempinfoExample {
         }
 
         public Criteria andTypeEqualTo(Integer value) {
-            addCriterion("type =", value, "type");
+            addCriterion("t2.type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassIdEqualto(Long value) {
+            addCriterion("t2.classid =", value, "classid");
             return (Criteria) this;
         }
 

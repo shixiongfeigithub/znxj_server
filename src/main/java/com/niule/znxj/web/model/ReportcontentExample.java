@@ -665,6 +665,11 @@ public class ReportcontentExample {
         }
 
         public Criteria andReportstateEqualTo(String value) {
+            addCriterion("reportstate =", value, "reportstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportstateWithAliasEqualTo(String value) {
             addCriterion("c.reportstate =", value, "reportstate");
             return (Criteria) this;
         }
@@ -1065,8 +1070,7 @@ public class ReportcontentExample {
         }
 
         public Criteria andOperationtimeEqualTo(String value) {
-//            addCriterion("operationtime =", value, "operationtime");
-            addCriterion("DATE_FORMAT(c.operationtime,'%Y-%m-%d') =", value, "operationtime");
+            addCriterion("operationtime =", value, "operationtime");
             return (Criteria) this;
         }
 
@@ -1116,7 +1120,7 @@ public class ReportcontentExample {
         }
 
         public Criteria andOperationtimeBetween(String value1, String value2) {
-            addCriterion("DATE_FORMAT(c.operationtime,'%Y-%m-%d') between", value1, value2, "operationtime");
+            addCriterion("operationtime between", value1, value2, "operationtime");
             return (Criteria) this;
         }
 
@@ -1166,7 +1170,7 @@ public class ReportcontentExample {
         }
 
         public Criteria andReportidIn(List<Long> values) {
-            addCriterion("c.reportid in", values, "reportid");
+            addCriterion("reportid in", values, "reportid");
             return (Criteria) this;
         }
 
@@ -1672,6 +1676,146 @@ public class ReportcontentExample {
 
         public Criteria andImgNotBetween(String value1, String value2) {
             addCriterion("img not between", value1, value2, "img");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueIsNull() {
+            addCriterion("checkvalue is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueIsNotNull() {
+            addCriterion("checkvalue is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueEqualTo(String value) {
+            addCriterion("checkvalue =", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueNotEqualTo(String value) {
+            addCriterion("checkvalue <>", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueGreaterThan(String value) {
+            addCriterion("checkvalue >", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueGreaterThanOrEqualTo(String value) {
+            addCriterion("checkvalue >=", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueLessThan(String value) {
+            addCriterion("checkvalue <", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueLessThanOrEqualTo(String value) {
+            addCriterion("checkvalue <=", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueLike(String value) {
+            addCriterion("checkvalue like", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueNotLike(String value) {
+            addCriterion("checkvalue not like", value, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueIn(List<String> values) {
+            addCriterion("checkvalue in", values, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueNotIn(List<String> values) {
+            addCriterion("checkvalue not in", values, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueBetween(String value1, String value2) {
+            addCriterion("checkvalue between", value1, value2, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckvalueNotBetween(String value1, String value2) {
+            addCriterion("checkvalue not between", value1, value2, "checkvalue");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemIsNull() {
+            addCriterion("enumitem is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemIsNotNull() {
+            addCriterion("enumitem is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemEqualTo(String value) {
+            addCriterion("enumitem =", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemNotEqualTo(String value) {
+            addCriterion("enumitem <>", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemGreaterThan(String value) {
+            addCriterion("enumitem >", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemGreaterThanOrEqualTo(String value) {
+            addCriterion("enumitem >=", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemLessThan(String value) {
+            addCriterion("enumitem <", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemLessThanOrEqualTo(String value) {
+            addCriterion("enumitem <=", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemLike(String value) {
+            addCriterion("enumitem like", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemNotLike(String value) {
+            addCriterion("enumitem not like", value, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemIn(List<String> values) {
+            addCriterion("enumitem in", values, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemNotIn(List<String> values) {
+            addCriterion("enumitem not in", values, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemBetween(String value1, String value2) {
+            addCriterion("enumitem between", value1, value2, "enumitem");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnumitemNotBetween(String value1, String value2) {
+            addCriterion("enumitem not between", value1, value2, "enumitem");
             return (Criteria) this;
         }
     }

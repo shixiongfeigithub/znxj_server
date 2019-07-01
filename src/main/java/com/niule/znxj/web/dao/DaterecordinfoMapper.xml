@@ -6,6 +6,8 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="unitname" property="unitname" jdbcType="VARCHAR" />
     <result column="defaultvalue" property="defaultvalue" jdbcType="VARCHAR" />
+    <result column="recordType" property="recordtype" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, unitname, defaultvalue
+    id, name, unitname, defaultvalue, recordType, state
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.DaterecordinfoExample" >
     select
@@ -100,9 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.niule.znxj.web.model.Daterecordinfo" >
     insert into daterecordinfo (id, name, unitname, 
-      defaultvalue)
+      defaultvalue, recordType, state
+      )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR}, 
-      #{defaultvalue,jdbcType=VARCHAR})
+      #{defaultvalue,jdbcType=VARCHAR}, #{recordtype,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.niule.znxj.web.model.Daterecordinfo" >
     insert into daterecordinfo
@@ -119,6 +123,12 @@
       <if test="defaultvalue != null" >
         defaultvalue,
       </if>
+      <if test="recordtype != null" >
+        recordType,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -132,6 +142,12 @@
       </if>
       <if test="defaultvalue != null" >
         #{defaultvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="recordtype != null" >
+        #{recordtype,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +172,12 @@
       <if test="record.defaultvalue != null" >
         defaultvalue = #{record.defaultvalue,jdbcType=VARCHAR},
       </if>
+      <if test="record.recordtype != null" >
+        recordType = #{record.recordtype,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,7 +188,9 @@
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       unitname = #{record.unitname,jdbcType=VARCHAR},
-      defaultvalue = #{record.defaultvalue,jdbcType=VARCHAR}
+      defaultvalue = #{record.defaultvalue,jdbcType=VARCHAR},
+      recordType = #{record.recordtype,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -183,6 +207,12 @@
       <if test="defaultvalue != null" >
         defaultvalue = #{defaultvalue,jdbcType=VARCHAR},
       </if>
+      <if test="recordtype != null" >
+        recordType = #{recordtype,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -190,13 +220,15 @@
     update daterecordinfo
     set name = #{name,jdbcType=VARCHAR},
       unitname = #{unitname,jdbcType=VARCHAR},
-      defaultvalue = #{defaultvalue,jdbcType=VARCHAR}
+      defaultvalue = #{defaultvalue,jdbcType=VARCHAR},
+      recordType = #{recordtype,jdbcType=INTEGER},
+      state = #{state,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="findByPageData" resultMap="BaseResultMap" parameterType="int">
     select
     <include refid="Base_Column_List" />
-    from daterecordinfo where 1=1 limit #{0},#{1}
+    from daterecordinfo where 1=1 order by id desc limit #{0},#{1}
   </select>
   <select id="countData" resultType="int">
     select count(id) from daterecordinfo
@@ -208,6 +240,7 @@
     <if test="name!=null">
       and name like #{name}
     </if>
+    order by id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countData2" resultType="int">

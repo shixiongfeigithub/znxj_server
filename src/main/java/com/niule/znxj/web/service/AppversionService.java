@@ -15,5 +15,5 @@ public interface AppversionService {
     Appversion selectByPrimaryKey(int id);
     int updateByPrimaryKey(Appversion record);
 
-    List<Appversion> selectByExample(int page,int size);
+    List<Appversion> selectByExample(int page, int size);
 }

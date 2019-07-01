@@ -316,9 +316,10 @@
       left join userinfo u on u.id=q.userid
       left join classinfo c on u.classid=c.id
       left join siteareainfo s on c.siteareaid=s.id
-      where q.type=0
+      where 1=1
       <if test="reportcode!=null and reportcode!=''">
-          and q.reportcode like #{reportcode}
+        AND( u.realname LIKE #{reportcode} OR c.customid LIKE #{reportcode} OR s.customid LIKE #{reportcode}
+        OR content LIKE #{reportcode} OR q.reportcode LIKE #{reportcode})
       </if>
       <if test="time!=null and time!=''">
           and str_to_date(q.uploadtime,'%Y-%m-%d')=str_to_date(#{time},'%Y-%m-%d')
@@ -326,6 +327,7 @@
       <if test="siteid!=null and siteid!=''">
         and s.id =#{siteid}
       </if>
+        and q.type=0 order BY  id desc
   </select>
   <!--<select id="showQuickreport2" resultMap="BaseResultMap"  parameterType="int" >-->
       <!--select q.*,u.realname,c.customid classname,s.customid sitename  from quickreport q-->

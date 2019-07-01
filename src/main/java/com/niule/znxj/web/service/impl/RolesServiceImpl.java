@@ -50,6 +50,7 @@ public class RolesServiceImpl implements RolesService{
     public List<Roles> selectByExample(int page, int size) {
         PageHelper.startPage(page,size);
         RolesExample example=new RolesExample();
+        example.setOrderByClause("roleid desc");
         return rolesMapper.selectByExample(example);
     }
 }

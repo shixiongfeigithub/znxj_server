@@ -5,17 +5,27 @@
     <title>智能巡检系统</title>
     <%@ include file="/WEB-INF/pages/common/header.jsp"%>
     <script type="text/javascript">
-        $(function(){
-            var op = $("#pwd2 option:selected");
-            var state=$("#pwd2").val();
-            if(op.val()==1){
-               /* $("#type")[0].style.visibility="hidden";*/
-                $("#type2")[0].style.visibility="hidden";
-            }else if(op.val()==2){
-               /* $("#type")[0].style.visibility="hidden";*/
-                $("#type2")[0].style.visibility="visible";
-            }
-        })
+
+         $(function(){
+             var op = $("#pwd2 option:selected");
+             var state=$("#pwd2").val();
+             if(op.val()==1){
+                /* $("#type")[0].style.visibility="hidden";*/
+                 $("#type2")[0].style.visibility="hidden";
+             }else if(op.val()==2){
+                /* $("#type")[0].style.visibility="hidden";*/
+                 $("#type2")[0].style.visibility="visible";
+
+                 $("#type2").find('label').text('记录类型：');
+
+             }else if (op.val() == 3){
+                 $("#type2")[0].style.visibility="visible";
+
+                 $("#type2").find('label').text('枚举类型：');
+             }
+
+         })
+
         function change(){
             var op = $("#pwd2 option:selected");
             var state=$("#pwd2").val();
@@ -25,6 +35,59 @@
             }else if(op.val()==2){
                /* $("#type")[0].style.visibility="hidden";*/
                 $("#type2")[0].style.visibility="visible";
+                $("#type2").find('label').text('记录类型：');
+                $.ajax({
+                    url:"queryRecordByType",
+                    type:"post",
+                    data:{
+                        recordType:1
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data!=null){
+                            var dynamicStateItem =  document.getElementById("jilutype");
+                            dynamicStateItem.innerHTML = "";
+                            for(var i=0;i<data.length;i++){
+                                var item = document.createElement("option");
+                                item.innerHTML = data[i].name+"&nbsp;&nbsp;("+data[i].unitname+")";
+                                item.value = data[i].id;
+                                dynamicStateItem.appendChild(item);
+                            }
+                            return true;
+                        }else{
+                            alert("没有数据。");
+                            return false;
+                        }
+                    }
+                });
+            }else if(op.val()==3){
+                /* $("#type")[0].style.visibility="hidden";*/
+                $("#type2")[0].style.visibility="visible";
+                $("#type2").find('label').text('枚举类型：');
+                $.ajax({
+                    url:"queryRecordByType",
+                    type:"post",
+                    data:{
+                        recordType:2
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data!=null){
+                            var dynamicStateItem =  document.getElementById("jilutype");
+                            dynamicStateItem.innerHTML = "";
+                            for(var i=0;i<data.length;i++){
+                                var item = document.createElement("option");
+                                item.innerHTML = data[i].name+"&nbsp;&nbsp;("+data[i].state+")";
+                                item.value = data[i].id;
+                                dynamicStateItem.appendChild(item);
+                            }
+                            return true;
+                        }else{
+                            alert("没有数据。");
+                            return false;
+                        }
+                    }
+                });
             }
         }
     </script>
@@ -48,6 +111,7 @@
                         <div class="box-content">
                             <form action="updcheck" method="post">
                                 <input type="hidden" name="id" value="${checkiteminfo.id}">
+                                <input type="hidden" name="page" value="${page}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">
@@ -73,20 +137,32 @@
                                             <select name="type" id="pwd2" onchange="change()">
                                                 <option ${checkiteminfo.type eq '1'?'selected':''} value="1">状态项</option>
                                                 <option ${checkiteminfo.type eq '2'?'selected':''} value="2">记录项</option>
+                                                <option ${checkiteminfo.type eq '3'?'selected':''} value="3">枚举项</option>
                                             </select>
                                         </td>
                                     </tr>
+
                                     <tr>
+                                        <%--<c:if test="${checkiteminfo.type != 1}">--%>
                                         <td class="form-inline" id="type2">
-                                            <label class="control-label" id="jilutype"  for="jilutype">记录类型:</label>
-                                            <%--<input type="text" value="${checkiteminfo.daterecord.name}&nbsp;${checkiteminfo.daterecord.unitname}" readonly class="form-control">--%>
+                                            <label class="control-label" for="jilutype">记录类型:</label>
+                                                <%--<input type="text" value="${checkiteminfo.daterecord.name}&nbsp;${checkiteminfo.daterecord.unitname}" readonly class="form-control">--%>
                                             <select id="jilutype" name="recordid" readonly="readonly">
-                                                <c:forEach items="${daterecordinfos}" var="daterecord">&ndash;%&gt;
-                                                    <option ${checkiteminfo.recordid eq daterecord.id?'selected':''} value="${daterecord.id }">${daterecord.name}&nbsp;${daterecord.unitname}</option>
+                                                <c:forEach var="daterecord" items="${daterecordinfos}">
+                                                    <c:if test="${checkiteminfo.type ==2}">
+                                                        <option ${checkiteminfo.recordid eq daterecord.id ? 'selected' : ''} value="${daterecord.id}">${daterecord.name} &nbsp;&nbsp;&nbsp;${daterecord.unitname}</option>
+                                                    </c:if>
+                                                    <c:if test="${checkiteminfo.type ==3}">
+                                                        <option ${checkiteminfo.recordid eq daterecord.id ? 'selected' : ''} value="${daterecord.id}">${daterecord.name} &nbsp;&nbsp;&nbsp;${daterecord.state}</option>
+                                                    </c:if>
                                                 </c:forEach>
+
                                             </select>
                                         </td>
+                                        <%--</c:if>--%>
                                     </tr>
+
+
                                     <%--<tr id="type">
                                         <td>
                                             <span>范围:</span>

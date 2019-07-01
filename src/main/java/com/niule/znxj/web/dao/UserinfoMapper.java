@@ -30,15 +30,15 @@ public interface UserinfoMapper {
 
     int updateByPrimaryKey(Userinfo record);
 
-    public List<Userinfo> findByPageUser(HashMap<String,Object> map);
-    public int countUser(HashMap<String,Object> map);
+    public List<Userinfo> findByPageUser(HashMap<String, Object> map);
+    public int countUser(HashMap<String, Object> map);
 
-    public List<Userinfo> findByPageUser2(HashMap<String,Object> map);
-    public int countUser2(HashMap<String,Object> map);
+    public List<Userinfo> findByPageUser2(HashMap<String, Object> map);
+    public int countUser2(HashMap<String, Object> map);
 
     List<Userinfo> querybyUserid(int uid);
 
-    Userinfo authUser(String username,String password);
+    Userinfo authUser(String username, String password);
 
     Userinfo queryRealname(Long id);
 }

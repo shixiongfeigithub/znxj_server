@@ -126,7 +126,7 @@ public class TaskreportinfoExample {
         }
 
         public Criteria andIdGreaterThan(Long value) {
-            addCriterion("ter.id >", value, "id");
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
@@ -281,6 +281,23 @@ public class TaskreportinfoExample {
         }
         public Criteria andDonetimeBetween2(String value1, String value2) {
             addCriterion("date_format(ter.donetime, '%Y-%m-%d' ) between", value1, value2, "donetime");
+            return (Criteria) this;
+        }
+        public Criteria andDonetimeBetween3(String value1, String value2) {
+            addCriterion("date_format(donetime, '%Y-%m-%d' ) between", value1, value2, "donetime");
+            return (Criteria) this;
+        }
+        public Criteria andexecutetimeBetween(Date value1, Date value2) {
+            addCriterion("temp.executetime between", value1, value2, "executetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutetimeEqualTo(String value) {
+            addCriterion("date_format(executetime, '%Y-%m-%d' )  ", value, "executetime");
+            return (Criteria) this;
+        }
+        public Criteria andTempTaskidEqualTo(Long value) {
+            addCriterion("temp.taskid =", value, "taskid");
             return (Criteria) this;
         }
         public Criteria andDonetimeNotBetween(Date value1, Date value2) {
@@ -792,7 +809,10 @@ public class TaskreportinfoExample {
             addCriterion("taskcode =", value, "taskcode");
             return (Criteria) this;
         }
-
+        public Criteria andTaskcode2EqualTo(String value) {
+            addCriterion("ter.taskcode =", value, "taskcode");
+            return (Criteria) this;
+        }
         public Criteria andTaskcodeNotEqualTo(String value) {
             addCriterion("taskcode <>", value, "taskcode");
             return (Criteria) this;
@@ -822,7 +842,10 @@ public class TaskreportinfoExample {
             addCriterion("taskcode like", value, "taskcode");
             return (Criteria) this;
         }
-
+        public Criteria andTaskcode2Like(String value) {
+            addCriterion("ter.taskcode like", value, "taskcode");
+            return (Criteria) this;
+        }
         public Criteria andTaskcodeNotLike(String value) {
             addCriterion("taskcode not like", value, "taskcode");
             return (Criteria) this;
@@ -968,73 +991,196 @@ public class TaskreportinfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andLogcatIsNull() {
-            addCriterion("logcat is null");
+        public Criteria andExamtimeIsNull() {
+            addCriterion("examtime is null");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatIsNotNull() {
-            addCriterion("logcat is not null");
+        public Criteria andExamtimeIsNotNull() {
+            addCriterion("examtime is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatEqualTo(String value) {
-            addCriterion("logcat =", value, "logcat");
+        public Criteria andExamtimeEqualTo(Date value) {
+            addCriterion("examtime =", value, "examtime");
+            return (Criteria) this;
+        }
+        public Criteria andExamtimeLike(String value) {
+            addCriterion("ter.examtime like", value, "examtime");
+            return (Criteria) this;
+        }
+        public Criteria andExamtimeNotEqualTo(Date value) {
+            addCriterion("examtime <>", value, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatNotEqualTo(String value) {
-            addCriterion("logcat <>", value, "logcat");
+        public Criteria andExamtimeGreaterThan(Date value) {
+            addCriterion("examtime >", value, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatGreaterThan(String value) {
-            addCriterion("logcat >", value, "logcat");
+        public Criteria andExamtimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("examtime >=", value, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatGreaterThanOrEqualTo(String value) {
-            addCriterion("logcat >=", value, "logcat");
+        public Criteria andExamtimeLessThan(Date value) {
+            addCriterion("examtime <", value, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatLessThan(String value) {
-            addCriterion("logcat <", value, "logcat");
+        public Criteria andExamtimeLessThanOrEqualTo(Date value) {
+            addCriterion("examtime <=", value, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatLessThanOrEqualTo(String value) {
-            addCriterion("logcat <=", value, "logcat");
+        public Criteria andExamtimeIn(List<Date> values) {
+            addCriterion("examtime in", values, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatLike(String value) {
-            addCriterion("logcat like", value, "logcat");
+        public Criteria andExamtimeNotIn(List<Date> values) {
+            addCriterion("examtime not in", values, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatNotLike(String value) {
-            addCriterion("logcat not like", value, "logcat");
+        public Criteria andExamtimeBetween(Date value1, Date value2) {
+            addCriterion("examtime between", value1, value2, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatIn(List<String> values) {
-            addCriterion("logcat in", values, "logcat");
+        public Criteria andExamtimeNotBetween(Date value1, Date value2) {
+            addCriterion("examtime not between", value1, value2, "examtime");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatNotIn(List<String> values) {
-            addCriterion("logcat not in", values, "logcat");
+        public Criteria andExamstateIsNull() {
+            addCriterion("examstate is null");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatBetween(String value1, String value2) {
-            addCriterion("logcat between", value1, value2, "logcat");
+        public Criteria andExamstateIsNotNull() {
+            addCriterion("examstate is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLogcatNotBetween(String value1, String value2) {
-            addCriterion("logcat not between", value1, value2, "logcat");
+        public Criteria andExamstateEqualTo(Integer value) {
+            addCriterion("ter.examstate =", value, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateNotEqualTo(Integer value) {
+            addCriterion("examstate <>", value, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateGreaterThan(Integer value) {
+            addCriterion("examstate >", value, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("examstate >=", value, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateLessThan(Integer value) {
+            addCriterion("examstate <", value, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateLessThanOrEqualTo(Integer value) {
+            addCriterion("examstate <=", value, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateIn(List<Integer> values) {
+            addCriterion("examstate in", values, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateNotIn(List<Integer> values) {
+            addCriterion("examstate not in", values, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateBetween(Integer value1, Integer value2) {
+            addCriterion("examstate between", value1, value2, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamstateNotBetween(Integer value1, Integer value2) {
+            addCriterion("examstate not between", value1, value2, "examstate");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserIsNull() {
+            addCriterion("examuser is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserIsNotNull() {
+            addCriterion("examuser is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria               andExamuserEqualTo(String value) {
+            addCriterion("examuser =", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserNotEqualTo(String value) {
+            addCriterion("examuser <>", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserGreaterThan(String value) {
+            addCriterion("examuser >", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserGreaterThanOrEqualTo(String value) {
+            addCriterion("examuser >=", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserLessThan(String value) {
+            addCriterion("examuser <", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserLessThanOrEqualTo(String value) {
+            addCriterion("examuser <=", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserLike(String value) {
+            addCriterion("examuser like", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserNotLike(String value) {
+            addCriterion("examuser not like", value, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserIn(List<String> values) {
+            addCriterion("examuser in", values, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserNotIn(List<String> values) {
+            addCriterion("examuser not in", values, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserBetween(String value1, String value2) {
+            addCriterion("examuser between", value1, value2, "examuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExamuserNotBetween(String value1, String value2) {
+            addCriterion("examuser not between", value1, value2, "examuser");
             return (Criteria) this;
         }
     }

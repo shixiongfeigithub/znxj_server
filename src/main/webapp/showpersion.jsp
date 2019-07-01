@@ -28,13 +28,12 @@
             }
         }
         function showtask(){
-            window.location="showallcont?page=1";
+            window.location="showallcont?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container">
     <div class="row">
 
@@ -91,7 +90,7 @@
                                     <tr>
                                         <td>
                                             <shiro:hasPermission name="upd:contact">
-                                                <a href="queryById?id=${cont.id}"><i class="glyphicon glyphicon-edit red "></i></a>
+                                                <a href="queryById?id=${cont.id}&page=${pageBean.currentPage}"><i class="glyphicon glyphicon-edit red "></i></a>
                                             </shiro:hasPermission>
                                             <shiro:hasPermission name="del:contact">
                                                 <a href="javascript:void(0)" onclick="delcont(${cont.id},'${cont.name}')"><i class="glyphicon glyphicon-trash"></i></a>

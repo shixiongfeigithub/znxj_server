@@ -29,13 +29,12 @@
             }
         }
         function showtask(){
-            window.location="showlog?page=1";
+            window.location="showlog?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" value="${pageBean.pageNum}" id="page">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>

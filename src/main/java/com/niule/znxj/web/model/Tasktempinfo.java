@@ -64,6 +64,16 @@ public class Tasktempinfo {
         this.updatetime = updatetime;
     }
 
+    public Tasktempinfo(Long taskid,Long userid, Date executetime, Integer state, String taskcode, Integer type,Date updatetime) {
+        this.taskid = taskid;
+        this.userid = userid;
+        this.executetime = executetime;
+        this.state = state;
+        this.taskcode = taskcode;
+        this.type = type;
+        this.updatetime = updatetime;
+    }
+
 
     public Long getId() {
         return id;

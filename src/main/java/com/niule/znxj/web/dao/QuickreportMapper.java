@@ -21,7 +21,7 @@ public interface QuickreportMapper {
     int insertSelective(Quickreport record);
 
  /*   List<Quickreport> selectByExample(QuickreportExample example);*/
-    List<Quickreport> selectByExample(int page,int pagesize,int type);
+    List<Quickreport> selectByExample(int page, int pagesize, int type);
     Quickreport selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") Quickreport record, @Param("example") QuickreportExample example);
@@ -32,6 +32,6 @@ public interface QuickreportMapper {
 
     int updateByPrimaryKey(Quickreport record);
 
-    List<Quickreport> showQuickreport(HashMap<String,Object> map);
+    List<Quickreport> showQuickreport(HashMap<String, Object> map);
 //    List<Quickreport> showQuickreport2();
 }

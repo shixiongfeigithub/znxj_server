@@ -4,6 +4,7 @@ import com.niule.znxj.core.util.PageBean;
 import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.ContactinfoService;
 import com.niule.znxj.web.service.OperateLogService;
+import com.niule.znxj.web.service.SiteService;
 import com.niule.znxj.web.service.TaskPlanService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,9 @@ public class WebContactController {
     private OperateLogService operateLogService;
     @Resource
     private TaskPlanService taskPlanService;
+    @Resource
+    private SiteService siteService;
+
     protected PageBean pageBean = new PageBean();
 
     public PageBean getPageBean() {
@@ -107,15 +111,16 @@ public class WebContactController {
     }
     @RequestMapping("/queryById")
     @RequiresPermissions("upd:contact")
-    public String queryById(Long id,Model m){
+    public String queryById(Long id,Model m,int page){
         Contactinfo contactinfo=contactinfoService.selectByPrimaryKey(id);
+        m.addAttribute("page",page);
         if(m!=null)
             m.addAttribute("contactinfo",contactinfo);
         return "updatepersion";
     }
     @RequestMapping("/updcont")
-    public String updcont(Contactinfo contactinfo,String selectedgroup, HttpSession session){
-        contactinfo.setGroupid(selectedgroup);
+    public String updcont(Contactinfo contactinfo,String selectedgroup, HttpSession session,int page){
+        contactinfo.setGroupid("0");
         int updresult=contactinfoService.updateByPrimaryKey(contactinfo);
         //获取登录用的信息
         //添加操作日志
@@ -124,7 +129,7 @@ public class WebContactController {
         String username=logadmininfo.getUsername();
         int addlog=operateLogService.insertSelective(username,info);
         if(updresult>0&&addlog>0){
-            return "redirect:showallcont?page=1";
+            return "redirect:showallcont?page="+page;
         }
         return "updatepersion";
     }
@@ -137,11 +142,25 @@ public class WebContactController {
         return "showpersiondetail";
     }
 
+    //新增推送内容
     @RequestMapping("sendpersion")
-    public String sendpersion(Model m){
+    public String sendpersion(Model m,HttpServletRequest request){
+        Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
+        List ids = new ArrayList(); //装载当前登录用户对应厂区
+        if (admininfo.getSiteid() == null) { //siteId为空是超级管理员，查询所有厂区
+            List<Siteareainfo> sites = siteService.queryAllSite();
+            if (sites.size() > 0) {
+                for (Siteareainfo siteareainfo : sites) {
+                    ids.add(siteareainfo.getId());
+                }
+            } else
+                ids = null;
+        } else { //siteId不为空有对应厂区
+            ids.add(admininfo.getSiteid());
+        }
         List<Contactinfo> contactinfos=contactinfoService.sendAllPersion();
         TaskplaninfoExample taskplaninfoExample=new TaskplaninfoExample();
-        taskplaninfoExample.createCriteria().andStateNotEqualTo(-1);
+        taskplaninfoExample.createCriteria().andStateNotEqualTo(-1).andSiteidIn(ids);
         List<Taskplaninfo> taskplaninfos=taskPlanService.selectByExample(taskplaninfoExample);
 
         m.addAttribute("taskplaninfos",taskplaninfos);

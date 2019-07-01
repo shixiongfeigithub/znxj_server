@@ -53,6 +53,7 @@
                         </div>
                         <div class="box-content">
                             <form action="updroles" method="post">
+                                <input type="hidden" name="page" value="${page}">
                                 <input type="hidden" class="form-control" style="width: 300px;" name="roleid" required="required" value="${roles.roleid}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
@@ -90,7 +91,7 @@
                                                                                     </c:forTokens>
                                                                                     <span>${power2.power.permissionname}
                                                                                         <input id="${power2.power.persionid}" class="${power2.power.parentid}"
-                                                                                               name="selectedpowers" type="checkbox"
+                                                                                               name="selectedpowers" type="checkbox" style="width: 17px;height: 17px;"
                                                                                                onclick="isOn(this.id,'${power2.power.parentid}')"
                                                                                                value="${power2.power.persionid }"
                                                                                         <c:if test="${power2.hasPower}">checked</c:if>/></span>

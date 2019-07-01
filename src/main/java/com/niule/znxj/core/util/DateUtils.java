@@ -1,5 +1,7 @@
 package com.niule.znxj.core.util;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -25,6 +27,13 @@ public final class DateUtils  {
                 * 1000 - gc.get(gc.MINUTE) * 60 * 1000 - gc.get(gc.SECOND)
                 * 1000 - Long.valueOf(days)*(24 * 60 * 60 * 1000));
         return aa;
+    }
+    public static Date getDaysDate(int days,Date date) {
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(date);
+        return new Date(date.getTime() - gc.get(gc.HOUR_OF_DAY) * 60 * 60
+                * 1000 - gc.get(gc.MINUTE) * 60 * 1000 - gc.get(gc.SECOND)
+                * 1000 - days * (24 * 60 * 60 * 1000));
     }
     /**
      * 某一时间点到现在的天数

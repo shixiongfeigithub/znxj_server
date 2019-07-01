@@ -291,7 +291,7 @@
   <select id="findByPageTerminal" resultMap="BaseResultMap" parameterType="int">
     select
     <include refid="Base_Column_List" />
-    from terminalinfo  limit #{0},#{1}
+    from terminalinfo order by id desc  limit #{0},#{1}
   </select>
   <select id="countTerminal" resultType="int">
     select count(id) from terminalinfo
@@ -304,6 +304,7 @@
     <if test="name!=''">
       and customid like #{name}
     </if>
+    order by id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countTerminal2" resultType="int">

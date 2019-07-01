@@ -164,11 +164,17 @@
 
 //            var checkid = $("#checkname option:selected")[0].value;
             var checkname=$("#checkname option:selected")[0].text;
-            var monthstr=$("#month option:selected")[0].value;
+
+            // var monthstr=$("#month option:selected")[0].value;
+            // var yearstr=$("#year option:selected")[0].value;
+            var monthstr = $("#startTime").val();
+            var yearstr = $("#endTime").val();
             if (checkname=="所有巡检项")
                 checkname=$("#paramcheckname").val();
             if (monthstr=="")
                 monthstr=$("#monthstr").val();
+            if (yearstr=="")
+                yearstr=$("#yearstr").val();
             $.ajax({
                 url : "equipstatechart",
                 type : "GET",
@@ -182,17 +188,19 @@
                     equipname:equipname,
 //                    checkid:checkid,
                     checkname:checkname,
-                    monthstr:monthstr
+                    startTime:monthstr,
+                    endTime:yearstr
                 },
                 success : function(result){
-                    console.log(result.data);
+                    // console.log(result.data);
                     if(result.data!=null && result.data!=""){
                         if(result.data.series.length>=0&&result.data.monthes.length>=0){
                             zhixian(result.data.series,result.data.monthes);
                         }else{
-                            var monthstr=$("#monthstr").val();
+                            // var monthstr=$("#monthstr").val();
+                            // var yearstr=$("#yearstr").val();
                             var checkname2=$("#paramcheckname").val();
-                            alert(checkname2+"巡检项"+monthstr+"月暂无信息");
+                            alert(checkname2+"巡检项暂无信息");
                             return false;
                         }
                     }
@@ -219,8 +227,11 @@
             if(checkname=="所有巡检项"){
                 checkname="";
             }
-            var monthstr=$("#month option:selected")[0].value;
-            window.location.href="equipstateinfo?page=1&checkid="+checkid+"&monthstr="+monthstr+
+           /* var monthstr=$("#month option:selected")[0].value;
+            var yearstr=$("#year option:selected")[0].value;*/
+           var monthstr = $("#startTime").val();
+           var yearstr = $("#endTime").val();
+            window.location.href="equipstateinfo?page=1&checkid="+checkid+"&startTime="+monthstr+"&endTime="+yearstr+
                     "&siteid="+siteid+"&areaid="+areaid+"&equipid="+equipid+"&sitename="+sitename+
                     "&areaname="+areaname+"&equipname="+equipname+"&checkname="+checkname+"&needline=1";
         }
@@ -228,7 +239,8 @@
 </head>
 <body>
 <input type="hidden" id="paramcheckname" value="${checkname}">
-<input type="hidden" id="monthstr" value="${monthstr}">
+<input type="hidden" id="monthstr" value="${startTime}">
+<input type="hidden" id="yearstr" value="${endTime}">
 <input type="hidden" id="returnsiteid" value="${siteid}">
 <input type="hidden" id="returnareaid" value="${areaid}">
 <input type="hidden" id="returnequipid" value="${equipid}">
@@ -282,6 +294,15 @@
                                             <%--<option ${checkname eq checks.itemname?'selected':''} value="${checks.itemname}">${checks.itemname}</option>--%>
                                         <%--</c:forEach>--%>
                                     </select>
+
+
+
+                                    <label class="control-label">选择时间：</label>
+                                    <%--<select  class="form-control" name="year" id="year">
+                                        <option value="2018">2018</option>
+                                        <option ${yearstr eq 2017?'selected':''}>2017</option>
+                                    </select>
+
                                     <label class="control-label">月份：</label>
                                    <select  class="form-control" name="month" id="month">
                                        <option value="">所有月份</option>
@@ -291,7 +312,10 @@
                                        <option ${monthstr eq 7?'selected':''}>7</option><option ${monthstr eq 8?'selected':''}>8</option>
                                        <option ${monthstr eq 9?'selected':''}>9</option><option ${monthstr eq 10?'selected':''}>10</option>
                                        <option ${monthstr eq 11?'selected':''}>11</option><option ${monthstr eq 12?'selected':''}>12</option>
-                                   </select>
+                                   </select>--%>
+
+                                    <input type="text"  class="jeinput" id="startTime" onClick="WdatePicker()" style="width:200px;height: 35px;" placeholder="年/月/日" name="startTime" value="${param.startTime}">&nbsp;&nbsp;至&nbsp;&nbsp;
+                                    <input type="text"  class="jeinput" id="endTime" onClick="WdatePicker()" style="width:200px;height: 35px;" placeholder="年/月/日" name="endTime" value="${param.endTime}">
 
                                     <input type="button" id="btn" class="btn btn-primary" value="搜索" style="margin-left: 50px;" onclick="getreport()">
                                 </form>
@@ -304,7 +328,8 @@
                                     <th>巡检项</th>
                                     <th>巡检项类型</th>
                                     <th>执行时间</th>
-                                    <th>数值</th>
+                                    <th>报告值</th>
+                                    <th>复核值</th>
                                     <th >数据名称</th>
                                     <th>单位</th>
                                 </tr>
@@ -316,22 +341,23 @@
                                         <td>${equipstates.checktype}</td>
                                         <td>${equipstates.operationtime}</td>
                                         <td >${equipstates.numvalue==""?"-":equipstates.numvalue}</td>
+                                        <td >${equipstates.checkvalue==""?"0":equipstates.checkvalue}</td>
                                         <td>${equipstates.recordname}</td>
                                         <td>${equipstates.unitname}</td>
                                     </tr>
                                 </c:forEach>
                             </table>
                             <div style="height: 50px;width: 500px;margin-left: 300px;">
-                                <a href="equipstateinfo?page=1&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&monthstr=${monthstr}">第一页</a>
+                                <a href="equipstateinfo?page=1&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&startTime=${startTime}&endTime=${endTime}">第一页</a>
                                 <c:if test="${equipstates.pageNum>1}">
-                                    <a href="equipstateinfo?page=${equipstates.pageNum-1}&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&monthstr=${monthstr}">上一页</a>
+                                    <a href="equipstateinfo?page=${equipstates.pageNum-1}&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&startTime=${startTime}&endTime=${endTime}">上一页</a>
                                 </c:if>
 
                                 <c:if test="${equipstates.pageNum<equipstates.pages}">
-                                    <a href="equipstateinfo?page=${equipstates.pageNum+1}&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&monthstr=${monthstr}">下一页</a>
+                                    <a href="equipstateinfo?page=${equipstates.pageNum+1}&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&startTime=${startTime}&endTime=${endTime}">下一页</a>
                                 </c:if>
 
-                                <a href="equipstateinfo?page=${equipstates.pages}&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&monthstr=${monthstr}">最后一页</a>
+                                <a href="equipstateinfo?page=${equipstates.pages}&siteid=${siteid}&sitename=${sitename}&areaid=${areaid}&areaname=${areaname}&equipid=${equipid}&equipname=${equipname}&checkname=${checkname}&startTime=${startTime}&endTime=${endTime}">最后一页</a>
 
                                 第${equipstates.pageNum}页/共${equipstates.pages}页
                             </div>

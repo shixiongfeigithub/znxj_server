@@ -29,13 +29,12 @@
             }
         }
         function showtask(){
-            window.location="showsite?page=1";
+            window.location="showsite?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.pageNum}">
 <div class="ch-container">
     <div class="row">
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
@@ -71,7 +70,7 @@
                                         <td>
                                             <c:if test="${siteid==null}">
                                             <shiro:hasPermission name="upd:site">
-                                                <a href="findbysiteid?id=${site.id}"> <i class="glyphicon glyphicon-edit red "></i>
+                                                <a href="findbysiteid?id=${site.id}&page=${pageBean.pageNum}"> <i class="glyphicon glyphicon-edit red "></i>
                                                 </a>
                                             </shiro:hasPermission>
                                             </c:if>

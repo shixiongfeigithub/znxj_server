@@ -12,8 +12,8 @@ public interface UserinfoService {
     public List<Userinfo> findByPageUser(HashMap<String, Object> map);
     public int countUser(HashMap<String, Object> map);
 
-    public List<Userinfo> findByPageUser2(HashMap<String,Object> map);
-    public int countUser2(HashMap<String,Object> map);
+    public List<Userinfo> findByPageUser2(HashMap<String, Object> map);
+    public int countUser2(HashMap<String, Object> map);
 
     int insert(Userinfo record);
     int deleteByPrimaryKey(Long id);
@@ -25,4 +25,12 @@ public interface UserinfoService {
     Userinfo queryRealname(Long id);
 
     int countuser(Long classid);
+
+    /**
+     * 判断该班组下是否已存在该用户
+     * @param userName 用户名
+     * @return
+     */
+//    int isUserExist(String userName, Long classid, Long id, Long oldClassId);
+    int isUserExist(String userName, Long id);
 }

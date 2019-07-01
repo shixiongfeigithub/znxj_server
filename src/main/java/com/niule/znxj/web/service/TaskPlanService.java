@@ -13,11 +13,11 @@ import java.util.List;
  * Created by administor on 2017/3/27.
  */
 public interface TaskPlanService {
-    public List<Taskplaninfo> findByPageTask(HashMap<String,Object> map);
-    public int countTask(HashMap<String,Object> map);
+    public List<Taskplaninfo> findByPageTask(HashMap<String, Object> map);
+    public int countTask(HashMap<String, Object> map);
 
-    public List<Taskplaninfo> findByPageTask2(HashMap<String,Object> map);
-    public int countTask2(HashMap<String,Object> map);
+    public List<Taskplaninfo> findByPageTask2(HashMap<String, Object> map);
+    public int countTask2(HashMap<String, Object> map);
 
     int deleteByPrimaryKey(Long id);
 
@@ -29,9 +29,9 @@ public interface TaskPlanService {
 
     int deleteTaskTempByTaskId(Long taskid);
 
-    List<Taskstopinfo> getStopTask(int page,int size,int state,int type);
+    List<Taskstopinfo> getStopTask(int page, int size, int state, int type);
 
-    List<Taskplaninfo> selectByType(Long siteid,Integer type);
+    List<Taskplaninfo> selectByType(Long siteid, Integer type);
 
     List<Taskplaninfo> selectByExample(TaskplaninfoExample taskplaninfoExample);
 }

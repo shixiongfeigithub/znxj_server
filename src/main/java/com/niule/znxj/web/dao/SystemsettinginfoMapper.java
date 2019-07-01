@@ -31,5 +31,5 @@ public interface SystemsettinginfoMapper extends GenericDao<Systemsettinginfo,Lo
 
     int updateByPrimaryKey(Systemsettinginfo record);
 
-    int updSysByKey(String key,String value);
+    int updSysByKey(String key, String value);
 }

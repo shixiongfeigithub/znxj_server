@@ -23,6 +23,7 @@
                         <div class="box-content">
                             <form action="/updwarntype" method="post">
                                 <input type="hidden" name="id" value="${warntype.id}">
+                                <input type="hidden" name="page" value="${page}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">

@@ -6,7 +6,9 @@ import com.niule.znxj.web.model.ReportcontentExample;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ReportcontentMapper {
     int countByExample(ReportcontentExample example);
 
@@ -30,5 +32,9 @@ public interface ReportcontentMapper {
 
     int updateByPrimaryKey(Reportcontent record);
 
-//    List<Reportcontent> dadiyreportlist(String operationtime);
+    int updateCheckValue(Reportcontent record);
+
+    List<Reportcontent> queryReportcontent(HashMap map);
+
+
 }

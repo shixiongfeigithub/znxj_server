@@ -1,6 +1,7 @@
 package com.niule.znxj.web.controller;
 
 import com.niule.znxj.core.util.PageBean;
+import com.niule.znxj.web.dao.CheckitemTaskMapper;
 import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.CheckInfoService;
 import com.niule.znxj.web.service.DateRecordService;
@@ -29,6 +30,9 @@ public class WebCheckController {
     private DateRecordService dateRecordService;
     @Resource
     private OperateLogService operateLogService;
+    @Resource
+    private CheckitemTaskMapper checkitemTaskMapper;
+
     protected PageBean pageBean = new PageBean();
 
     public PageBean getPageBean() {
@@ -71,8 +75,8 @@ public class WebCheckController {
     }
     @RequestMapping("toaddcheck")
     @RequiresPermissions("add:check")
-    public String toaddcheck(Model m){
-        List<Daterecordinfo> daterecordinfos=dateRecordService.selectByExample();
+    public String toaddcheck(Model m,Integer recodeType){
+        List<Daterecordinfo> daterecordinfos=dateRecordService.selectByExample(recodeType);
         m.addAttribute("daterecordinfos",daterecordinfos);
         return "addcheckitem";
     }
@@ -90,12 +94,17 @@ public class WebCheckController {
         }
         return "addcheckitem";
     }
+
     @RequestMapping("delcheck")
     @RequiresPermissions("del:check")
     @ResponseBody
     public int delcheck(Long id, HttpServletRequest request){
         //删除巡检项
         int delcheck= checkInfoService.deleteByPrimaryKey(id);
+        //2018年7月16日16:46:06 新加   --
+        if (delcheck == 2)
+            return delcheck;
+        //2018年7月16日16:46:06 新加   --
         String checkname=request.getParameter("checkname");
         //添加操作日志
         HttpSession session=request.getSession();
@@ -111,16 +120,23 @@ public class WebCheckController {
     }
     @RequestMapping("querybycheckid")
     @RequiresPermissions("upd:check")
-    public String querybycheckid(Long id,Model m){
+    public String querybycheckid(Long id,Model m,int page,Integer type){
         Checkiteminfo checkiteminfo=checkInfoService.selectByPrimaryKey(id);
-        List<Daterecordinfo> daterecordinfos=dateRecordService.selectByExample();
+        List<Daterecordinfo> daterecordinfos = null;
+        if(type == 3){
+            daterecordinfos=dateRecordService.selectByExample(2);
+        }else if (type == 2){
+            daterecordinfos=dateRecordService.selectByExample(1);
+        }
+
 
         m.addAttribute("checkiteminfo",checkiteminfo);
         m.addAttribute("daterecordinfos",daterecordinfos);
+        m.addAttribute("page",page);
         return "updatecheckiteminfo";
     }
     @RequestMapping("updcheck")
-    public String updcheck(Checkiteminfo checkiteminfo,HttpSession session){
+    public String updcheck(Checkiteminfo checkiteminfo,HttpSession session,int page){
         int updresult=checkInfoService.updateByPrimaryKeySelective(checkiteminfo);
         //获取登录用的信息
 
@@ -130,7 +146,7 @@ public class WebCheckController {
         int addlog=operateLogService.insertSelective(username,info);
 
         if(updresult>0&&addlog>0){
-            return "redirect:showallcheck?page=1";
+            return "redirect:showallcheck?page="+page;
         }
         return "updatecheckiteminfo";
     }
@@ -145,5 +161,13 @@ public class WebCheckController {
     @ResponseBody
     public int getChecknameByid(Long recordid){
         return checkInfoService.selectByExample2(recordid);
+    }
+
+
+    //查询是否有使用的巡检项
+    @RequestMapping("selectUsrCheckItem")
+    @ResponseBody
+    public int selectUsrCheckItem(Long id){
+       return checkInfoService.selectByExample3(id);
     }
 }

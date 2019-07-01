@@ -211,7 +211,7 @@
             attach=JSON.parse($("#attachvalue").val());
             for(var i=0;i<attach.length;i++){
                 photo.push(attach[i]);
-                $("#file").append("<li class='list-group-item' onclick='selectfile(this)' num='"+attach[i]+"'>"+attach[i].substring(attach[i].lastIndexOf("/")+1)+"</li>");
+                $("#file").append("<li class='list-group-item' onclick='selectfile(this)' num='"+attach[i]+"'>"+attach[i].substring(attach[i].lastIndexOf("_")+1)+"</li>");
             }
             change();
         })

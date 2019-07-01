@@ -19,6 +19,8 @@ public class Sendemail {
 
     private String smtpPort;
 
+    private Integer sendexception;
+
     private Taskplaninfo task;
 
     public Taskplaninfo getTask() {
@@ -99,5 +101,13 @@ public class Sendemail {
 
     public void setSmtpPort(String smtpPort) {
         this.smtpPort = smtpPort == null ? null : smtpPort.trim();
+    }
+
+    public Integer getSendexception() {
+        return sendexception;
+    }
+
+    public void setSendexception(Integer sendexception) {
+        this.sendexception = sendexception;
     }
 }

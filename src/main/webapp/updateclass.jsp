@@ -20,7 +20,34 @@
                 pickerPosition:"bottom-left",
                 minuteStep: 10
             });
+
+            //判断是否存在同名班组
+            $("#pwd4").change(function () {
+                var customid = $("#idc").val();
+                var siteareaid = $("#pwd4").val();
+                var id = $("#id").val();
+                $.ajax({
+                    url:"isClassIdExist",
+                    type:"post",
+                    data:{
+                        customName:customid,
+                        siteareaid:siteareaid,
+                        id:id
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data >0){
+                            alert("该厂区下已存在班组名为"+customid+"的班组");
+                            $("input[type='submit']").attr("disabled",true);
+                        }else{
+                            $("input[type='submit']").attr("disabled",false);
+                        }
+                    }
+                })
+            });
         });
+
+
         </script>
 </head>
 <body>
@@ -41,7 +68,8 @@
                         </div>
                         <div class="box-content">
                             <form action="updclass" method="post">
-                                <input type="hidden" name="id" value="${classinfo.id}">
+                                <input type="hidden" name="id" id="id" value="${classinfo.id}">
+                                <input type="hidden" name="page" value="${page}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">
@@ -72,12 +100,26 @@
                                             <label class="control-label" for="pwd3">班组负责人:</label>
                                            <%-- <input type="text" class="form-control" style="width: 300px;" name="directorid" value="${classinfo.userinfo.realname}" id="pwd3">--%>
                                             <select class="form-control" name="directorid" id="pwd3">
-                                                <c:forEach items="${userinfos}" var="user">
-                                                    <option ${classinfo.userinfo.realname eq user.realname ? 'selected' : ''} value="${user.id}">${user.realname}</option>
+                                                <c:forEach items="${userinfos}" var="users">
+                                                    <option ${classinfo.userinfo.realname eq users.realname ? 'selected' : ''} value="${users.id}">${users.realname}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
                                     </tr>
+                                    <%--<tr>--%>
+                                        <%--<td class="form-inline">--%>
+                                            <%--<label class="control-label" for="pwd3">复核责任人:</label><br>--%>
+                                            <%--<c:forEach items="${checkUserList}" var="user" varStatus="status">--%>
+                                                <%--&lt;%&ndash;<input value="${user.check}">&ndash;%&gt;--%>
+                                                <%--<span style="display:inline-block;width: 155px;margin-left: 0px;margin-top: 20px;">--%>
+                                                    <%--<input type="checkbox" ${user.check eq true ? 'checked' : ''} name="checkuserid" value="${user.userinfo.id}" style="height: 15px">${user.userinfo.realname}--%>
+                                                <%--</span>--%>
+                                                <%--<c:if test="${status.count%8==0}">--%>
+                                                    <%--<br>--%>
+                                                <%--</c:if>--%>
+                                            <%--</c:forEach>--%>
+                                        <%--</td>--%>
+                                    <%--</tr>--%>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="pwd4">所属厂区:</label>

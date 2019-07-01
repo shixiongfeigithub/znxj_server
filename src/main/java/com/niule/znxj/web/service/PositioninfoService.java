@@ -23,8 +23,8 @@ public interface PositioninfoService {
     int updateByPrimaryKey(Positioninfo record);
 
     List<Positioninfo> selectByExample();
-    PageInfo<Positioninfo> selectByExample(int page , int size);
-    PageInfo<Positioninfo> selectByExample1(int page,int size,String name);
+    PageInfo<Positioninfo> selectByExample(int page, int size);
+    PageInfo<Positioninfo> selectByExample1(int page, int size, String name);
 
 
 

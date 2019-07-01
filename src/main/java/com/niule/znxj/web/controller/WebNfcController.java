@@ -91,20 +91,21 @@ public class WebNfcController {
     }
     @RequestMapping("querybynfcid")
     @RequiresPermissions("upd:nfc")
-    public String querybynfcid(Long id,Model m){
+    public String querybynfcid(Long id,Model m,int page){
         Nfcinfo nfcinfo=nfcService.selectByPrimaryKey(id);
         m.addAttribute("nfcinfo",nfcinfo);
+        m.addAttribute("page",page);
         return "updatenfcinfo";
     }
     @RequestMapping("updatenfc")
-    public String updatenfc(Nfcinfo nfcinfo,HttpSession session){
+    public String updatenfc(Nfcinfo nfcinfo,HttpSession session,int page){
         int updresult=nfcService.updateByPrimaryKeySelective(nfcinfo);
         String name="修改了nfc"+nfcinfo.getCustomid()+"的信息";
         Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
         String username=logadmininfo.getUsername();
         int addlogres=operateLogService.insertSelective(username,name);
         if(updresult>0&&addlogres>0){
-           return "redirect:showallnfc?page=1";
+           return "redirect:showallnfc?page="+page;
        }
         return "updatenfcinfo";
     }

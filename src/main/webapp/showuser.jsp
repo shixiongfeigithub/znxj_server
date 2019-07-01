@@ -52,16 +52,14 @@
             }
         }
         function showtask(){
-            window.location="showallusers?page=1";
+            window.location="showallusers?page="+$("#page").val();
         }
     </script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
+<input type="hidden" id="page" value="${pageBean.currentPage}">
 <div class="ch-container">
     <div class="row">
-
         <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
         <div id="content"class="col-lg-12 col-sm-12">
             <div class="row">
@@ -123,7 +121,7 @@
                                     <tr>
                                         <td>
                                             <shiro:hasPermission name="upd:user">
-                                                <a href="querybyid?id=${user.id}"><i class="glyphicon glyphicon-edit red "></i></a>
+                                                <a href="querybyUserId?id=${user.id}&page=${pageBean.currentPage}"><i class="glyphicon glyphicon-edit red "></i></a>
                                             </shiro:hasPermission>
                                             <shiro:hasPermission name="del:user">
                                                 <a href="javascript:void(0)" onclick="classbyuserid(${user.id},'${user.realname}')"><i class="glyphicon glyphicon-trash"></i></a>

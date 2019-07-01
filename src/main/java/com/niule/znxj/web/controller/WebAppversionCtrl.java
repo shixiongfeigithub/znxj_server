@@ -43,15 +43,29 @@ public class WebAppversionCtrl {
     @Resource
     private OperateLogService operateLogService;
 
-    @RequestMapping(value = "showappversion",method = RequestMethod.POST)
+    /**
+     * 查看apk版本信息
+     * @param page
+     * @param m
+     * @return
+     */
+    @RequestMapping(value = "showappversion")
     public String showappversion(int page, Model m){
         int size=15;
         PageInfo info = new PageInfo<>(appversionService.selectByExample(page,size));
         m.addAttribute("info",info);
         return "appversion/showappversion";
     }
+
+    /**
+     * 添加新的apk
+     * @param request
+     * @return
+     * @throws ServletException
+     * @throws IOException
+     */
     @RequestMapping("/addappversion")
-    @RequiresPermissions("add:apk")
+//    @RequiresPermissions("add:apk")
     @ResponseBody
     public int addappversion(HttpServletRequest request)throws ServletException, IOException {
         Appversion appversion=new Appversion();
@@ -156,10 +170,16 @@ public class WebAppversionCtrl {
         return result;
     }
 
+    /**
+     * 删除apk
+     * @param id
+     * @param session
+     * @param request
+     * @return
+     */
     @RequestMapping("/delappversion")
     @ResponseBody
-    @RequiresPermissions("del:apk")
-
+//    @RequiresPermissions("del:apk")
     public int delappversion(int id,HttpSession session,HttpServletRequest request){
         int delappversion=appversionService.deleteByPrimaryKey(id);
         //获取登录用户的信息

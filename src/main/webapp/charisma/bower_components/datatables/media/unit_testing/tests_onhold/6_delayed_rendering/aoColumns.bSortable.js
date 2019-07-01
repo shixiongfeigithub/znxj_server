@@ -38,7 +38,7 @@ $(document).ready( function () {
 	oTest.fnWaitTest( 
 		"Disabled column has no sorting class",
 		null,
-		function () { return $('#example thead th:eq(1)').hasClass("sorting_asc") == false; }
+		function () { return $('#example thead th:eq(1)').hasClass("sorting_desc") == false; }
 	);
 	
 	oTest.fnWaitTest( 

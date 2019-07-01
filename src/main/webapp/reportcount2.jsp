@@ -171,7 +171,7 @@
                                             <th>最高值</th>
                                             <th>下限警告值</th>
                                             <th>上限警告值</th>
-                                            <th>数值</th>
+                                            <th>报告值</th>
                                             <th>数据名称</th>
                                             <th>单位</th>
                                             <th>异常描述</th>
@@ -189,15 +189,22 @@
                                                 <td>${reports.lowerwarning}</td>
                                                 <td>${reports.upperwarning}</td>
                                                 <td>
+                                                    <%--<c:if test="${reports.checktype == '枚举项'}">--%>
+                                                        <%--<c:if test="${reports.enumitem == ''}">-</c:if>--%>
+                                                        <%--<c:if test="${reports.enumitem != ''}">${reports.enumitem}</c:if>--%>
+                                                    <%--</c:if>--%>
 
-                                                    <c:if test="${reports.numvalue!=''}">
+                                                    <%--<c:if test="${reports.checktype != '枚举项'}">--%>
+                                                        <c:if test="${reports.numvalue!=''}">
 
-                                                        <c:if test="${Double.parseDouble(reports.numvalue) < Double.parseDouble(reports.normalmin)}"><span style="color: red;">${reports.numvalue}↓↓</span></c:if>
-                                                        <c:if test="${Double.parseDouble(reports.numvalue) > Double.parseDouble(reports.normalmax)}"><span style="color: red;">${reports.numvalue}↑↑</span></c:if>
-                                                        <c:if test="${ Double.parseDouble(reports.normalmin)<=Double.parseDouble(reports.numvalue)}">
-                                                            <c:if test="${Double.parseDouble(reports.numvalue) <= Double.parseDouble(reports.normalmax)}"> <span>${reports.numvalue}</span></c:if>
+                                                            <c:if test="${Double.parseDouble(reports.numvalue) < Double.parseDouble(reports.normalmin)}"><span style="color: red;">${reports.numvalue}↓↓</span></c:if>
+                                                            <c:if test="${Double.parseDouble(reports.numvalue) > Double.parseDouble(reports.normalmax)}"><span style="color: red;">${reports.numvalue}↑↑</span></c:if>
+                                                            <c:if test="${ Double.parseDouble(reports.normalmin)<=Double.parseDouble(reports.numvalue)}">
+                                                                <c:if test="${Double.parseDouble(reports.numvalue) <= Double.parseDouble(reports.normalmax)}"> <span>${reports.numvalue}</span></c:if>
+                                                            </c:if>
                                                         </c:if>
-                                                    </c:if>
+                                                    <%--</c:if>--%>
+
                                                         <%--<c:if test="${reports.numvalue!=''}">--%>
                                                             <%--<c:if test="${reports.normalmin!=''}">--%>
                                                                 <%--<c:if test="${reports.numvalue < reports.normalmin}"><span style="color: red;">${reports.numvalue}↓↓</span></c:if>--%>

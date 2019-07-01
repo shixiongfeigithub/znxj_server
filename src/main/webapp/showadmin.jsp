@@ -29,14 +29,12 @@
         }
     }
     function showtask(){
-        window.location="showadmin?page=1";
+        window.location="showadmin?page="+$("#page").val();
     }
 </script>
 </head>
 <body style="overflow-x:hidden;">
-<%--<jsp:include page="/WEB-INF/pages/common/navigation.jsp" />--%>
-<!-- topbar ends -->
-<%--<div class="ch-container">--%>
+<input type="hidden" id ="page" value="${admininfos.pageNum}">
     <div class="row">
        <%-- <jsp:include page="/WEB-INF/pages/common/menu.jsp" />--%>
         <div id="content" class="col-lg-12 col-sm-12">
@@ -70,8 +68,8 @@
                                 <c:forEach items="${admininfos.list}" var="a">
                                     <tr>
                                         <td>
-                                            <shiro:hasPermission name="upd:admin"><a href="selectbyid?id=${a.id}"> <i class="glyphicon glyphicon-edit red "></i></a></shiro:hasPermission>
-                                            <shiro:hasPermission name="del:admin"><a href="javascript:void(0)" onclick="deladmin(${a.id},'${a.username}')"><i class="glyphicon glyphicon-trash"></i></a></shiro:hasPermission>
+                                            <shiro:hasPermission name="upd:admin"><a href="selectbyid?id=${a.id}&page=${admininfos.pageNum}"> <i class="glyphicon glyphicon-edit red "></i></a></shiro:hasPermission>
+                                            <shiro:hasPermission name="del:admin"><a href="javascript:void(0)" onclick="deladmin(${a.id},'${a.username}','${admininfos.pageNum}')"><i class="glyphicon glyphicon-trash"></i></a></shiro:hasPermission>
                                             <a href="selectbyadminid?id=${a.id}"> <i class="glyphicon glyphicon-info-sign blue "></i></a>
                                         </td>
                                         <td>${a.username}</td>
