@@ -30,8 +30,8 @@
         var count;
         //浮点数值
         function CheckInputIntFloat(oInput) {
-            if('' != oInput.value.replace(/\d{1,}\.{0,1}\d{0,}/,'')) {
-                oInput.value = oInput.value.match(/\d{1,}\.{0,1}\d{0,}/) == null ? '' :oInput.value.match(/\d{1,}\.{0,1}\d{0,}/);
+            if('' != oInput.value.replace(/-?\d{1,}\.{0,1}\d{0,}/,'')) {
+                oInput.value = oInput.value.match(/-?\d{1,}\.{0,1}\d{0,}/) == null ? '' :oInput.value.match(/-?\d{1,}\.{0,1}\d{0,}/);
             }
         }
         $(function () {
