@@ -129,6 +129,27 @@ public class WebAdmininfoController {
                         return "login";
             		}
             	}
+			}else{
+				if(authUserInfo.getFreezetime()!=null){
+					long freezeTime = authUserInfo.getFreezetime().getTime();
+	            	int secend = (int) ((nowTime - freezeTime)/1000);
+	            	if(secend<=Integer.parseInt(timeNum)) {
+	            		model.addAttribute("error", "账户已被冻结，请稍后再试 ！");
+	        			String info="用户"+authUserInfo.getUsername()+"登录失败";
+	                    int addlog=operateLogService.insertSelective(authUserInfo.getUsername(),info);
+	                    return "login";
+	            	}
+				}
+				if (authUserInfo.getState()==0){
+                    model.addAttribute("error","该账号已被禁用！");
+                    return "login";
+                }
+                if(authUserInfo.getState()==1){
+                    if(authUserInfo.getExpirydate().getTime() < nowTime){
+                        model.addAttribute("error","该账号已过期！");
+                        return "login";
+                    }
+                }
 			}
             
             Subject subject = SecurityUtils.getSubject();
@@ -140,7 +161,7 @@ public class WebAdmininfoController {
             subject.login(new UsernamePasswordToken(admininfo.getUsername(), admininfo.getPassword()));
             if(authUserInfo!=null&&authUserInfo.getState()==1){
                 String info="用户"+authUserInfo.getUsername()+"已登录";
-                authUserInfo.setFailnums(null);
+                authUserInfo.setFailnums(0);
                 authUserInfo.setFreezetime(null);
                 admininfoService.updateByPrimaryKeySelective(authUserInfo);
                 String username=authUserInfo.getUsername();
