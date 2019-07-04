@@ -140,6 +140,9 @@ public class WebAdmininfoController {
             subject.login(new UsernamePasswordToken(admininfo.getUsername(), admininfo.getPassword()));
             if(authUserInfo!=null&&authUserInfo.getState()==1){
                 String info="用户"+authUserInfo.getUsername()+"已登录";
+                authUserInfo.setFailnums(null);
+                authUserInfo.setFreezetime(null);
+                admininfoService.updateByPrimaryKeySelective(authUserInfo);
                 String username=authUserInfo.getUsername();
                 int addlog=operateLogService.insertSelective(username,info);
                 List<Systemsettinginfo> systems1=systemService.selectByExample();
