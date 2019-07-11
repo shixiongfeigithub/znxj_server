@@ -587,7 +587,7 @@
                                                     <td class="fontcenter">
                                                         <c:if test="${reports.checktype=='记录项'}">
                                                             <c:if test="${taskreportinfo.examstate==0}">
-                                                                <input type="text" onkeyup="javascript:CheckInputIntFloat(this);" style="width: 50px"
+                                                                <input type="text" onblur="javascript:CheckInputIntFloat(this);" style="width: 50px"
                                                                        value="${reports.numvalue}">
                                                             </c:if>
                                                             <c:if test="${taskreportinfo.examstate==1}">

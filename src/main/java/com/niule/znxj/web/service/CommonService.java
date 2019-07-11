@@ -2,10 +2,8 @@ package com.niule.znxj.web.service;
 
 import com.niule.znxj.core.entity.Result;
 import com.niule.znxj.web.model.*;
-import com.niule.znxj.web.model.taskcontent.TaskCheckItem;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
