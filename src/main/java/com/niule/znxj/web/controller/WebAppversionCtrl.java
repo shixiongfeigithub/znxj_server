@@ -69,7 +69,8 @@ public class WebAppversionCtrl {
     @ResponseBody
     public int addappversion(HttpServletRequest request)throws ServletException, IOException {
         Appversion appversion=new Appversion();
-        String savePath = request.getSession().getServletContext().getRealPath("/apk");
+        //String savePath = request.getSession().getServletContext().getRealPath("/apk");
+        String savePath =  Resources.ApplicationResources.getString("apkfile.path");
         File file = new File(savePath);
         if(!file.exists()&&!file.isDirectory()){
             System.out.println("目录或文件不存在！");
