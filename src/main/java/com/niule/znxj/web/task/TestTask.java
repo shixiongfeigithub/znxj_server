@@ -17,13 +17,13 @@ public class TestTask {
     /**
      * 凌晨0点 触发生成当天任务
      */
-    @Scheduled(cron = "0 0 0 * * ?")
+    //@Scheduled(cron = "0 0 0 * * ?")
     public void dojob() {
         commonService.generate();
     }
 
     //发送日报
-    @Scheduled(cron = "0 0 0 * * ?")
+ //   @Scheduled(cron = "0 0 0 * * ?")
 //    @Scheduled(cron = "0 0/1 * * * ?" )
 //    @Scheduled(cron="0/5 * *  * * ? ")   //每5秒执行一次
 //    @Scheduled(cron = "0 19 18 ? * *" )
@@ -32,7 +32,7 @@ public class TestTask {
     }
 
     //发送周报
-    @Scheduled(cron = "0 0 0 ? * MON")
+//    @Scheduled(cron = "0 0 0 ? * MON")
 //    @Scheduled(cron = "0 04 10 ? * *" )
 //      @Scheduled(cron = "0 0/1 14 * * ?" )
     public void sendweekemail() {
@@ -40,13 +40,13 @@ public class TestTask {
     }
 
     //    发送月报
-    @Scheduled(cron = "0 0 0 ? * ?")
+ //   @Scheduled(cron = "0 0 0 ? * ?")
 //    @Scheduled(cron = "0 0/1 17 * * ?" )
     public void sendmonthemail() {
         commonService.sendmonthemail();
     }
 
-    @Scheduled(cron = "0 */1 * * * ?")
+ //   @Scheduled(cron = "0 */1 * * * ?")
     public void automaticExamine() {
         commonService.automaticExamine();
     }

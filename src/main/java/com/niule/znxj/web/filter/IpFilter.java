@@ -25,9 +25,6 @@ public class IpFilter implements Filter{
 	//用来存放允许访问的ip
 	private List<String> allowList = new ArrayList<String>();
 	
-	//app端接口
-	private String appForward = "/app";
-	
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		try {
@@ -48,27 +45,25 @@ public class IpFilter implements Filter{
 		String remoteAddr = getIpAddr(httpServletRequest);
 		System.out.println("===============" + servlerPath+"  ip:"+remoteAddr);
 		//如果allowList为空,则认为没做限制,不为空则检查是否限制
-		if (servlerPath.indexOf(appForward)!=-1) {
+
+		if(allowList.size() == 0 || allowList == null) {
 			filterChain.doFilter(request, response);
-		}else {
-			if(allowList.size() == 0 || allowList == null) {
-				filterChain.doFilter(request, response);
-			} else {
-				Boolean flag = false;  //访问标志，默认为false，限制访问
-				for(String regex : allowList){
-					if(remoteAddr.matches(regex)){
-						//ip没被限制，正常访问
-						filterChain.doFilter(request, response);
-						flag = true;  //置为true，表示不限制访问
-						break;
-					}
-				}
-				if(!flag) {
-					//ip被限制，跳到指定页面
-					request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
+		} else {
+			Boolean flag = false;  //访问标志，默认为false，限制访问
+			for(String regex : allowList){
+				if(remoteAddr.matches(regex)){
+					//ip没被限制，正常访问
+					filterChain.doFilter(request, response);
+					flag = true;  //置为true，表示不限制访问
+					break;
 				}
 			}
+			if(!flag) {
+				//ip被限制，跳到指定页面
+				request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
+			}
 		}
+
 	}
 	
 	@Override
