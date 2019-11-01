@@ -51,6 +51,7 @@ public class SecurityRealm extends AuthorizingRealm {
            /* authorizationInfo.addRole(role.getRolessign());*/
             final List<Power> permissions = powerMapper.selectByRoleid(role.getRoleid());
             for (Power permission : permissions) {// 添加权限
+                System.out.println(permission.getPersionid()+" "+permission.getPermissionname());
                 authorizationInfo.addStringPermission(permission.getPermissionsign());
             }
         return authorizationInfo;

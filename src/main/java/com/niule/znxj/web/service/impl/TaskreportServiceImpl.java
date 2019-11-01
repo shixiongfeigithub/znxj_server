@@ -210,15 +210,7 @@ public class TaskreportServiceImpl implements TaskreportService {
         return taskreportinfoMapper.updateByPrimaryKeyWithBLOBs(taskreportinfo);
     }
 
-    @Override
-    public List<Taskreportinfo> findByPageReport2(HashMap<String, Object> map) {
-        return taskreportinfoMapper.findByPageReport2(map);
-    }
 
-    @Override
-    public int countReport2(HashMap<String, Object> map) {
-        return taskreportinfoMapper.countReport2(map);
-    }
 
     @Override
     public int deleteByExample(TaskreportinfoExample example) {
@@ -234,7 +226,25 @@ public class TaskreportServiceImpl implements TaskreportService {
     public List<Taskreportinfo> getreportbytype(int type) {
         return taskreportinfoMapper.getreportbytype(type);
     }
+    @Override
+    public List<Taskreportinfo> findByPageReport2(HashMap<String, Object> map) {
+        return taskreportinfoMapper.findByPageReport2(map);
+    }
 
+    @Override
+    public int countReport2(HashMap<String, Object> map) {
+        return taskreportinfoMapper.countReport2(map);
+    }
+
+    @Override
+    public List<Taskreportinfo> findByPageReport3(HashMap<String, Object> map) {
+        return taskreportinfoMapper.findByPageReport3(map);
+    }
+
+    @Override
+    public int countReport3(HashMap<String, Object> map) {
+        return taskreportinfoMapper.countReport3(map);
+    }
     /**
      * 饼图设计
      *

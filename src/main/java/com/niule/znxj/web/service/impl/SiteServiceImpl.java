@@ -56,6 +56,15 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
+    public List<Siteareainfo> selectByExample3(List<Long> siteids) {
+        SiteareainfoExample example=new SiteareainfoExample();
+        if(siteids!=null){
+            example.createCriteria().andIdIn(siteids);
+        }
+        return siteareainfoMapper.selectByExample(example);
+    }
+
+    @Override
     public List<Siteareainfo> findByPageSite(HashMap<String,Object> map) {
         int page=Integer.parseInt(map.get("page").toString());
         int size=Integer.parseInt(map.get("size").toString());

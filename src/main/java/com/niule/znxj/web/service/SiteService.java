@@ -17,8 +17,7 @@ public interface SiteService {
      * @return
      */
     List<Siteareainfo> queryAllSite();
-    public List<Siteareainfo> findByPageSite(HashMap<String, Object> map);
-//    public int countSite();
+    List<Siteareainfo> findByPageSite(HashMap<String, Object> map);
     int deleteByPrimaryKey(Long id);
 
     int insert(Siteareainfo record);
@@ -27,6 +26,7 @@ public interface SiteService {
     int updateByPrimaryKeySelective(Siteareainfo record);
     List<Siteareainfo> selectByExample();
     List<Siteareainfo> selectByExample2(Integer siteid);
+    List<Siteareainfo> selectByExample3(List<Long> siteids);
     List<Siteareainfo> queryAllSite2(int page, int size);
     List<Siteareainfo> selectSiteByUser(SiteareainfoExample example);
 

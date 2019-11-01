@@ -109,12 +109,7 @@ public class WebTaskPlanController {
         map.put("type", type);
         List<Taskplaninfo> taskplaninfos = null;
         if (((identifyingid == null) || ("".equals(identifyingid))) && ((state == null) || ("".equals(state)))) {
-//            if (page == 1) {
-//            taskplaninfos = getTaskplaninfos(type, page, pagesize);
-
-//            } else
                 taskplaninfos = this.taskPlanService.findByPageTask(map);
-
             int rows1 = this.taskPlanService.countTask(map);
             totalpage = PageBean.counTotalPage(pagesize, rows1);
             state = "";

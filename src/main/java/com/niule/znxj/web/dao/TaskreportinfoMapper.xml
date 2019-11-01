@@ -49,6 +49,12 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
     <result column="logcat" property="logcat" jdbcType="LONGVARCHAR" />
   </resultMap>
+
+  <resultMap id="newBaseResultMap" type="com.niule.znxj.web.model.Taskreportinfo" extends="BaseResultMap" >
+    <result column="areacustomid" property="areacustomid" jdbcType="VARCHAR" />
+    <result column="equipmentcustomid" property="equipmentcustomid" jdbcType="VARCHAR" />
+  </resultMap>
+
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -609,41 +615,8 @@
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
     order by temp.id DESC
     limit #{page},#{pagesize}
-
   </select>
   <select id="countReport2" resultType="int" parameterType="map">
-    <!--select count(temp.id)-->
-    <!--from tasktempinfo temp-->
-    <!--left join taskreportinfo ter on ter.taskcode=temp.taskcode-->
-    <!--left join taskstopinfo st on temp.id=st.tasktempid-->
-    <!--left join taskplaninfo t on t.id=temp.taskid-->
-    <!--left join userinfo u on t.directorid=u.id-->
-    <!--left join terminalinfo term on ter.termimalid=term.id-->
-    <!--left join siteareainfo s on s.id=t.siteid-->
-    <!--where temp.type=#{tasktype}-->
-    <!--and s.id in-->
-    <!--<foreach collection="ids"  item="siteid" open="(" separator="," close=")" >-->
-      <!--#{siteid}-->
-    <!--</foreach>-->
-    <!--<if test="taskcode!=null">-->
-      <!--and temp.taskcode like #{taskcode}-->
-    <!--</if>-->
-    <!--<if test="reportstate!=null and reportstate!=''">-->
-      <!--and ter.reportstate=#{reportstate}-->
-    <!--</if>-->
-    <!--<if test="operationstate!=null and operationstate!=''">-->
-      <!--and  temp.operationstate=#{operationstate}-->
-    <!--</if>-->
-    <!--<if test="state!=null and state!=''">-->
-      <!--and temp.state=#{state}-->
-    <!--</if>-->
-    <!--<if test="stopstate!=null and stopstate!=''">-->
-      <!--and temp.stopstate=#{stopstate}-->
-    <!--</if>-->
-    <!--<if test="time1!=null and time1!=''">-->
-      <!--and date_format(ter.donetime, '%Y-%m-%d' ) between #{time1,jdbcType=VARCHAR}  </if>-->
-    <!--<if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>-->
-    <!--order by temp.executetime DESC-->
     select count(temp.id) from tasktempinfo temp
     left join taskreportinfo ter on ter.taskcode=temp.taskcode
     left join taskstopinfo st on temp.id=st.tasktempid
@@ -679,6 +652,124 @@
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
     order by temp.id DESC
   </select>
+
+
+  <select id="findByPageReport3" parameterType="map" resultMap="newBaseResultMap">
+    select ter.id,ter.taskid,ter.donetime,ter.uploadtime,ter.reportstate,ter.worker,ter.termimalid,
+    ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
+    u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.operationstate tempoperationstate,
+    temp.stopstate,temp.taskcode temptaskcode,temp.executetime,temp.updatetime,st.id stopid,st.reason stopreason,
+    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,a.customid areacustomid,e.customid equipmentcustomid
+    from tasktempinfo temp
+    left join taskreportinfo ter on ter.taskcode=temp.taskcode
+    left join taskstopinfo st on temp.id=st.tasktempid
+    left join taskplaninfo t on t.id=temp.taskid
+    left join userinfo u on t.directorid=u.id
+    left join terminalinfo term on ter.termimalid=term.id
+    left join siteareainfo s on s.id=t.siteid
+    left join area_task at on t.id=at.taskid
+    left join areainfo a on a.id=at.areaid
+    left join equipment_task et on t.id=et.taskid
+    left join equipmentinfo e on e.id=et.equipmentid
+    where temp.type in
+    <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
+      #{type}
+    </foreach>
+     and  temp.operationstate in
+    <foreach collection="operationstates"  item="operationstate" open="(" separator="," close=")" >
+      #{operationstate}
+    </foreach>
+     and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="areaid!=null">
+      and a.id = #{areaid}
+    </if>
+    <if test="equipmentid!=null">
+      and e.id = #{equipmentid}
+    </if>
+    <if test="worker!=null">
+      and ter.worker = #{worker}
+    </if>
+    <if test="taskcode!=null">
+      and t.identifyingid = #{taskcode}
+    </if>
+    <if test="reportstate!=null and reportstate!=''">
+      and ter.reportstate=#{reportstate}
+    </if>
+    <if test="operationstate!=null and operationstate!=''">
+      and  temp.operationstate=#{operationstate}
+    </if>
+    <if test="state!=null and state!=''">
+      and temp.state in
+      <foreach collection="state"  item="state" open="(" separator="," close=")" >
+        #{state}
+      </foreach>
+    </if>
+    <if test="stopstate!=null and stopstate!=''">
+      and temp.stopstate=#{stopstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(temp.executetime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by temp.id DESC
+    limit #{page},#{pagesize}
+  </select>
+  <select id="countReport3" resultType="int" parameterType="map">
+    select count(temp.id) from tasktempinfo temp
+    left join taskreportinfo ter on ter.taskcode=temp.taskcode
+    left join taskstopinfo st on temp.id=st.tasktempid
+    left join taskplaninfo t on t.id=temp.taskid
+    left join userinfo u on t.directorid=u.id
+    left join terminalinfo term on ter.termimalid=term.id
+    left join siteareainfo s on s.id=t.siteid
+    where temp.type in
+    <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
+      #{type}
+    </foreach>
+    and  temp.operationstate in
+    <foreach collection="operationstates"  item="operationstate" open="(" separator="," close=")" >
+      #{operationstate}
+    </foreach>
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="areaid!=null">
+      and a.id = #{areaid}
+    </if>
+    <if test="equipmentid!=null">
+      and e.id = #{equipmentid}
+    </if>
+    <if test="worker!=null">
+      and ter.worker = #{worker}
+    </if>
+    <if test="taskcode!=null">
+      and t.identifyingid = #{taskcode}
+    </if>
+    <if test="reportstate!=null and reportstate!=''">
+      and ter.reportstate=#{reportstate}
+    </if>
+    <if test="operationstate!=null and operationstate!=''">
+      and  temp.operationstate=#{operationstate}
+    </if>
+    <if test="state!=null and state!=''">
+      and temp.state in
+      <foreach collection="state"  item="state" open="(" separator="," close=")" >
+        #{state}
+      </foreach>
+    </if>
+    <if test="stopstate!=null and stopstate!=''">
+      and temp.stopstate=#{stopstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(temp.executetime, '%Y-%m-%d' ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by temp.id DESC
+  </select>
+
   <select id="queryByTaskidAndDonetime" resultMap="BaseResultMap">
     select * from taskreportinfo where taskid=#{0}
   </select>
@@ -688,19 +779,7 @@
     <if test="reportstate!=null and reportstate!=''">and reportstate=#{reportstate}</if>
     <if test="donetime!=null">and DATE(donetime)=#{donetime}</if>
   </select>
-  <!--<select id="gettaskreportlog" resultMap="BaseResultMap" parameterType="map">-->
-  <!--select ter.id,ter.taskid,ter.donetime,ter.logcat,ter.tasktype,ter.reportstate,-->
-  <!--ter.worker,ter.taskcode,ter.starttime,ter.endtime,u.realname,t.customid ,s.customid sitename-->
-  <!--from taskreportinfo ter-->
-  <!--left join taskplaninfo t on ter.taskid=t.id-->
-  <!--left join userinfo u on ter.userid=u.id-->
-  <!--left join siteareainfo s on s.id=t.siteid-->
-  <!--where ter.logcat is not null-->
-  <!--<if test="siteid!=null and siteid!=''">-->
-  <!--s.id=#{siteid}-->
-  <!--</if>-->
-  <!--order by ter.endtime desc-->
-  <!--</select>-->
+
   <select id="gettaskreportlog2" resultMap="BaseResultMap" parameterType="map">
     select ter.id,ter.taskid,ter.donetime,ter.logcat,ter.tasktype,ter.reportstate,
     ter.worker,ter.taskcode,ter.starttime,ter.endtime,u.realname,t.customid,s.customid sitename from
