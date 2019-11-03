@@ -50,11 +50,6 @@
     <result column="logcat" property="logcat" jdbcType="LONGVARCHAR" />
   </resultMap>
 
-  <resultMap id="newBaseResultMap" type="com.niule.znxj.web.model.Taskreportinfo" extends="BaseResultMap" >
-    <result column="areacustomid" property="areacustomid" jdbcType="VARCHAR" />
-    <result column="equipmentcustomid" property="equipmentcustomid" jdbcType="VARCHAR" />
-  </resultMap>
-
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -654,12 +649,12 @@
   </select>
 
 
-  <select id="findByPageReport3" parameterType="map" resultMap="newBaseResultMap">
+  <select id="findByPageReport3" parameterType="map" resultMap="BaseResultMap">
     select ter.id,ter.taskid,ter.donetime,ter.uploadtime,ter.reportstate,ter.worker,ter.termimalid,
     ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
     u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.operationstate tempoperationstate,
     temp.stopstate,temp.taskcode temptaskcode,temp.executetime,temp.updatetime,st.id stopid,st.reason stopreason,
-    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,a.customid areacustomid,e.customid equipmentcustomid
+    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname
     from tasktempinfo temp
     left join taskreportinfo ter on ter.taskcode=temp.taskcode
     left join taskstopinfo st on temp.id=st.tasktempid
@@ -667,32 +662,18 @@
     left join userinfo u on t.directorid=u.id
     left join terminalinfo term on ter.termimalid=term.id
     left join siteareainfo s on s.id=t.siteid
-    left join area_task at on t.id=at.taskid
-    left join areainfo a on a.id=at.areaid
-    left join equipment_task et on t.id=et.taskid
-    left join equipmentinfo e on e.id=et.equipmentid
     where temp.type in
     <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
       #{type}
-    </foreach>
-     and  temp.operationstate in
-    <foreach collection="operationstates"  item="operationstate" open="(" separator="," close=")" >
-      #{operationstate}
     </foreach>
      and s.id in
     <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
       #{siteid}
     </foreach>
-    <if test="areaid!=null">
-      and a.id = #{areaid}
-    </if>
-    <if test="equipmentid!=null">
-      and e.id = #{equipmentid}
-    </if>
-    <if test="worker!=null">
+    <if test="worker!=null and worker!=''">
       and ter.worker = #{worker}
     </if>
-    <if test="taskcode!=null">
+    <if test="taskcode!=null and taskcode!=''">
       and t.identifyingid = #{taskcode}
     </if>
     <if test="reportstate!=null and reportstate!=''">
@@ -706,9 +687,6 @@
       <foreach collection="state"  item="state" open="(" separator="," close=")" >
         #{state}
       </foreach>
-    </if>
-    <if test="stopstate!=null and stopstate!=''">
-      and temp.stopstate=#{stopstate}
     </if>
     <if test="time1!=null and time1!=''">
       and date_format(temp.executetime, '%Y-%m-%d'
@@ -729,24 +707,14 @@
     <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
       #{type}
     </foreach>
-    and  temp.operationstate in
-    <foreach collection="operationstates"  item="operationstate" open="(" separator="," close=")" >
-      #{operationstate}
-    </foreach>
     and s.id in
     <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
       #{siteid}
     </foreach>
-    <if test="areaid!=null">
-      and a.id = #{areaid}
-    </if>
-    <if test="equipmentid!=null">
-      and e.id = #{equipmentid}
-    </if>
-    <if test="worker!=null">
+    <if test="worker!=null and worker!=''">
       and ter.worker = #{worker}
     </if>
-    <if test="taskcode!=null">
+    <if test="taskcode!=null and taskcode!=''">
       and t.identifyingid = #{taskcode}
     </if>
     <if test="reportstate!=null and reportstate!=''">
@@ -760,9 +728,6 @@
       <foreach collection="state"  item="state" open="(" separator="," close=")" >
         #{state}
       </foreach>
-    </if>
-    <if test="stopstate!=null and stopstate!=''">
-      and temp.stopstate=#{stopstate}
     </if>
     <if test="time1!=null and time1!=''">
       and date_format(temp.executetime, '%Y-%m-%d' ) between #{time1,jdbcType=VARCHAR}  </if>

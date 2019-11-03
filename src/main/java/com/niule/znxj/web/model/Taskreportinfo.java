@@ -53,10 +53,6 @@ public class Taskreportinfo {
 
     private Tasktempinfo temp;
 
-    private String areacustomid;
-
-    private String equipmentcustomid;
-
     private String areainouttime;
 
     public String getAreainouttime() {
@@ -259,21 +255,6 @@ public class Taskreportinfo {
         this.examuser = examuser == null ? null : examuser.trim();
     }
 
-    public String getAreacustomid() {
-        return areacustomid;
-    }
-
-    public void setAreacustomid(String areacustomid) {
-        this.areacustomid = areacustomid;
-    }
-
-    public String getEquipmentcustomid() {
-        return equipmentcustomid;
-    }
-
-    public void setEquipmentcustomid(String equipmentcustomid) {
-        this.equipmentcustomid = equipmentcustomid;
-    }
 
     @Override
     public String toString() {

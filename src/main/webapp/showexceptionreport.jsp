@@ -13,9 +13,9 @@
             //tasknum();
         })
         function deltaskreport(tempid,id){
-           if(id==undefined || id==''|| id==null){
-               id=0;
-           }
+            if(id==undefined || id==''|| id==null){
+                id=0;
+            }
             var isDel=confirm('确定删除吗？');
             if (isDel!=true) {
                 return false;
@@ -49,8 +49,8 @@
                 success: function (data) {
                     if (data !=null) {
                         $("#showstop").append("<p>终止原因："+data.reason+"</p>" +
-                                "<p>终止内容："+data.content+"</p><p>终止时间："+ data.stoptime2+"</p>" +
-                                "<p>班组名称："+data.classname+"</p><p>负责人名称："+data.directorname+"</p>");
+                            "<p>终止内容："+data.content+"</p><p>终止时间："+ data.stoptime2+"</p>" +
+                            "<p>班组名称："+data.classname+"</p><p>负责人名称："+data.directorname+"</p>");
                         $("#myModal").modal("show");
                     } else {
                         alert("暂时没有其他信息");
@@ -60,9 +60,9 @@
             })
         }
         function tasknum(){
-            var type = $("#status option:selected")[0].value;
+            var type = $("#typestatus option:selected")[0].value;
             var siteid = $("#name2 option:selected")[0].value;
-            var taskCcode=$("#taskCcodeaa").val();
+            var taskcode=$("#taskcode").val();
             $("#taskno").empty();
             if($("#roleid").val()==null){
                 $("#taskno").append("<option  value='' selected>所有任务</option>");
@@ -73,7 +73,7 @@
                     url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
                     success : function(task){
                         for(var i=0;i<task.length;i++){
-                            if(task[i].identifyingid==taskCcode){
+                            if(task[i].identifyingid==taskcode){
                                 $("#taskno").append("<option  value='"+task[i].identifyingid+"' selected>"+task[i].identifyingid+"</option>");
                             }else{
                                 $("#taskno").append("<option  value='"+task[i].identifyingid+"' >"+task[i].identifyingid+"</option>");
@@ -87,8 +87,7 @@
                     url : "taskbysiteandtype?type="+type+"&siteid="+siteid,
                     success : function(task){
                         for(var i=0;i<task.length;i++){
-//                            $("#taskno").append("<option  value='"+task[i].identifyingid+"'>"+task[i].identifyingid+"</option>");
-                            if(task[i].identifyingid==taskCcode){
+                            if(task[i].identifyingid==taskcode){
                                 $("#taskno").append("<option  value='"+task[i].identifyingid+"' selected>"+task[i].identifyingid+"</option>");
                             }else{
                                 $("#taskno").append("<option  value='"+task[i].identifyingid+"' >"+task[i].identifyingid+"</option>");
@@ -98,66 +97,6 @@
                 })
             }
         }
-
-
-        function sitechange(){
-            var siteid = $("#siteid option:selected")[0].value;
-                $.ajax({
-                    url:"queryareabysiteid",
-                    type:"post",
-                    data:{
-                        siteid:siteid,
-                    },
-                    dataType:"json",
-                    success:function(data){
-                        if(data!=null){
-                            var areaselect =  document.getElementById("area1");
-                            areaselect.innerHTML = "";
-                            for(var i=0;i<data.length;i++){
-                                var areaop = document.createElement("option");
-                                areaop.innerHTML = data[i].customid;
-                                areaop.value = data[i].id;
-                                areaselect.appendChild(areaop);
-                            }
-                            return true;
-                        }else{
-                            alert("该厂区暂时没有区域");
-                            return false;
-                        }
-                    }
-                });
-
-        }
-
-        function areachange(){
-            var areaid = $("#areaid option:selected")[0].value;
-            debugger;
-                $.ajax({
-                    url:"queryequipment",
-                    type:"post",
-                    data:{
-                        areaid:areaid,
-                    },
-                    dataType:"json",
-                    success:function(data){
-                        if(data!=null){
-                            var equipselect =  document.getElementById("equip1");
-                            equipselect.innerHTML = "";
-                            for(var i=0;i<data.length;i++){
-                                var equipop = document.createElement("option");
-                                equipop.innerHTML = data[i].customid;
-                                equipop.value = data[i].id;
-                                equipselect.appendChild(equipop);
-                            }
-                            return true;
-                        }else{
-                            alert("该区域暂时没有设备");
-                            return false;
-                        }
-                    }
-                });
-        }
-
     </script>
 </head>
 <body>
@@ -171,59 +110,50 @@
                     <div>
                         <ul id="myTab" class="nav nav-tabs">
                             <li>
-                                <a href="showexceptionreport?page=1">任务列表</a>
+                                <a href="showexceptionreport?page=1">异常任务列表</a>
                             </li>
-                           <%-- <li><a href="showstoptask?page=1&state=3&type=${type}">终止任务</a></li>--%>
-                            <%--<li class="active"><a href="#report" data-toggle="tab" style="background: #35A7E7;color: white;">任务报告</a></li>--%>
                         </ul>
                     </div>
 
                     <div id="myTabContent" class="tab-content">
                         <div class="tab-pane fade in active" id="report">
                             <div class="box-inner">
-                                <%--<div class="box-header well" data-original-title="">
-                                    <h2>
-                                        <i class="glyphicon glyphicon-globe"></i>
-                                        <c:if test="${type==0}">日常巡检任务报告 - 列表</c:if>
-                                        <c:if test="${type==1}">计划巡检任务报告--列表</c:if>
-                                        <c:if test="${type==2}">HSE隐患排查报告--列表</c:if>
-                                        <c:if test="${type==3}">视频巡检任务报告--列表</c:if>
-                                    </h2>
-                                </div>--%>
                                 <div class="box-content">
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showexceptionreport?page=1" method="post">
-                                            <label class="control-label" for="siteid">厂区：</label>
-                                            <select class="form-control" id="siteid" name="siteid" onchange="sitechange()">
-                                                <c:if test="${siteid==null}">
+                                            <label class="control-label" for="name2">厂区：</label>
+                                            <select id="name2" class="form-control" name="siteid" onchange="tasknum()">
+                                                <c:if test="${roleid==null}">
                                                     <option value="">所有厂区</option>
                                                 </c:if>
                                                 <c:forEach items="${sites}" var="site">
                                                     <option  value="${site.id}" ${siteid eq site.id ?'selected':''}>${site.customid}</option>
                                                 </c:forEach>
                                             </select>
-
-                                            <label class="control-label" for="area1">选择区域:</label>
-                                            <select  id="area1" name="areaid" class="form-control"  onchange="areachange()">
-                                                <c:if test="${siteid==null}">
-                                                    <option value="">所有区域</option>
+                                            <label class="control-label" for="taskstatus">任务类型：</label>
+                                            <select class="form-control" id="taskstatus" name="tasktype"  onchange="tasknum()">
+                                                <c:if test="${roleid==null}">
+                                                    <option ${tasktype eq ''?'selected':''} value="">所有任务</option>
                                                 </c:if>
-                                                <c:forEach items="${areainfos}" var="area">
-                                                    <option value="${area.id}" ${areaid eq area.id ?'selected':''}>${area.customid}</option>
-                                                </c:forEach>
+                                                <option ${tasktype eq '0'?'selected':''} ${type eq '0'?'selected':''} value="0">日常巡检</option>
+                                                <option ${tasktype eq '1'?'selected':''} ${type eq '1'?'selected':''} value="1">计划巡检</option>
+                                                <%--<option ${tasktype eq '2'?'selected':''} ${type eq '2'?'selected':''} value="2">隐患排查</option>--%>
+                                                <option ${tasktype eq '3'?'selected':''} ${type eq '3'?'selected':''} value="3">视频巡检</option>
+                                                <%--<option ${searchtype eq '4'?'selected':''} ${type eq '4'?'selected':''} value="4">临时任务</option>--%>
+                                            </select>
+                                            <label class="control-label" for="taskno">任务号：</label>
+                                            <select class="form-control" id="taskno" name="taskcode" >
+                                                <c:choose>
+                                                    <c:when test="${taskcode==null and taskcode==''}">
+                                                        <option value="" selected>所有任务</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="${taskcode}" selected>${taskcode}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </select>
 
-                                            <label class="control-label" for="equip1">选择设备:</label>
-                                            <select  id="equip1" name="equipid" class="form-control" >
-                                                <c:if test="${areaid==null}">
-                                                    <option value="">所有设备</option>
-                                                </c:if>
-                                                <c:forEach items="${equipmentinfos}" var="equip">
-                                                    <option value="${equip.id}" ${equipid eq equip.id ?'selected':''}>${equip.customid}</option>
-                                                </c:forEach>
-                                            </select>
-
-                                            <label class="control-label" for="operationstate">处理状态：</label>
+                                            <label class="control-label" for="operationstate">执行状态：</label>
                                             <select class="form-control" id="operationstate" name="operationstate">
                                                 <option ${operationstate eq '' ? 'selected' : ''} value="">所有</option>
                                                 <option ${operationstate eq '1' ? 'selected' : ''} value="1">漏检</option>
@@ -232,39 +162,37 @@
                                                 <option ${operationstate eq '4' ? 'selected' : ''} value="4">超时</option>
                                                 <option ${operationstate eq '5' ? 'selected' : ''} value="5">主动终止</option>
                                             </select><br>
-                                            <label class="control-label" for="worker">责任人：</label>
-                                            <input type="text" style="width: 200px;" id="worker" name="worker" value="${worker}">
                                             <label class="control-label" style="margin-top: 10px">报告完成时间：</label>
-                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${time2}"style="margin-top: 10px" id="time2">
+                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
-                                                <script language="JavaScript">
-                                                    Date.prototype.format = function (format) {
-                                                        var args = {
-                                                            "M+": this.getMonth() + 1,
-                                                            "d+": this.getDate(),
-                                                            "h+": this.getHours(),
-                                                            "m+": this.getMinutes(),
-                                                            "s+": this.getSeconds(),
-                                                            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+                                            <script language="JavaScript">
+                                                Date.prototype.format = function (format) {
+                                                    var args = {
+                                                        "M+": this.getMonth() + 1,
+                                                        "d+": this.getDate(),
+                                                        "h+": this.getHours(),
+                                                        "m+": this.getMinutes(),
+                                                        "s+": this.getSeconds(),
+                                                        "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
 
-                                                            "S": this.getMilliseconds()
-                                                        };
-                                                        if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-                                                        for (var i in args) {
-                                                            var n = args[i];
-                                                            if (new RegExp("(" + i + ")").test(format)) format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
-                                                        }
-                                                        return format;
+                                                        "S": this.getMilliseconds()
                                                     };
-                                                    $(function () {
-                                                        if($("#time1").val() == ""){
-                                                            $("#time1").val(new Date().format("yyyy-MM-dd"));
-                                                        }
-                                                        if($("#time2").val() == ""){
-                                                            $("#time2").val(new Date().format("yyyy-MM-dd"));
-                                                        }
-                                                    });
-                                                </script>
+                                                    if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                                                    for (var i in args) {
+                                                        var n = args[i];
+                                                        if (new RegExp("(" + i + ")").test(format)) format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+                                                    }
+                                                    return format;
+                                                };
+                                                $(function () {
+                                                    if($("#time1").val() == ""){
+                                                        $("#time1").val(new Date().format("yyyy-MM-dd"));
+                                                    }
+                                                    if($("#time2").val() == ""){
+                                                        $("#time2").val(new Date().format("yyyy-MM-dd"));
+                                                    }
+                                                });
+                                            </script>
 
                                         </form>
                                     </div>
@@ -274,7 +202,7 @@
                                             <th>任务号</th>
                                             <th>报告编号</th>
                                             <th>执行状态</th>
-                                           <%-- <th>子任务状态</th>--%>
+                                            <%-- <th>子任务状态</th>--%>
                                             <th>报告完成时间</th>
                                             <%--<th>子任务更新时间</th>--%>
                                             <th>工人</th>
@@ -290,12 +218,12 @@
                                                 <td>
                                                     <shiro:hasPermission name="del:taskreport">
                                                         <%--<c:if test="${report.id==null}">--%>
-                                                            <a href="javascript:;" onclick="deltaskreport('${report.temp.id}','${report.id==null?'':report.id}')">
+                                                        <a href="javascript:;" onclick="deltaskreport('${report.temp.id}','${report.id==null?'':report.id}')">
                                                             <i class="glyphicon glyphicon-trash"></i></a>
                                                         <%--</c:if>--%>
                                                         <%--<c:if test="${report.id!=null}">--%>
-                                                            <%--<a href="javascript:;" onclick="deltaskreport('${report.temp.id}',${report.id})">--%>
-                                                                <%--<i class="glyphicon glyphicon-trash"></i></a>--%>
+                                                        <%--<a href="javascript:;" onclick="deltaskreport('${report.temp.id}',${report.id})">--%>
+                                                        <%--<i class="glyphicon glyphicon-trash"></i></a>--%>
                                                         <%--</c:if>--%>
 
                                                     </shiro:hasPermission>
@@ -317,16 +245,11 @@
                                                 <td>
                                                     <c:if test="${report.id==null}">${report.temp.taskcode}</c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <a href="querytaskreportdetail?id=${report.id}&page=${pageBean.currentPage}&type=${type}&type2=1">${report.temp.taskcode}</a>
+                                                        <a href="querytaskreportdetail?id=${report.id}&page=${pageBean.currentPage}&type=${tasktype}&type2=1">${report.temp.taskcode}</a>
                                                     </c:if>
                                                 </td>
                                                 <td>
-                                                    <c:if test="${report.temp.state ==0}">未执行
-                                                        <%--<c:if test="${report.temp.operationstate==0}">未执行</c:if>--%>
-                                                        <%--<c:if test="${report.temp.operationstate==1}">未执行(已漏检)</c:if>--%>
-                                                        <%--<c:if test="${report.temp.operationstate==2}">未执行(已跳检)</c:if>--%>
-                                                        <%--<c:if test="${report.temp.operationstate==3}">未执行(已完成)</c:if>--%>
-                                                    </c:if>
+                                                    <c:if test="${report.temp.state ==0}">未执行</c:if>
                                                     <c:if test="${report.temp.state ==1}">进行中 </c:if>
                                                     <c:if test="${report.temp.state ==2}">
                                                         <c:if test="${report.temp.operationstate==1}">已漏检</c:if>
@@ -353,7 +276,7 @@
                                                         </c:if>
                                                     </c:if>
                                                 </td>
-                                                <%--<td><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>--%>
+                                                    <%--<td><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>--%>
                                                 <td>${report.worker}</td>
 
                                                 <td>${report.ter.customid}</td>
@@ -373,16 +296,16 @@
                                         </c:forEach>
                                     </table>
                                     <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                                        <a href="showexceptionreport?page=1&siteid=${siteid}&areaid=${areaid}&equipid=${equipid}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&worker=${worker}">第一页</a>
+                                        <a href="showexceptionreport?page=1&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">第一页</a>
                                         <c:if test="${pageBean.currentPage>1}">
-                                            <a href="showexceptionreport?page=${pageBean.currentPage-1}&siteid=${siteid}&areaid=${areaid}&equipid=${equipid}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&worker=${worker}">上一页</a>
+                                            <a href="showexceptionreport?page=${pageBean.currentPage-1}&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">上一页</a>
                                         </c:if>
 
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                            <a href="showexceptionreport?page=${pageBean.currentPage+1}&siteid=${siteid}&areaid=${areaid}&equipid=${equipid}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&worker=${worker}">下一页</a>
+                                            <a href="showexceptionreport?page=${pageBean.currentPage+1}&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">下一页</a>
                                         </c:if>
 
-                                        <a href="showexceptionreport?page=${pageBean.totalPage}&siteid=${siteid}&areaid=${areaid}&equipid=${equipid}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&worker=${worker}">最后一页</a>
+                                        <a href="showexceptionreport?page=${pageBean.totalPage}&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">最后一页</a>
 
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
                                     </div>
