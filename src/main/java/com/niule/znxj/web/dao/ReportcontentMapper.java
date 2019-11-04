@@ -22,6 +22,8 @@ public interface ReportcontentMapper {
 
     List<Reportcontent> selectByExample(ReportcontentExample example);
 
+    List<Reportcontent> selectByExample2(Long reportid);
+
     Reportcontent selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Reportcontent record, @Param("example") ReportcontentExample example);

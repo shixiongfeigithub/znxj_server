@@ -10,36 +10,34 @@
     <script type="text/javascript" src="js/formatdate.js"></script>
     <script type="text/javascript">
         $(function () {
-            //tasknum();
+            tasknum();
         })
-        function deltaskreport(tempid,id){
-            if(id==undefined || id==''|| id==null){
-                id=0;
+
+        function tasknum(){
+            debugger;
+            var siteid = $("#name2 option:selected")[0].value;
+            var taskcode='${taskcode}';
+            var type="";
+            $("#taskno").empty();
+            if($("#roleid").val()==null){
+                $("#taskno").append("<option  value='' selected>所有任务</option>");
             }
-            var isDel=confirm('确定删除吗？');
-            if (isDel!=true) {
-                return false;
-            }else {
+
                 $.ajax({
-                    url: "deltaskreport?id=" + id+"&tempid="+tempid,
-                    type: "post",
-                    datatype: "json",
-                    success: function (data) {
-                        if (data > 0) {
-                            alert("删除成功");
-                            showtask();
-                        } else {
-                            alert("删除失败");
-                            return false;
+                    type : "GET",
+                    url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
+                    success : function(task){
+                        for(var i=0;i<task.length;i++){
+                            if(task[i].identifyingid==taskcode){
+                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' selected>"+task[i].identifyingid+"</option>");
+                            }else{
+                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' >"+task[i].identifyingid+"</option>");
+                            }
                         }
                     }
-                });
-            }
+                })
         }
-        function showtask(){
-            var tasktype=$("#tasktype").val();
-            window.location="/firstPage?page="+$("#page").val();
-        }
+
         function showstop(tempid){
             $("#showstop").empty();
             $.ajax({
@@ -59,43 +57,13 @@
                 }
             })
         }
-        function tasknum(){
-            var type = $("#typestatus option:selected")[0].value;
-            var siteid = $("#name2 option:selected")[0].value;
-            var taskcode=$("#taskcode").val();
-            $("#taskno").empty();
-            if($("#roleid").val()==null){
-                $("#taskno").append("<option  value='' selected>所有任务</option>");
-            }
-            if(""==type){
-                $.ajax({
-                    type : "GET",
-                    url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
-                    success : function(task){
-                        for(var i=0;i<task.length;i++){
-                            if(task[i].identifyingid==taskcode){
-                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' selected>"+task[i].identifyingid+"</option>");
-                            }else{
-                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' >"+task[i].identifyingid+"</option>");
-                            }
-                        }
-                    }
-                })
-            }else {
-                $.ajax({
-                    type : "GET",
-                    url : "taskbysiteandtype?type="+type+"&siteid="+siteid,
-                    success : function(task){
-                        for(var i=0;i<task.length;i++){
-                            if(task[i].identifyingid==taskcode){
-                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' selected>"+task[i].identifyingid+"</option>");
-                            }else{
-                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' >"+task[i].identifyingid+"</option>");
-                            }
-                        }
-                    }
-                })
-            }
+
+        function closetaskreport(tempid,reportid) {
+            window.location="/toclosetaskreport?reportid="+reportid+"&tempid="+tempid;
+        }
+
+        function assignprincipal(tempid,reportid) {
+            window.location="/toassignprincipal?reportid="+reportid+"&tempid="+tempid;
         }
     </script>
 </head>
@@ -123,23 +91,12 @@
                                         <form action="showexceptionreport?page=1" method="post">
                                             <label class="control-label" for="name2">厂区：</label>
                                             <select id="name2" class="form-control" name="siteid" onchange="tasknum()">
-                                                <c:if test="${roleid==null}">
+                                                <c:if test="${siteid==null}">
                                                     <option value="">所有厂区</option>
                                                 </c:if>
                                                 <c:forEach items="${sites}" var="site">
                                                     <option  value="${site.id}" ${siteid eq site.id ?'selected':''}>${site.customid}</option>
                                                 </c:forEach>
-                                            </select>
-                                            <label class="control-label" for="taskstatus">任务类型：</label>
-                                            <select class="form-control" id="taskstatus" name="tasktype"  onchange="tasknum()">
-                                                <c:if test="${roleid==null}">
-                                                    <option ${tasktype eq ''?'selected':''} value="">所有任务</option>
-                                                </c:if>
-                                                <option ${tasktype eq '0'?'selected':''} ${type eq '0'?'selected':''} value="0">日常巡检</option>
-                                                <option ${tasktype eq '1'?'selected':''} ${type eq '1'?'selected':''} value="1">计划巡检</option>
-                                                <%--<option ${tasktype eq '2'?'selected':''} ${type eq '2'?'selected':''} value="2">隐患排查</option>--%>
-                                                <option ${tasktype eq '3'?'selected':''} ${type eq '3'?'selected':''} value="3">视频巡检</option>
-                                                <%--<option ${searchtype eq '4'?'selected':''} ${type eq '4'?'selected':''} value="4">临时任务</option>--%>
                                             </select>
                                             <label class="control-label" for="taskno">任务号：</label>
                                             <select class="form-control" id="taskno" name="taskcode" >
@@ -148,7 +105,7 @@
                                                         <option value="" selected>所有任务</option>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <option value="${taskcode}" selected>${taskcode}</option>
+                                                        <option value="${taskCcode}" selected>${taskCcode}</option>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </select>
@@ -161,7 +118,10 @@
                                                 <option ${operationstate eq '3' ? 'selected' : ''} value="3">正常</option>
                                                 <option ${operationstate eq '4' ? 'selected' : ''} value="4">超时</option>
                                                 <option ${operationstate eq '5' ? 'selected' : ''} value="5">主动终止</option>
-                                            </select><br>
+                                            </select>
+                                            <label class="control-label" for="worker">任务负责人：</label>
+                                            <input type="text" style="width: 100px;" id="worker" name="worker" value="${worker}">
+                                            <br>
                                             <label class="control-label" style="margin-top: 10px">报告完成时间：</label>
                                             <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
@@ -216,22 +176,15 @@
                                         <c:forEach items="${pageBean.list}" var="report">
                                             <tr>
                                                 <td>
-                                                    <shiro:hasPermission name="del:taskreport">
-                                                        <%--<c:if test="${report.id==null}">--%>
-                                                        <a href="javascript:;" onclick="deltaskreport('${report.temp.id}','${report.id==null?'':report.id}')">
-                                                            <i class="glyphicon glyphicon-trash"></i></a>
-                                                        <%--</c:if>--%>
-                                                        <%--<c:if test="${report.id!=null}">--%>
-                                                        <%--<a href="javascript:;" onclick="deltaskreport('${report.temp.id}',${report.id})">--%>
-                                                        <%--<i class="glyphicon glyphicon-trash"></i></a>--%>
-                                                        <%--</c:if>--%>
+                                                    <shiro:hasPermission name="item:closereport">
+                                                        <a href="javascript:;" onclick="closetaskreport('${report.temp.id}','${report.id==null?'':report.id}')">
+                                                            <i class="glyphicon glyphicon-lock"></i></a>
 
                                                     </shiro:hasPermission>
-                                                    <c:if test="${report.id==null}"></c:if>
-                                                    <c:if test="${report.id!=null}">
-                                                        <a href="querytaskreportdetail?page=${pageBean.currentPage}&id=${report.id}&type=${type}&type2=1">
-                                                            <i class="glyphicon glyphicon-info-sign blue "></i></a>
-                                                    </c:if>
+                                                    <shiro:hasPermission name="item:assignprincipal">
+                                                        <a href="javascript:;" onclick="assignprincipal('${report.temp.id}','${report.id==null?'':report.id}')">
+                                                            <i class="glyphicon glyphicon-barcode"></i></a>
+                                                    </shiro:hasPermission>
 
                                                 </td>
                                                 <td>
@@ -243,9 +196,9 @@
                                                     </c:if>
                                                 </td>
                                                 <td>
-                                                    <c:if test="${report.id==null}">${report.temp.taskcode}</c:if>
+                                                    <c:if test="${report.id==null}">${report.temp.taskcode}${report.task.taskdesc}</c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <a href="querytaskreportdetail?id=${report.id}&page=${pageBean.currentPage}&type=${tasktype}&type2=1">${report.temp.taskcode}</a>
+                                                        <a href="showexceptiondetail?id=${report.id}&page=${pageBean.currentPage}&type=${report.tasktype}&type2=1">${report.temp.taskcode}</a>
                                                     </c:if>
                                                 </td>
                                                 <td>

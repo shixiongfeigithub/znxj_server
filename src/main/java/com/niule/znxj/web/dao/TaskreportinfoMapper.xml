@@ -652,7 +652,7 @@
   <select id="findByPageReport3" parameterType="map" resultMap="BaseResultMap">
     select ter.id,ter.taskid,ter.donetime,ter.uploadtime,ter.reportstate,ter.worker,ter.termimalid,
     ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
-    u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.operationstate tempoperationstate,
+    u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.type tasktype,temp.operationstate tempoperationstate,
     temp.stopstate,temp.taskcode temptaskcode,temp.executetime,temp.updatetime,st.id stopid,st.reason stopreason,
     st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname
     from tasktempinfo temp
