@@ -15,6 +15,8 @@ public class Taskcloseinfo {
 
     private String attachment;
 
+    private String operationuser;
+
     private Date createtime;
 
     public Integer getId() {
@@ -71,5 +73,13 @@ public class Taskcloseinfo {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    public String getOperationuser() {
+        return operationuser;
+    }
+
+    public void setOperationuser(String operationuser) {
+        this.operationuser = operationuser;
     }
 }

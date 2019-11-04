@@ -37,4 +37,6 @@ public interface AdmininfoMapper {
     int admincount(int roleid);
 
     Admininfo queryUserIsExistPower(String examUser, String examPwd);
+
+    List<Admininfo> selectByRoleId(Integer roleid);
 }

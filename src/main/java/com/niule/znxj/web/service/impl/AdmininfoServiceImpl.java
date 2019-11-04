@@ -104,4 +104,9 @@ public class AdmininfoServiceImpl implements AdmininfoService{
         }
 
     }
+
+    @Override
+    public List<Admininfo> selectByRoleId(Integer roleid) {
+        return admininfoMapper.selectByRoleId(roleid);
+    }
 }

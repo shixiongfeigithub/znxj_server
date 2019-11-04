@@ -32,4 +32,6 @@ public interface AdmininfoService {
     int admincount(int roleid);
 
     Result queryUserIsExistPower(String examUser, String examPwd);
+
+    List<Admininfo> selectByRoleId(Integer roleid);
 }

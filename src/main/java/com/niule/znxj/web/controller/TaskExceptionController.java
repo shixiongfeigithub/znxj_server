@@ -24,6 +24,9 @@ import java.util.*;
 @Controller
 public class TaskExceptionController {
 
+    @Resource
+    private AdmininfoService admininfoService;
+
     @Autowired
     private SiteService siteService;
 
@@ -71,6 +74,11 @@ public class TaskExceptionController {
         List<Siteareainfo> siteareainfos = siteService.selectByExample3(siteids); //查询角色对应的所有厂区
         //List<Areainfo> areainfos = areaService.selectByExample1(siteid);
         //List<Equipmentinfo> equipmentinfos = equipmentService.queryequip(areaid);
+
+        //判断用户角色
+        if(admininfo.getRoleid()==3){ //操作员
+            //查询操作员为该用户的异常任务
+        }
 
         if (page <= 0) {
             page = 1;
@@ -399,7 +407,7 @@ public class TaskExceptionController {
     /*跳转到关闭异常巡检任务页面*/
     @RequestMapping("/toclosetaskreport")
     @RequiresPermissions("item:closereport")
-    public String closetaskreport(Model m, Long reportid,Long tempid, HttpServletRequest request) {
+    public String toclosetaskreport(Model m, Long reportid,Long tempid, HttpServletRequest request) {
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
         Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(reportid);
         m.addAttribute("reportid", reportid);
@@ -429,6 +437,49 @@ public class TaskExceptionController {
         taskcloseinfo.setCreatetime(new Date());
         int result=taskCloseService.insert(taskcloseinfo);
         return result;
+    }
+
+    /*异常巡检任务指定责任人页面*/
+    @RequestMapping("/toassignprincipal")
+    @RequiresPermissions("item:assignprincipal")
+    public String toassignprincipal(Model m, Long reportid,Long tempid, HttpServletRequest request) {
+        Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
+
+        List<Admininfo> operationuserList = admininfoService.selectByRoleId(3); //查询所有角色为操作员的用户
+        Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(reportid);
+        for (Admininfo user : operationuserList){
+            if (user.getId()==admininfo.getId()){
+                operationuserList.remove(user);
+                break;
+            }
+        }
+        m.addAttribute("reportid", reportid);
+        m.addAttribute("tempid", tempid);
+        m.addAttribute("taskcode",taskreportinfo.getTaskcode());
+        m.addAttribute("operationuserList",operationuserList);
+        return "assignprincipal";
+    }
+
+    @RequestMapping("/assignprincipal")
+    @ResponseBody
+    public int assignprincipal(Taskcloseinfo taskcloseinfo,HttpServletRequest request){
+        Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
+        System.out.println("11111111111111111111111111111");
+        /*TaskcloseinfoExample example = new TaskcloseinfoExample();
+        example.createCriteria().andReportidEqualTo(taskcloseinfo.getReportid());
+        List<Taskcloseinfo> infoList = taskCloseService.selectByExample(example);
+
+
+        List<String> attach=new ArrayList<>();
+        String [] stringArr= taskcloseinfo.getAttachment().split(",");
+        for(int i=0;i<stringArr.length;i++){
+            attach.add(stringArr[i]);
+        }
+        taskcloseinfo.setAttachment(JsonUtil.toJSON(attach));
+        taskcloseinfo.setUserid(admininfo.getId().intValue());
+        taskcloseinfo.setCreatetime(new Date());
+        //int result=taskCloseService.insert(taskcloseinfo);*/
+        return 0;
     }
 
     public PageBean getPageBean() {
