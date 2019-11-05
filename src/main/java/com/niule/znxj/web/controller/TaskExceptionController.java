@@ -92,13 +92,10 @@ public class TaskExceptionController {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("page", (page - 1) * pagesize);
         map.put("pagesize", pagesize);
-
         List<Integer> tasktypeList = new ArrayList<>();
-
-            tasktypeList.add(0); //日常巡检
-            tasktypeList.add(1); //计划巡检
-            tasktypeList.add(3); //视频巡检
-
+        tasktypeList.add(0); //日常巡检
+        tasktypeList.add(1); //计划巡检
+        tasktypeList.add(3); //视频巡检
         map.put("tasktypes",tasktypeList);//任务类型
         map.put("taskcode", taskcode); //任务号
         map.put("reportstate", 1); //异常报告
@@ -108,28 +105,24 @@ public class TaskExceptionController {
         map.put("worker",worker); //任务执行者
 
         List<Integer> stateList = new ArrayList<>();
-            if (operationstate!=null && operationstate.equals("5")) {
+        if (operationstate!=null && operationstate.equals("5")) {
+            stateList.add(3);
+            map.put("stopstate", 1);
+            map.put("operationstate", null);
+        } else {
+            if (operationstate==null) {
                 stateList.add(3);
-                map.put("stopstate", 1);
-                map.put("operationstate", null);
-            } else {
-                if (operationstate==null) {
-                    stateList.add(3);
-                    stateList.add(2);
-                } else if (operationstate.equals("4")) {
-                    stateList.add(3);
-                } else
-                    stateList.add(2);
-                map.put("operationstate", operationstate);
-            }
-
-            map.put("state", stateList);
-            taskreportinfos = taskreportService.findByPageReport3(map);
-            int rows2 = taskreportService.countReport3(map);
-            totalpage = PageBean.counTotalPage(pagesize, rows2);
-
-
-
+                stateList.add(2);
+            } else if (operationstate.equals("4")) {
+                stateList.add(3);
+            } else
+                stateList.add(2);
+            map.put("operationstate", operationstate);
+        }
+        map.put("state", stateList);
+        taskreportinfos = taskreportService.findByPageReport3(map);
+        int rows2 = taskreportService.countReport3(map);
+        totalpage = PageBean.counTotalPage(pagesize, rows2);
         pageBean.setList(taskreportinfos);
         pageBean.setTotalPage((int) totalpage);
         pageBean.setCurrentPage(page);

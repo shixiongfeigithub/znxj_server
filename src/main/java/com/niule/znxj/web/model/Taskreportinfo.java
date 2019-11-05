@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class Taskreportinfo {
     private Long id;
-
     private Long taskid;
     @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private Date donetime;
