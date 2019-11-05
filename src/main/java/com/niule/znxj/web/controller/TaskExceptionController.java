@@ -6,6 +6,7 @@ import com.niule.znxj.web.dao.ReportcontentMapper;
 import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,7 +50,7 @@ public class TaskExceptionController {
     private SystemService systemService;
 
     @Autowired
-    private  TaskCloseService taskCloseService;
+    private ExceptionhandlerinfoService exceptionhandlerinfoService;
 
     protected PageBean pageBean = new PageBean();
 
@@ -418,25 +419,29 @@ public class TaskExceptionController {
 
     @RequestMapping("/closetaskreport")
     @ResponseBody
-    public int closetaskreport(Taskcloseinfo taskcloseinfo,HttpServletRequest request){
+    public int closetaskreport(Exceptionhandlerinfo exceptionhandlerinfo,HttpServletRequest request){
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
-        TaskcloseinfoExample example = new TaskcloseinfoExample();
-        example.createCriteria().andReportidEqualTo(taskcloseinfo.getReportid());
-        List<Taskcloseinfo> infoList = taskCloseService.selectByExample(example);
+        ExceptionhandlerinfoExample example = new ExceptionhandlerinfoExample();
+        example.createCriteria().andReportidEqualTo(exceptionhandlerinfo.getReportid());
+        List<Exceptionhandlerinfo> infoList = exceptionhandlerinfoService.selectByExample(example);
         if(infoList!=null && infoList.size()>0){
-           return 0;
-        }
+           Exceptionhandlerinfo info = infoList.get(0);
+           if (info.getExceptionclosetime()!=null)
+                return 0;
 
-        List<String> attach=new ArrayList<>();
-        String [] stringArr= taskcloseinfo.getAttachment().split(",");
-        for(int i=0;i<stringArr.length;i++){
-            attach.add(stringArr[i]);
+            List<String> attach=new ArrayList<>();
+            String [] stringArr= exceptionhandlerinfo.getAttachment().split(",");
+            for(int i=0;i<stringArr.length;i++){
+                attach.add(stringArr[i]);
+            }
+            BeanUtils.copyProperties(exceptionhandlerinfo,info);
+            exceptionhandlerinfo.setAttachment(JsonUtil.toJSON(attach));
+            exceptionhandlerinfo.setCheckuserid(admininfo.getId().intValue());
+            exceptionhandlerinfo.setExceptionclosetime(new Date());
+            int result=exceptionhandlerinfoService.updateByExample(exceptionhandlerinfo,example);
+            return result;
         }
-        taskcloseinfo.setAttachment(JsonUtil.toJSON(attach));
-        taskcloseinfo.setUserid(admininfo.getId().intValue());
-        taskcloseinfo.setCreatetime(new Date());
-        int result=taskCloseService.insert(taskcloseinfo);
-        return result;
+        return -1;
     }
 
     /*异常巡检任务指定责任人页面*/
@@ -462,23 +467,22 @@ public class TaskExceptionController {
 
     @RequestMapping("/assignprincipal")
     @ResponseBody
-    public int assignprincipal(Taskcloseinfo taskcloseinfo,HttpServletRequest request){
+    public int assignprincipal(Exceptionhandlerinfo exceptionhandlerinfo,HttpServletRequest request){
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
-        System.out.println("11111111111111111111111111111");
-        /*TaskcloseinfoExample example = new TaskcloseinfoExample();
-        example.createCriteria().andReportidEqualTo(taskcloseinfo.getReportid());
-        List<Taskcloseinfo> infoList = taskCloseService.selectByExample(example);
+        ExceptionhandlerinfoExample example = new ExceptionhandlerinfoExample();
+        example.createCriteria().andReportidEqualTo(exceptionhandlerinfo.getReportid());
+        List<Exceptionhandlerinfo> infoList = exceptionhandlerinfoService.selectByExample(example);
+        if(infoList!=null && infoList.size()>0){
+            Exceptionhandlerinfo info = infoList.get(0);
+            if(info.getAppointedtime()==null){
+                exceptionhandlerinfo.setCheckuserid(admininfo.getId().intValue());
+                exceptionhandlerinfo.setAppointedtime(new Date());
+            }
 
-
-        List<String> attach=new ArrayList<>();
-        String [] stringArr= taskcloseinfo.getAttachment().split(",");
-        for(int i=0;i<stringArr.length;i++){
-            attach.add(stringArr[i]);
+            BeanUtils.copyProperties(exceptionhandlerinfo,info);
+            int result=exceptionhandlerinfoService.updateByExample(exceptionhandlerinfo,example);
+            return result;
         }
-        taskcloseinfo.setAttachment(JsonUtil.toJSON(attach));
-        taskcloseinfo.setUserid(admininfo.getId().intValue());
-        taskcloseinfo.setCreatetime(new Date());
-        //int result=taskCloseService.insert(taskcloseinfo);*/
         return 0;
     }
 

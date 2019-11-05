@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.niule.znxj.web.dao.TaskcloseinfoMapper" >
-  <resultMap id="BaseResultMap" type="com.niule.znxj.web.model.Taskcloseinfo" >
+<mapper namespace="com.niule.znxj.web.dao.ExceptionhandlerinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.niule.znxj.web.model.Exceptionhandlerinfo" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="reportid" property="reportid" jdbcType="INTEGER" />
     <result column="taskcode" property="taskcode" jdbcType="VARCHAR" />
-    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="checkuserid" property="checkuserid" jdbcType="INTEGER" />
     <result column="descontent" property="descontent" jdbcType="VARCHAR" />
     <result column="attachment" property="attachment" jdbcType="VARCHAR" />
-    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="operatorname" property="operatorname" jdbcType="INTEGER" />
+    <result column="reporttime" property="reporttime" jdbcType="TIMESTAMP" />
+    <result column="confirmtime" property="confirmtime" jdbcType="TIMESTAMP" />
+    <result column="appointedtime" property="appointedtime" jdbcType="TIMESTAMP" />
+    <result column="exceptionclosetime" property="exceptionclosetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,15 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, reportid, taskcode, userid, descontent, attachment, createtime
+    id, reportid, taskcode, checkuserid, descontent, attachment, operatorname, reporttime, 
+    confirmtime, appointedtime, exceptionclosetime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.TaskcloseinfoExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.ExceptionhandlerinfoExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from taskcloseinfo
+    from exceptionhandlerinfo
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,29 +93,31 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from taskcloseinfo
+    from exceptionhandlerinfo
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from taskcloseinfo
+    delete from exceptionhandlerinfo
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.niule.znxj.web.model.TaskcloseinfoExample" >
-    delete from taskcloseinfo
+  <delete id="deleteByExample" parameterType="com.niule.znxj.web.model.ExceptionhandlerinfoExample" >
+    delete from exceptionhandlerinfo
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.niule.znxj.web.model.Taskcloseinfo" >
-    insert into taskcloseinfo (id, reportid, taskcode, 
-      userid, descontent, attachment, 
-      createtime)
+  <insert id="insert" parameterType="com.niule.znxj.web.model.Exceptionhandlerinfo" >
+    insert into exceptionhandlerinfo (id, reportid, taskcode, 
+      checkuserid, descontent, attachment, 
+      operatorname, reporttime, confirmtime, 
+      appointedtime, exceptionclosetime)
     values (#{id,jdbcType=INTEGER}, #{reportid,jdbcType=INTEGER}, #{taskcode,jdbcType=VARCHAR}, 
-      #{userid,jdbcType=INTEGER}, #{descontent,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP})
+      #{checkuserid,jdbcType=INTEGER}, #{descontent,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, 
+      #{operatorname,jdbcType=INTEGER}, #{reporttime,jdbcType=TIMESTAMP}, #{confirmtime,jdbcType=TIMESTAMP}, 
+      #{appointedtime,jdbcType=TIMESTAMP}, #{exceptionclosetime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.niule.znxj.web.model.Taskcloseinfo" >
-    insert into taskcloseinfo
+  <insert id="insertSelective" parameterType="com.niule.znxj.web.model.Exceptionhandlerinfo" >
+    insert into exceptionhandlerinfo
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -121,8 +128,8 @@
       <if test="taskcode != null" >
         taskcode,
       </if>
-      <if test="userid != null" >
-        userid,
+      <if test="checkuserid != null" >
+        checkuserid,
       </if>
       <if test="descontent != null" >
         descontent,
@@ -130,8 +137,20 @@
       <if test="attachment != null" >
         attachment,
       </if>
-      <if test="createtime != null" >
-        createtime,
+      <if test="operatorname != null" >
+        operatorname,
+      </if>
+      <if test="reporttime != null" >
+        reporttime,
+      </if>
+      <if test="confirmtime != null" >
+        confirmtime,
+      </if>
+      <if test="appointedtime != null" >
+        appointedtime,
+      </if>
+      <if test="exceptionclosetime != null" >
+        exceptionclosetime,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -144,8 +163,8 @@
       <if test="taskcode != null" >
         #{taskcode,jdbcType=VARCHAR},
       </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=INTEGER},
+      <if test="checkuserid != null" >
+        #{checkuserid,jdbcType=INTEGER},
       </if>
       <if test="descontent != null" >
         #{descontent,jdbcType=VARCHAR},
@@ -153,19 +172,31 @@
       <if test="attachment != null" >
         #{attachment,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null" >
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="operatorname != null" >
+        #{operatorname,jdbcType=INTEGER},
+      </if>
+      <if test="reporttime != null" >
+        #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmtime != null" >
+        #{confirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointedtime != null" >
+        #{appointedtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exceptionclosetime != null" >
+        #{exceptionclosetime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.niule.znxj.web.model.TaskcloseinfoExample" resultType="java.lang.Integer" >
-    select count(*) from taskcloseinfo
+  <select id="countByExample" parameterType="com.niule.znxj.web.model.ExceptionhandlerinfoExample" resultType="java.lang.Integer" >
+    select count(*) from exceptionhandlerinfo
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update taskcloseinfo
+    update exceptionhandlerinfo
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
@@ -176,8 +207,8 @@
       <if test="record.taskcode != null" >
         taskcode = #{record.taskcode,jdbcType=VARCHAR},
       </if>
-      <if test="record.userid != null" >
-        userid = #{record.userid,jdbcType=INTEGER},
+      <if test="record.checkuserid != null" >
+        checkuserid = #{record.checkuserid,jdbcType=INTEGER},
       </if>
       <if test="record.descontent != null" >
         descontent = #{record.descontent,jdbcType=VARCHAR},
@@ -185,8 +216,20 @@
       <if test="record.attachment != null" >
         attachment = #{record.attachment,jdbcType=VARCHAR},
       </if>
-      <if test="record.createtime != null" >
-        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      <if test="record.operatorname != null" >
+        operatorname = #{record.operatorname,jdbcType=INTEGER},
+      </if>
+      <if test="record.reporttime != null" >
+        reporttime = #{record.reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.confirmtime != null" >
+        confirmtime = #{record.confirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.appointedtime != null" >
+        appointedtime = #{record.appointedtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.exceptionclosetime != null" >
+        exceptionclosetime = #{record.exceptionclosetime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -194,20 +237,24 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update taskcloseinfo
+    update exceptionhandlerinfo
     set id = #{record.id,jdbcType=INTEGER},
       reportid = #{record.reportid,jdbcType=INTEGER},
       taskcode = #{record.taskcode,jdbcType=VARCHAR},
-      userid = #{record.userid,jdbcType=INTEGER},
+      checkuserid = #{record.checkuserid,jdbcType=INTEGER},
       descontent = #{record.descontent,jdbcType=VARCHAR},
       attachment = #{record.attachment,jdbcType=VARCHAR},
-      createtime = #{record.createtime,jdbcType=TIMESTAMP}
+      operatorname = #{record.operatorname,jdbcType=INTEGER},
+      reporttime = #{record.reporttime,jdbcType=TIMESTAMP},
+      confirmtime = #{record.confirmtime,jdbcType=TIMESTAMP},
+      appointedtime = #{record.appointedtime,jdbcType=TIMESTAMP},
+      exceptionclosetime = #{record.exceptionclosetime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.niule.znxj.web.model.Taskcloseinfo" >
-    update taskcloseinfo
+  <update id="updateByPrimaryKeySelective" parameterType="com.niule.znxj.web.model.Exceptionhandlerinfo" >
+    update exceptionhandlerinfo
     <set >
       <if test="reportid != null" >
         reportid = #{reportid,jdbcType=INTEGER},
@@ -215,8 +262,8 @@
       <if test="taskcode != null" >
         taskcode = #{taskcode,jdbcType=VARCHAR},
       </if>
-      <if test="userid != null" >
-        userid = #{userid,jdbcType=INTEGER},
+      <if test="checkuserid != null" >
+        checkuserid = #{checkuserid,jdbcType=INTEGER},
       </if>
       <if test="descontent != null" >
         descontent = #{descontent,jdbcType=VARCHAR},
@@ -224,20 +271,36 @@
       <if test="attachment != null" >
         attachment = #{attachment,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null" >
-        createtime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="operatorname != null" >
+        operatorname = #{operatorname,jdbcType=INTEGER},
+      </if>
+      <if test="reporttime != null" >
+        reporttime = #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmtime != null" >
+        confirmtime = #{confirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointedtime != null" >
+        appointedtime = #{appointedtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exceptionclosetime != null" >
+        exceptionclosetime = #{exceptionclosetime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.niule.znxj.web.model.Taskcloseinfo" >
-    update taskcloseinfo
+  <update id="updateByPrimaryKey" parameterType="com.niule.znxj.web.model.Exceptionhandlerinfo" >
+    update exceptionhandlerinfo
     set reportid = #{reportid,jdbcType=INTEGER},
       taskcode = #{taskcode,jdbcType=VARCHAR},
-      userid = #{userid,jdbcType=INTEGER},
+      checkuserid = #{checkuserid,jdbcType=INTEGER},
       descontent = #{descontent,jdbcType=VARCHAR},
       attachment = #{attachment,jdbcType=VARCHAR},
-      createtime = #{createtime,jdbcType=TIMESTAMP}
+      operatorname = #{operatorname,jdbcType=INTEGER},
+      reporttime = #{reporttime,jdbcType=TIMESTAMP},
+      confirmtime = #{confirmtime,jdbcType=TIMESTAMP},
+      appointedtime = #{appointedtime,jdbcType=TIMESTAMP},
+      exceptionclosetime = #{exceptionclosetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
