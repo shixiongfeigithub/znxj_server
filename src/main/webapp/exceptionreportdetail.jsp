@@ -178,13 +178,38 @@
             $("#pic")[0].appendChild(video);
         }
 
+        /*根据区域编号显示所有的设备*/
+        function showequip() {
+            var areaid = $("#areaname option:selected")[0].value;
+            $("#equipment").empty();
+            var equipmentid = '${equipmentid}';
+            if(equipmentid==null){
+                $("#equipment").append("<option  value='' selected>所有设备</option>");
+            }
+            $.ajax({
+                url: "showequipment?areaid=" + areaid,
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    if (data == "") {
+                        $("#equipment").append("<option  value='' selected>所有设备</option>");
+                    } else {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].id == equipmentid) {
+                                $("#equipment").append("<option  value='" + data[i].id + "' selected>" + data[i].name + "</option>");
+                            } else {
+                                $("#equipment").append("<option  value='" + data[i].id + "' >" + data[i].name + "</option>");
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
     </script>
 </head>
 <body>
-
-<input type="hidden" value="${reportid}" id="reportid">
 <input type="hidden" value="${page}" name="page" id="page">
-<input type="hidden" value="${taskcode}"  id="taskcode">
 <div class="ch-container">
     <div class="row">
         <div id="content" class="col-lg-12 col-sm-12">
@@ -222,30 +247,24 @@
 
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showexceptiondetail?page=1" method="post">
-                                            <%--<label class="control-label" for="name2">厂区：</label>
-                                            <select id="name2" class="form-control" name="siteid" onchange="tasknum()">
-                                                <c:if test="${siteid==null}">
-                                                    <option value="">所有厂区</option>
+                                            <input type="hidden" value="${reportid}" id="reportid">
+                                            <label class="control-label" for="areaname">区域：</label>
+                                            <select id="areaname" class="form-control" name="areaid" onchange="showequip()">
+                                                <c:if test="${areaid==null}">
+                                                    <option value="">所有区域</option>
                                                 </c:if>
-                                                <c:forEach items="${sites}" var="site">
-                                                    <option  value="${site.id}" ${siteid eq site.id ?'selected':''}>${site.customid}</option>
+                                                <c:forEach items="${areainfos}" var="area">
+                                                    <option  value="${area.id}" ${areaid eq area.id ?'selected':''}>${area.customid}</option>
                                                 </c:forEach>
                                             </select>
-                                            <label class="control-label" for="taskno">任务号：</label>
-                                            <select class="form-control" id="taskno" name="taskcode" >
+                                            <label class="control-label" for="equipment">任务号：</label>
+                                            <select class="form-control" id="equipment" name="equipmentid" >
                                                 <c:choose>
-                                                    <c:when test="${taskcode==null and taskcode==''}">
-                                                        <option value="" selected>所有任务</option>
+                                                    <c:when test="${equipmentid==null and equipmentid==''}">
+                                                        <option value="" selected>所有设备</option>
                                                     </c:when>
-                                                    <c:otherwise>
-                                                        <option value="${taskCcode}" selected>${taskCcode}</option>
-                                                    </c:otherwise>
                                                 </c:choose>
-                                            </select>--%>
-
-                                            <label class="control-label" for="worker">任务负责人：</label>
-                                            <input type="text" style="width: 100px;" id="worker" name="worker">
-                                            <br>
+                                            </select>
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
                                         </form>
                                     </div>

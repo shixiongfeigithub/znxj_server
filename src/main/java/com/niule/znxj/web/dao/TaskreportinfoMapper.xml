@@ -647,7 +647,6 @@
     order by temp.id DESC
   </select>
 
-
   <select id="findByPageReport3" parameterType="map" resultMap="BaseResultMap">
     select ter.id,ter.taskid,ter.donetime,ter.uploadtime,ter.reportstate,ter.worker,ter.termimalid,
     ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
@@ -673,14 +672,11 @@
     <if test="worker!=null and worker!=''">
       and ter.worker = #{worker}
     </if>
-    <if test="taskcode!=null and taskcode!=''">
-      and t.identifyingid = #{taskcode}
+    <if test="taskAcode!=null and taskAcode!=''">
+      and t.identifyingid = #{taskAcode}
     </if>
     <if test="reportstate!=null and reportstate!=''">
       and ter.reportstate=#{reportstate}
-    </if>
-    <if test="examstate!=null and examstate!=''">
-      and ter.examstate != #{examstate}
     </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
       and ex.exceptionstate=#{exceptionstate}
@@ -689,7 +685,7 @@
       and date_format(ter.donetime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
-    order by temp.id DESC
+    and ter.examstate !=0 order by temp.id DESC
     limit #{page},#{pagesize}
   </select>
   <select id="countReport3" resultType="int" parameterType="map">
@@ -711,14 +707,11 @@
     <if test="worker!=null and worker!=''">
       and ter.worker = #{worker}
     </if>
-    <if test="taskcode!=null and taskcode!=''">
-      and t.identifyingid = #{taskcode}
+    <if test="taskAcode!=null and taskAcode!=''">
+      and t.identifyingid = #{taskAcode}
     </if>
     <if test="reportstate!=null and reportstate!=''">
       and ter.reportstate=#{reportstate}
-    </if>
-    <if test="examstate!=null and examstate!=''">
-      and ter.examstate !=#{examstate}
     </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
       and ex.exceptionstate=#{exceptionstate}
@@ -727,7 +720,88 @@
       and date_format(ter.donetime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
-    order by temp.id DESC
+    and ter.examstate !=0 order by temp.id DESC
+  </select>
+
+
+
+  <select id="findByPageReport4" parameterType="map" resultMap="BaseResultMap">
+    select ter.id,ter.taskid,ter.donetime,ter.uploadtime,ter.reportstate,ter.worker,ter.termimalid,
+    ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
+    u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.type tasktype,temp.operationstate tempoperationstate,
+    temp.stopstate,temp.taskcode temptaskcode,temp.executetime,temp.updatetime,st.id stopid,st.reason stopreason,
+    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,ex.exceptionstate,ex.exceptionclosetime
+    from exceptionhandlerinfo ex
+    left join tasktempinfo temp on temp.taskcode = ex.taskcode
+    left join taskreportinfo ter on ter.taskcode=temp.taskcode
+    left join taskstopinfo st on temp.id=st.tasktempid
+    left join taskplaninfo t on t.id=temp.taskid
+    left join userinfo u on t.directorid=u.id
+    left join terminalinfo term on ter.termimalid=term.id
+    left join siteareainfo s on s.id=t.siteid
+    where ex.operatorname =#{username}
+    and temp.type in
+    <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
+      #{type}
+    </foreach>
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="worker!=null and worker!=''">
+      and ter.worker = #{worker}
+    </if>
+    <if test="taskAcode!=null and taskAcode!=''">
+      and t.identifyingid = #{taskAcode}
+    </if>
+    <if test="reportstate!=null and reportstate!=''">
+      and ter.reportstate=#{reportstate}
+    </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and ex.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(ter.donetime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    and ter.examstate !=0 order by temp.id DESC
+    limit #{page},#{pagesize}
+  </select>
+  <select id="countReport4" resultType="int" parameterType="map">
+    select count(temp.id) from exceptionhandlerinfo ex
+    left join tasktempinfo temp on temp.taskcode = ex.taskcode
+    left join taskreportinfo ter on ter.taskcode=temp.taskcode
+    left join taskstopinfo st on temp.id=st.tasktempid
+    left join taskplaninfo t on t.id=temp.taskid
+    left join userinfo u on t.directorid=u.id
+    left join terminalinfo term on ter.termimalid=term.id
+    left join siteareainfo s on s.id=t.siteid
+    where ex.operatorname =#{username}
+    and temp.type in
+    <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
+      #{type}
+    </foreach>
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="worker!=null and worker!=''">
+      and ter.worker = #{worker}
+    </if>
+    <if test="taskAcode!=null and taskAcode!=''">
+      and t.identifyingid = #{taskAcode}
+    </if>
+    <if test="reportstate!=null and reportstate!=''">
+      and ter.reportstate=#{reportstate}
+    </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and ex.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(ter.donetime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    and ter.examstate !=0 order by temp.id DESC
   </select>
 
   <select id="queryByTaskidAndDonetime" resultMap="BaseResultMap">

@@ -22,7 +22,7 @@ public interface ReportcontentMapper {
 
     List<Reportcontent> selectByExample(ReportcontentExample example);
 
-    List<Reportcontent> selectByExample2(Long reportid);
+    List<Reportcontent> selectByExample2(HashMap<String, Object> map);
 
     Reportcontent selectByPrimaryKey(Integer id);
 
@@ -36,7 +36,6 @@ public interface ReportcontentMapper {
 
     int updateCheckValue(Reportcontent record);
 
-    List<Reportcontent> queryReportcontent(HashMap map);
 
 
 }

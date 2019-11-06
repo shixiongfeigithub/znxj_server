@@ -231,6 +231,16 @@ public class TaskreportServiceImpl implements TaskreportService {
     public int countReport3(HashMap<String, Object> map) {
         return taskreportinfoMapper.countReport3(map);
     }
+
+    @Override
+    public List<Taskreportinfo> findByPageReport4(HashMap<String, Object> map) {
+        return taskreportinfoMapper.findByPageReport4(map);
+    }
+
+    @Override
+    public int countReport4(HashMap<String, Object> map) {
+        return taskreportinfoMapper.countReport4(map);
+    }
     /**
      * 饼图设计
      *

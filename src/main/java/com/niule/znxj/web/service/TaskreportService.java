@@ -40,6 +40,10 @@ public interface TaskreportService {
 
     public int countReport3(HashMap<String, Object> map);
 
+    public List<Taskreportinfo> findByPageReport4(HashMap<String, Object> map);
+
+    public int countReport4(HashMap<String, Object> map);
+
     int deleteByPrimaryKey(Long id);
 
     Taskreportinfo selectByPrimaryKey(Long id);

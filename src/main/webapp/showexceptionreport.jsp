@@ -14,7 +14,6 @@
         })
 
         function tasknum(){
-            debugger;
             var siteid = $("#name2 option:selected")[0].value;
             var taskcode='${taskcode}';
             var type="";
@@ -99,14 +98,11 @@
                                                 </c:forEach>
                                             </select>
                                             <label class="control-label" for="taskno">任务号：</label>
-                                            <select class="form-control" id="taskno" name="taskcode" >
+                                            <select class="form-control" id="taskno" name="taskAcode" >
                                                 <c:choose>
-                                                    <c:when test="${taskcode==null and taskcode==''}">
+                                                    <c:when test="${taskAcode==null and taskAcode==''}">
                                                         <option value="" selected>所有任务</option>
                                                     </c:when>
-                                                    <c:otherwise>
-                                                        <option value="${taskCcode}" selected>${taskCcode}</option>
-                                                    </c:otherwise>
                                                 </c:choose>
                                             </select>
 
@@ -195,7 +191,7 @@
                                                 <td>
                                                     <c:if test="${report.id==null}">${report.temp.taskcode}${report.task.taskdesc}</c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <a href="showexceptiondetail?id=${report.id}&page=${pageBean.currentPage}">${report.temp.taskcode}</a>
+                                                        <a href="showexceptiondetail?reportid=${report.id}&page=${pageBean.currentPage}">${report.temp.taskcode}</a>
                                                     </c:if>
                                                 </td>
                                                 <td>

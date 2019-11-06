@@ -54,6 +54,10 @@ public interface TaskreportinfoMapper {
 
     public int countReport3(HashMap<String, Object> map);
 
+    public List<Taskreportinfo> findByPageReport4(HashMap<String, Object> map);
+
+    public int countReport4(HashMap<String, Object> map);
+
     List<Taskreportinfo> queryByTaskidAndDonetime(int taskid, String donetime);
 
     /*查询某一天某项任务操作状态是正常或者异常的任务报告的信息*/

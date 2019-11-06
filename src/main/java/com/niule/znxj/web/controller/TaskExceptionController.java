@@ -59,30 +59,30 @@ public class TaskExceptionController {
      * 分页显示所有任务异常的报告 - 列表
      */
     @RequestMapping("/showexceptionreport")
-    public String showexceptionreport(Model m, int page,String taskcode,Long siteid,Integer exceptionstate,
+    public String showexceptionreport(Model m, int page,String taskAcode,Long siteid,Integer exceptionstate,
                                  String worker, String time1, String time2,HttpServletRequest request) {
 
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
+        List<Siteareainfo> siteareainfos = null;
         List<Long> siteids = new ArrayList<>();
-        if (admininfo.getSiteid() == null) {
-            List<Siteareainfo> sites = siteService.queryAllSite();
-            for (Siteareainfo siteareainfo : sites) {
-                siteids.add(siteareainfo.getId());
+        if(siteid==null){
+            if (admininfo.getSiteid() == null) {
+                List<Siteareainfo> sites = siteService.queryAllSite();
+                for (Siteareainfo siteareainfo : sites) {
+                    siteids.add(siteareainfo.getId());
+                }
+            } else {
+                siteids.add(Long.valueOf(admininfo.getSiteid()));
             }
-        } else {
-            siteids.add(Long.valueOf(admininfo.getSiteid()));
-        }
-        List<Siteareainfo> siteareainfos = siteService.selectByExample3(siteids); //查询角色对应的所有厂区
-        //判断用户角色
-        if(admininfo.getRoleid()==3){ //操作员
-            //查询操作员为该用户的异常任务
+            siteareainfos = siteService.selectByExample3(siteids); //查询角色对应的所有厂区
+        }else{
+            siteids.add(siteid);
         }
 
         if (page <= 0) {
             page = 1;
         }
         page = PageBean.countCurrentPage(page);
-        List<Taskreportinfo> taskreportinfos = null;
         long totalpage = 0;
         int pagesize = 15;
 
@@ -94,23 +94,31 @@ public class TaskExceptionController {
         tasktypeList.add(1); //计划巡检
         tasktypeList.add(3); //视频巡检
         map.put("tasktypes",tasktypeList);//任务类型
-        map.put("taskcode", taskcode); //任务号
+        map.put("taskAcode", taskAcode); //任务号(T3000A)
         map.put("reportstate", 1); //异常报告
-        map.put("examstate", 0); //审核状态
         map.put("time1", time1);//开始时间
         map.put("time2", time2);//结束时间
         map.put("siteids", siteids);//厂区
         map.put("worker",worker); //巡检责任人
         map.put("exceptionstate",exceptionstate);
 
-        taskreportinfos = taskreportService.findByPageReport3(map);
-        int rows2 = taskreportService.countReport3(map);
-        totalpage = PageBean.counTotalPage(pagesize, rows2);
+        List<Taskreportinfo> taskreportinfos = null;
+        int rows = 0;
+        //判断用户角色
+        if(admininfo.getRoleid()==3){ //操作员
+            //查询操作员为该用户的异常任务
+            taskreportinfos = taskreportService.findByPageReport4(map);
+            rows = taskreportService.countReport4(map);
+        }else{
+            taskreportinfos = taskreportService.findByPageReport3(map);
+            rows = taskreportService.countReport3(map);
+        }
+        totalpage = PageBean.counTotalPage(pagesize, rows);
         pageBean.setList(taskreportinfos);
         pageBean.setTotalPage((int) totalpage);
         pageBean.setCurrentPage(page);
         m.addAttribute("pageBean", pageBean);
-        m.addAttribute("taskcode", taskcode);
+        m.addAttribute("taskAcode", taskAcode);
         m.addAttribute("siteid", siteid);
         m.addAttribute("worker",worker);
         m.addAttribute("time1", time1);
@@ -128,12 +136,19 @@ public class TaskExceptionController {
      * @return
      */
     @RequestMapping("/showexceptiondetail")
-    public String showexceptiondetail(Model m, int page, Long reportid) throws Exception {
+    public String showexceptiondetail(Model m, int page, Long reportid,Long areaid,Long equipmentid) throws Exception {
         //得到报告明细
         Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(reportid);
+        Taskplaninfo taskplaninfo = taskPlanService.selectByPrimaryKey(taskreportinfo.getTaskid());
+        List<Areainfo> areainfoList = areaService.selectByExample1(taskplaninfo.getSiteid().intValue());
+        Areainfo areainfo = areaService.selectByPrimaryKey(areaid);
+        Equipmentinfo equipmentinfo = equipmentService.selectByPrimaryKey(equipmentid);
         //根据任务报告ID得到所有报告内容reportcontent
-        List<Reportcontent> reportcontents = reportcontentMapper.selectByExample2(reportid);
-
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("reportid", reportid);
+        map.put("areaname", areainfo.getCustomid());
+        map.put("equipname",equipmentinfo.getName());
+        List<Reportcontent> reportcontents = reportcontentMapper.selectByExample2(map);
         List<Reportsetting> reportsettings = systemService.showReportSetting();
         for (Reportsetting reportsetting : reportsettings) {
             m.addAttribute(reportsetting.getName(), reportsetting.getIsshow());
@@ -142,6 +157,9 @@ public class TaskExceptionController {
         m.addAttribute("reportid", reportid);
         m.addAttribute("taskcode", taskreportinfo.getTaskcode());
         m.addAttribute("taskreportinfo", taskreportinfo);
+        m.addAttribute("areaid",areaid);
+        m.addAttribute("areainfos",areainfoList);
+        m.addAttribute("equipmentid",equipmentid);
         m.addAttribute("page", page);
         return "exceptionreportdetail";
     }

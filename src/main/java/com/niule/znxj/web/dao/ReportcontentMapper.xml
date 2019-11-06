@@ -112,11 +112,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample2" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByExample2" resultMap="BaseResultMap" parameterType="map" >
     select c.*,r.taskcode,r.worker,r.tasktype,r.starttime,r.endtime
     from reportcontent c
     left join taskreportinfo r on r.id=c.reportid
-    where c.reportid = #{reportid} and c.reportstate ='1';
+    where c.reportid = #{reportid} and c.reportstate ='1'
+    <if test="areaname != null and areaname !=''" >
+      and c.areaname =#{areaname}
+    </if>
+    <if test="equipname != null and equipname !=''" >
+      and c.equipname =#{equipname}
+    </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
