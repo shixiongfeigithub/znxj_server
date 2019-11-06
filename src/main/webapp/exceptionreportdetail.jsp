@@ -18,15 +18,7 @@
             vertical-align: middle;
         }
     </style>
-    <%--<script src="/js/jquery-1.11.0.min.js"></script>--%>
     <script type="text/javascript">
-        var count;
-        //浮点数值
-        function CheckInputIntFloat(oInput) {
-            if('' != oInput.value.replace(/-?\d{1,}\.{0,1}\d{0,}/,'')) {
-                oInput.value = oInput.value.match(/-?\d{1,}\.{0,1}\d{0,}/) == null ? '' :oInput.value.match(/-?\d{1,}\.{0,1}\d{0,}/);
-            }
-        }
         $(function () {
             var x = document.getElementById('table').rows[0].cells;
             var len = $("#statuslen").val();
@@ -190,15 +182,11 @@
 </head>
 <body>
 
-<input type="hidden" value="${taskreport.id}" id="reportid">
-<input type="hidden" value="${taskreportid}" id="oldreportid">
-<input type="hidden" value="${type}" id="oldtype">
-<input type="hidden" value="${FLUCTUATE}" name="FLUCTUATE" id="maxval">
+<input type="hidden" value="${reportid}" id="reportid">
 <input type="hidden" value="${page}" name="page" id="page">
 <input type="hidden" value="${taskcode}"  id="taskcode">
 <div class="ch-container">
     <div class="row">
-        <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
         <div id="content" class="col-lg-12 col-sm-12">
             <div class="row">
                 <div class="box col-md-12">
@@ -227,6 +215,47 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="box-content">
+
+
+
+
+
+                                    <div class="form-inline" style="margin-bottom: 20px;">
+                                        <form action="showexceptiondetail?page=1" method="post">
+                                            <%--<label class="control-label" for="name2">厂区：</label>
+                                            <select id="name2" class="form-control" name="siteid" onchange="tasknum()">
+                                                <c:if test="${siteid==null}">
+                                                    <option value="">所有厂区</option>
+                                                </c:if>
+                                                <c:forEach items="${sites}" var="site">
+                                                    <option  value="${site.id}" ${siteid eq site.id ?'selected':''}>${site.customid}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <label class="control-label" for="taskno">任务号：</label>
+                                            <select class="form-control" id="taskno" name="taskcode" >
+                                                <c:choose>
+                                                    <c:when test="${taskcode==null and taskcode==''}">
+                                                        <option value="" selected>所有任务</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option value="${taskCcode}" selected>${taskCcode}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </select>--%>
+
+                                            <label class="control-label" for="worker">任务负责人：</label>
+                                            <input type="text" style="width: 100px;" id="worker" name="worker">
+                                            <br>
+                                            <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
+                                        </form>
+                                    </div>
+
+
+
+
+
+
+
                                     <table id="table" class="table table-striped table-bordered table-hover ">
                                         <tr>
                                             <c:if test="${areaname==1}">
@@ -356,7 +385,6 @@
                                                         <c:if test="${reports.checktype == '状态项'}">
                                                             <c:if test="${reports.areaskipdesc != null or reports.equipmentskipdesc != null}">
                                                                 -
-                                                                <%--<c:if test="${reports.reportstate == ''}">-</c:if>--%>
                                                             </c:if>
 
                                                             <c:if test="${reports.areaskipdesc == null and reports.equipmentskipdesc == null}">
@@ -377,9 +405,6 @@
                                                 </c:if>
                                                 <c:if test="${errcontent==1}">
                                                     <td class="fontcenter" id="error${status.index}">${reports.errcontent}</td>
-                                                        <%--<a href="javascript:void(0);" onclick="showimg('${reports.imgs}','${reports.audio}','${reports.video}')">${reports.errcontent}--%>
-                                                        <%--</a>--%>
-
                                                 </c:if>
                                                 <c:if test="${recordname==1}">
                                                     <td class="fontcenter">${reports.recordname}</td>

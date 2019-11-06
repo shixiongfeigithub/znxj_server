@@ -30,7 +30,7 @@ public class ExceptionhandlerinfoServiceImpl implements ExceptionhandlerinfoServ
     }
 
     @Override
-    public int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(Long id) {
         return exceptionhandlerinfoMapper.deleteByPrimaryKey(id);
     }
 
@@ -50,7 +50,7 @@ public class ExceptionhandlerinfoServiceImpl implements ExceptionhandlerinfoServ
     }
 
     @Override
-    public Exceptionhandlerinfo selectByPrimaryKey(Integer id) {
+    public Exceptionhandlerinfo selectByPrimaryKey(Long id) {
         return exceptionhandlerinfoMapper.selectByPrimaryKey(id);
     }
 

@@ -51,7 +51,6 @@ public class SecurityRealm extends AuthorizingRealm {
            /* authorizationInfo.addRole(role.getRolessign());*/
             final List<Power> permissions = powerMapper.selectByRoleid(role.getRoleid());
             for (Power permission : permissions) {// 添加权限
-                System.out.println(permission.getPersionid()+" "+permission.getPermissionname());
                 authorizationInfo.addStringPermission(permission.getPermissionsign());
             }
         return authorizationInfo;
@@ -72,24 +71,5 @@ public class SecurityRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username, password, getName());
         return authenticationInfo;
     }
-    /*protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-　　　　Subject subject = getSubject(request, response);
-        String redirectUrl = getred(request, response, subject);
-        try {
 
-            subject.logout();
-
-        } catch (SessionException ise) {
-
-            ise.printStackTrace();
-
-        }
-
-        issueRedirect(request, response, redirectUrl);
-
-　　　　　//返回false表示不执行后续的过滤器，直接返回跳转到登录页面
-
-        return false;
-
-    }*/
 }

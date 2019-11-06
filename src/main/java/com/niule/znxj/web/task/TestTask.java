@@ -22,24 +22,25 @@ public class TestTask {
         commonService.generate();
     }
 
-    //发送日报
+    //发送日报(每日凌晨0点)
     @Scheduled(cron = "0 0 0 * * ?")
     public void senddayemail() {
         commonService.senddayreport();
     }
 
-    //发送周报
+    //发送周报（每周一凌晨0点）
     @Scheduled(cron = "0 0 0 ? * MON")
     public void sendweekemail() {
         commonService.sendweekemail();
     }
 
-    //    发送月报
+    //发送月报（每月一号凌晨0点）
     @Scheduled(cron = "0 0 0 ? * ?")
     public void sendmonthemail() {
         commonService.sendmonthemail();
     }
 
+    //自动复核（每分钟执行一次）
     @Scheduled(cron = "0 */1 * * * ?")
     public void automaticExamine() {
         commonService.automaticExamine();

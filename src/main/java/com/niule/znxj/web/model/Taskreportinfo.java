@@ -54,6 +54,26 @@ public class Taskreportinfo {
 
     private String areainouttime;
 
+    private Integer exceptionstate;
+
+    private Date exceptionclosetime;
+
+    public Integer getExceptionstate() {
+        return exceptionstate;
+    }
+
+    public void setExceptionstate(Integer exceptionstate) {
+        this.exceptionstate = exceptionstate;
+    }
+
+    public Date getExceptionclosetime() {
+        return exceptionclosetime;
+    }
+
+    public void setExceptionclosetime(Date exceptionclosetime) {
+        this.exceptionclosetime = exceptionclosetime;
+    }
+
     public String getAreainouttime() {
         return areainouttime;
     }

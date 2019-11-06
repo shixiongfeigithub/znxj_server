@@ -110,14 +110,11 @@
                                                 </c:choose>
                                             </select>
 
-                                            <label class="control-label" for="operationstate">执行状态：</label>
-                                            <select class="form-control" id="operationstate" name="operationstate">
-                                                <option ${operationstate eq '' ? 'selected' : ''} value="">所有</option>
-                                                <option ${operationstate eq '1' ? 'selected' : ''} value="1">漏检</option>
-                                                <option ${operationstate eq '2' ? 'selected' : ''} value="2">跳检</option>
-                                                <option ${operationstate eq '3' ? 'selected' : ''} value="3">正常</option>
-                                                <option ${operationstate eq '4' ? 'selected' : ''} value="4">超时</option>
-                                                <option ${operationstate eq '5' ? 'selected' : ''} value="5">主动终止</option>
+                                            <label class="control-label" for="exceptionstate">异常状态：</label>
+                                            <select class="form-control" id="exceptionstate" name="exceptionstate">
+                                                <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
+                                                <option ${exceptionstate eq '0' ? 'selected' : ''} value="1">已关闭</option>
+                                                <option ${exceptionstate eq '1' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
                                             <label class="control-label" for="worker">任务负责人：</label>
                                             <input type="text" style="width: 100px;" id="worker" name="worker" value="${worker}">
@@ -198,7 +195,7 @@
                                                 <td>
                                                     <c:if test="${report.id==null}">${report.temp.taskcode}${report.task.taskdesc}</c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <a href="showexceptiondetail?id=${report.id}&page=${pageBean.currentPage}&type=${report.tasktype}&type2=1">${report.temp.taskcode}</a>
+                                                        <a href="showexceptiondetail?id=${report.id}&page=${pageBean.currentPage}">${report.temp.taskcode}</a>
                                                     </c:if>
                                                 </td>
                                                 <td>

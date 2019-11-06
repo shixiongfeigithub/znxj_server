@@ -443,18 +443,7 @@ public class WebTaskreportController {
             else
                 m.addAttribute("examtime", 1);
         }
-//        if (tasktempinfos.size() > 0) {
-//            //如果当前时间在下一次子任务执行之前，有复核权限的用户可以对报告进行复核
-//            if (now.getTime() <= tasktempinfos.get(0).getExecutetime().getTime())
-//                m.addAttribute("examtime", 0);
-//            else
-//                m.addAttribute("examtime", 1);
-//        } else{
-//            if(taskreportinfo.getExamtime()==null&&taskreportinfo.getExamstate()==0)
-//                m.addAttribute("examtime", 0);
-//            else
-//                m.addAttribute("examtime", 1);
-//        }
+
         List<Reportsetting> reportsettings = systemService.showReportSetting();
         for (Reportsetting reportsetting : reportsettings) {
             m.addAttribute(reportsetting.getName(), reportsetting.getIsshow());
@@ -576,125 +565,20 @@ public class WebTaskreportController {
         return reportcontentList;
     }
 
-    //报告审核
+    /**
+     * 任务报告复核
+     *
+     * @param reportData 复核数据
+     * @param reportId   报告id
+     * @param examuser   复核人姓名
+     * @param taskcode   任务编号
+     * @return
+     */
     @RequestMapping(value = "updReportContent", method = RequestMethod.POST)
     @ResponseBody
     public int updReportContent(String reportData, Long reportId, String examuser, String taskcode) {
         return taskreportService.updReportContent(reportData, reportId, examuser, taskcode);
     }
-//    @RequestMapping("querytaskreportdetail")
-//    public String querytaskreportdetail(Long id, Model m, int type) {
-//
-//        Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(id);
-//        List<List<String>> resList = new ArrayList<>();
-//        List<String> childList = new ArrayList<>();
-//        List<String> taskcode = new ArrayList<>();
-//        childList.add("区域");
-//        childList.add("设备");
-//        childList.add("巡检项");
-//        childList.add("巡检项类型");
-//        childList.add("执行时间");
-//        childList.add("低值");
-//        childList.add("高值");
-//        childList.add("告警下限");
-//        childList.add("告警上限");
-//        childList.add("数值");
-//        childList.add("异常描述");
-//        childList.add("数据名称");
-//        childList.add("单位");
-//        resList.add(childList);
-//        String content = "{" + "\"res\":" + taskreportinfo.getContent() + "}";
-//        TaskReportRes res = JsonUtil.toObject(content, TaskReportRes.class);
-//        for (TaskReportContent item : res.getRes()) {
-//            childList = new ArrayList<>();
-//            String area = item.getAreaname();
-//            String equipment = item.getEquipname();
-//            String checkname = item.getCheckname();
-//            String checkitype = item.getChecktype();
-////            String executetime=item.getOperationtime();
-//
-//            String normalmin= "";
-//            String normalmax =  "";
-//            String lowerwarning = "";
-//            String upperwarning ="";
-//
-//            childList.add(area);
-//            childList.add(equipment);
-//            childList.add(checkname);
-//            childList.add(checkitype);
-//            childList.add(checkitype);
-//            if (item.getChecktype().equals("状态项")) {
-//                normalmin = "-";
-//                normalmax = "-";
-//                lowerwarning = "-";
-//                upperwarning = "-";
-//                childList.add(normalmin);
-//                childList.add(normalmax);
-//                childList.add(lowerwarning);
-//                childList.add(upperwarning);
-//                if("0".equals(item.getReportstate())){
-//                    childList.add("正常");
-//                    childList.add("-");
-//                }else {
-//                    childList.add("<span style='background:red;color:white;display:inline-block;padding:5 10;'>"+"异常"+"</span>");
-//                    childList.add("<a href='javascript:void(0);' onclick=showimg('" + JsonUtil.toJSON(item.getImg()) + "','" + JsonUtil.toJSON(item.getAudio()) + "','" + JsonUtil.toJSON(item.getVideo()) + "')>" + item.getErrcontent() + "</a>");
-//                }
-//            } else {
-//                normalmin = item.getNormalmin()+"";
-//                normalmax = item.getNormalmax()+"";
-//                lowerwarning = item.getLowerwarning()+"";
-//                upperwarning = item.getUpperwarning()+"";
-//                childList.add(normalmin);
-//                childList.add(normalmax);
-//                childList.add(lowerwarning);
-//                childList.add(upperwarning);
-//                if (item.getNumvalue() != "") {
-//                    if(item.getLowerwarning()!=0&&item.getUpperwarning()!=0){
-//                        if (Double.parseDouble(item.getNumvalue()) > item.getUpperwarning()) {
-//                            childList.add("<span style='color:red;'>" + item.getNumvalue() +  "</span>");
-//                            childList.add("<span style='color:red;'>" + "↑↑" + "</span>");
-//                        }
-//                        if (Double.parseDouble(item.getNumvalue()) < item.getLowerwarning()) {
-//                            childList.add("<span style='color:red;'>" + item.getNumvalue() + "</span>");
-//                            childList.add("<span style='color:red;'>" +  "↓↓" + "</span>");
-//                        }
-//                        if (item.getLowerwarning() <= Double.parseDouble(item.getNumvalue()) &&
-//                                Double.parseDouble(item.getNumvalue()) <= item.getUpperwarning()) {
-//                            childList.add(item.getNumvalue());
-//                            childList.add("-");
-//                        }
-//                    }else{
-//                        if (Double.parseDouble(item.getNumvalue()) > item.getNormalmax()) {
-//                            childList.add("<span style='color:red;'>" + item.getNumvalue()  + "</span>");
-//                            childList.add("<span style='color:red;'>" +  "↑↑" + "</span>");
-//                        }
-//                        if (Double.parseDouble(item.getNumvalue()) < item.getNormalmin()) {
-//                            childList.add("<span style='color:red;'>" + item.getNumvalue()  + "</span>");
-//                            childList.add("<span style='color:red;'>" +"↓↓" + "</span>");
-//                        }
-//                        if (item.getNormalmin() <= Double.parseDouble(item.getNumvalue()) &&
-//                                Double.parseDouble(item.getNumvalue()) <= item.getNormalmax()) {
-//                            childList.add(item.getNumvalue());
-//                            childList.add("-");
-//                        }
-//                    }
-//                } else {
-//                    childList.add("-");
-//                    childList.add("-");
-//                }
-//            }
-//            String recordname=item.getRecordname();
-//            String unitname=item.getUnitname();
-//            childList.add(recordname);
-//            childList.add(unitname);
-//            resList.add(childList);
-//        }
-//        m.addAttribute("reportinfos", resList);
-//        m.addAttribute("type",type);
-//        m.addAttribute("taskreportid",id);
-//        m.addAttribute("taskcode",taskreportinfo.getTaskcode());
-//        return "report3";
-//    }
 
     /**
      * 任务报告汇总
@@ -2419,8 +2303,6 @@ public class WebTaskreportController {
         m.addAttribute("courseList", courseList);
         m.addAttribute("errortasklist", reportcontents);
         m.addAttribute("temppagebean", temppagebean);
-//        m.addAttribute("taskpagebean", taskpagebean);
-//        m.addAttribute("identifyingid", errortasklist.size()>0?errortasklist.get(0).getTask().getIdentifyingid():null);
         m.addAttribute("identifyingid", taskplaninfo != null ? taskplaninfo.getIdentifyingid() : null);
         m.addAttribute("ip", ip);
         return "exceptionReport";

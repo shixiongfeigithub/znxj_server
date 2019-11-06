@@ -19,10 +19,7 @@
     <result column="examtime" property="examtime" jdbcType="TIMESTAMP" />
     <result column="examstate" property="examstate" jdbcType="INTEGER" />
     <result column="examuser" property="examuser" jdbcType="VARCHAR" />
-
     <result column="customid" property="task.customid" jdbcType="VARCHAR" />
-    <!--<result column="createtime" property="task.createtime" jdbcType="TIMESTAMP" />-->
-    <!--<result column="createtime" property="task.createtime" jdbcType="TIMESTAMP" />-->
     <result column="sitename" property="task.site.customid" jdbcType="VARCHAR" />
     <result column="userid" jdbcType="BIGINT" property="user.id" />
     <result column="realname" jdbcType="VARCHAR" property="user.realname" />
@@ -44,6 +41,8 @@
     <result column="stopclassname" property="temp.taskstopinfo.classname" jdbcType="VARCHAR" />
     <result column="stopdirectorname" property="temp.taskstopinfo.directorname" jdbcType="VARCHAR" />
     <result column="realname" property="temp.user.realname" jdbcType="VARCHAR" />
+    <result column="exceptionstate" property="exceptionstate" jdbcType="INTEGER" />
+    <result column="exceptionclosetime" property="exceptionclosetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.niule.znxj.web.model.TaskreportinfoWithBLOBs" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -654,7 +653,7 @@
     ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
     u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.type tasktype,temp.operationstate tempoperationstate,
     temp.stopstate,temp.taskcode temptaskcode,temp.executetime,temp.updatetime,st.id stopid,st.reason stopreason,
-    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname
+    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,ex.exceptionstate,ex.exceptionclosetime
     from tasktempinfo temp
     left join taskreportinfo ter on ter.taskcode=temp.taskcode
     left join taskstopinfo st on temp.id=st.tasktempid
@@ -662,6 +661,7 @@
     left join userinfo u on t.directorid=u.id
     left join terminalinfo term on ter.termimalid=term.id
     left join siteareainfo s on s.id=t.siteid
+    left join exceptionhandlerinfo ex on ter.id = ex.reportid
     where temp.type in
     <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
       #{type}
@@ -679,17 +679,14 @@
     <if test="reportstate!=null and reportstate!=''">
       and ter.reportstate=#{reportstate}
     </if>
-    <if test="operationstate!=null and operationstate!=''">
-      and  temp.operationstate=#{operationstate}
+    <if test="examstate!=null and examstate!=''">
+      and ter.examstate != #{examstate}
     </if>
-    <if test="state!=null and state!=''">
-      and temp.state in
-      <foreach collection="state"  item="state" open="(" separator="," close=")" >
-        #{state}
-      </foreach>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and ex.exceptionstate=#{exceptionstate}
     </if>
     <if test="time1!=null and time1!=''">
-      and date_format(temp.executetime, '%Y-%m-%d'
+      and date_format(ter.donetime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
     order by temp.id DESC
@@ -720,17 +717,15 @@
     <if test="reportstate!=null and reportstate!=''">
       and ter.reportstate=#{reportstate}
     </if>
-    <if test="operationstate!=null and operationstate!=''">
-      and  temp.operationstate=#{operationstate}
+    <if test="examstate!=null and examstate!=''">
+      and ter.examstate !=#{examstate}
     </if>
-    <if test="state!=null and state!=''">
-      and temp.state in
-      <foreach collection="state"  item="state" open="(" separator="," close=")" >
-        #{state}
-      </foreach>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and ex.exceptionstate=#{exceptionstate}
     </if>
     <if test="time1!=null and time1!=''">
-      and date_format(temp.executetime, '%Y-%m-%d' ) between #{time1,jdbcType=VARCHAR}  </if>
+      and date_format(ter.donetime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
     order by temp.id DESC
   </select>

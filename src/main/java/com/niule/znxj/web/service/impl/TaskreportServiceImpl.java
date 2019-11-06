@@ -6,10 +6,7 @@ import com.niule.znxj.core.entity.JSONResult;
 import com.niule.znxj.core.entity.Result;
 import com.niule.znxj.core.util.DateUtils;
 import com.niule.znxj.core.util.json.JsonUtil;
-import com.niule.znxj.web.dao.OperatelogMapper;
-import com.niule.znxj.web.dao.ReportcontentMapper;
-import com.niule.znxj.web.dao.TaskreportinfoMapper;
-import com.niule.znxj.web.dao.TasktempinfoMapper;
+import com.niule.znxj.web.dao.*;
 import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.model.response.*;
 import com.niule.znxj.web.service.TaskreportService;
@@ -39,6 +36,8 @@ public class TaskreportServiceImpl implements TaskreportService {
     private TasktempinfoMapper tasktempinfoMapper;
     @Resource
     private OperatelogMapper operatelogMapper;
+    @Resource
+    private ExceptionhandlerinfoMapper exceptionhandlerinfoMapper;
 
     @Override
     public List<Tasktempinfo> dadiyreport(String date, Long taskidstr) {
@@ -89,19 +88,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         return tasktempinfoMapper.dadiyreport(example);
     }
 
-
-    /* public static void main(String[] args) throws ParseException {
-         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-         Date start = sdf.parse("20180530155916");
-         Date end = sdf.parse("20180530160002");
-         long between = end.getTime() - start.getTime();
-         long day = between / (24*60*60*1000);
-         long hour = (between / (60*60*1000) -day*24);
-         long min = (between / (60*1000) -day *24*60-hour*60);
-         long s = (between / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
-         System.out.println(between);
-         System.out.println(day+"天"+hour+"小时"+min+"分"+s+"秒");
-     }*/
     @Override
     public int deleteByPrimaryKey(Long id) {
         return taskreportinfoMapper.deleteByPrimaryKey(id);
@@ -635,41 +621,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         return res;
     }
 
-    /* public WebChartRes2 equipStateChart(int page,int size,String checkname,String monthstr,String yearstr,String areaname,String equipname){
-         List<Reportcontent> equipstates=equipSateInfo3(checkname,monthstr,yearstr,areaname,equipname);
-         WebChartRes2 res = new WebChartRes2();
-         List<String> monthList =  new ArrayList<>();
-         List<WebChartResBean2> series = new ArrayList<>();
-
-         WebChartResBean2 webChartResBean = new WebChartResBean2();
-
-         Map<Integer,Integer> timeMap = new HashMap<Integer,Integer>();
-         List<Double> dataList = new ArrayList<Double>();
-         for(Reportcontent item:equipstates){
-             Calendar time = Calendar.getInstance();
- //            if(item.getNumvalue()!=null&&!"".equals(item.getNumvalue()))
- //                dataList.add(Double.parseDouble(item.getNumvalue()));
- //            if(item.getNumvalue()==null&&"".equals(item.getNumvalue()))
- //                dataList.add(0.0);
-             if(item.getOperationtime()!=null&&!"".equals(item.getOperationtime())){
-                *//* if(item.getNumvalue()!=null&&!"".equals(item.getNumvalue())){
-                    monthList.add(item.getOperationtime());
-                    dataList.add(Double.parseDouble(item.getNumvalue()));
-                }*//*
-               if(item.getCheckvalue() != null && !"".equals(item.getCheckvalue())){
-                   monthList.add(item.getOperationtime());
-                   dataList.add(Double.parseDouble(item.getCheckvalue()));
-               }
-            }
-        }
-        if(equipstates.size()>0&&!"".equals(equipstates.get(0).getCheckname()))
-            webChartResBean.setName(equipstates.get(0).getCheckname());
-        webChartResBean.setData(dataList);
-        series.add(webChartResBean);
-        res.setSeries(series);
-        res.setMonthes(monthList);
-        return res;
-    }*/
     public Integer getTaskDay(Date var) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(var);
@@ -697,6 +648,16 @@ public class TaskreportServiceImpl implements TaskreportService {
             reportcontent.setCheckvalue(checkReport.getCheckvalue());
             updReportContent = reportcontentMapper.updateCheckValue(reportcontent);
         }
+        //更新异常报告表中的确认时间
+        ExceptionhandlerinfoExample exceptionhandlerinfoExample = new ExceptionhandlerinfoExample();
+        exceptionhandlerinfoExample.createCriteria().andReportidEqualTo(reportId);
+        List<Exceptionhandlerinfo> exceptionhandlerinfos = exceptionhandlerinfoMapper.selectByExample(exceptionhandlerinfoExample);
+        if(exceptionhandlerinfos!=null && exceptionhandlerinfos.size()>0){
+            Exceptionhandlerinfo info = exceptionhandlerinfos.get(0);
+            info.setConfirmtime(new Date());
+            exceptionhandlerinfoMapper.insert(info);
+        }
+
         if (updCheckTime > 0 && updReportContent > 0) {
             String info = "用户" + examuser + "复核报告" + taskcode + "成功";
             return insertSelective(examuser, info);

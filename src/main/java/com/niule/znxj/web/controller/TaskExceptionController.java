@@ -59,7 +59,7 @@ public class TaskExceptionController {
      * 分页显示所有任务异常的报告 - 列表
      */
     @RequestMapping("/showexceptionreport")
-    public String showexceptionreport(Model m, int page,String taskcode,Long siteid,String operationstate,
+    public String showexceptionreport(Model m, int page,String taskcode,Long siteid,Integer exceptionstate,
                                  String worker, String time1, String time2,HttpServletRequest request) {
 
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
@@ -73,9 +73,6 @@ public class TaskExceptionController {
             siteids.add(Long.valueOf(admininfo.getSiteid()));
         }
         List<Siteareainfo> siteareainfos = siteService.selectByExample3(siteids); //查询角色对应的所有厂区
-        //List<Areainfo> areainfos = areaService.selectByExample1(siteid);
-        //List<Equipmentinfo> equipmentinfos = equipmentService.queryequip(areaid);
-
         //判断用户角色
         if(admininfo.getRoleid()==3){ //操作员
             //查询操作员为该用户的异常任务
@@ -99,27 +96,13 @@ public class TaskExceptionController {
         map.put("tasktypes",tasktypeList);//任务类型
         map.put("taskcode", taskcode); //任务号
         map.put("reportstate", 1); //异常报告
+        map.put("examstate", 0); //审核状态
         map.put("time1", time1);//开始时间
         map.put("time2", time2);//结束时间
         map.put("siteids", siteids);//厂区
-        map.put("worker",worker); //任务执行者
+        map.put("worker",worker); //巡检责任人
+        map.put("exceptionstate",exceptionstate);
 
-        List<Integer> stateList = new ArrayList<>();
-        if (operationstate!=null && operationstate.equals("5")) {
-            stateList.add(3);
-            map.put("stopstate", 1);
-            map.put("operationstate", null);
-        } else {
-            if (operationstate==null) {
-                stateList.add(3);
-                stateList.add(2);
-            } else if (operationstate.equals("4")) {
-                stateList.add(3);
-            } else
-                stateList.add(2);
-            map.put("operationstate", operationstate);
-        }
-        map.put("state", stateList);
         taskreportinfos = taskreportService.findByPageReport3(map);
         int rows2 = taskreportService.countReport3(map);
         totalpage = PageBean.counTotalPage(pagesize, rows2);
@@ -132,215 +115,34 @@ public class TaskExceptionController {
         m.addAttribute("worker",worker);
         m.addAttribute("time1", time1);
         m.addAttribute("time2", time2);
-        m.addAttribute("operationstate", operationstate);
+        m.addAttribute("exceptionstate", exceptionstate);
         m.addAttribute("sites", siteareainfos);
         m.addAttribute("roleid", admininfo.getRoleid());
-        //ShowReportParam param = new ShowReportParam(page, tasktype, taskcode, "1", time1, time2, operationstate, siteid, tasktype);
-        //request.getSession().setAttribute("reportParam", param);
         return "showexceptionreport";
     }
 
     /**
      * 异常任务报告的详细信息
      *
-     * @param id   任务报告编号
-     * @param m
-     * @param type 任务类型
+     * @param reportid   任务报告编号
      * @return
      */
     @RequestMapping("/showexceptiondetail")
-    public String showexceptiondetail(Long id, Model m, int type, int page, Integer type2) throws Exception {
+    public String showexceptiondetail(Model m, int page, Long reportid) throws Exception {
         //得到报告明细
-        Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(id);
-        //得到前一次报告
-        List<Taskreportinfo> taskreportinfos = getTaskCode(taskreportinfo.getTaskcode());
-        List<Reportcontent> reportcontentList = new ArrayList<>();
-        if (taskreportinfos.size() > 0) {
-            if (taskreportinfos.get(0).getId() != null) {
-                ReportcontentExample example = new ReportcontentExample();
-                example.createCriteria().andReportidEqualTo(taskreportinfos.get(0).getId());
-                reportcontentList = reportcontentMapper.selectByExample(example);
-            }
-        }
-
+        Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(reportid);
         //根据任务报告ID得到所有报告内容reportcontent
-        List<Reportcontent> reportcontents = reportcontentMapper.selectByExample2(id);
-        //得到波动值
-        List<Systemsettinginfo> systems = systemService.selectByExample();
-        Double fluctudte = 0.0;
-        for (Systemsettinginfo info : systems) {
-            m.addAttribute(info.getKeyname(), info.getValue());
-            if (info.getKeyname().equals("FLUCTUATE"))
-                fluctudte = Double.valueOf(info.getValue());
-        }
-        Iterator<Reportcontent> iterator = reportcontents.iterator();
-        while (iterator.hasNext()){
-            Reportcontent reportcontent = iterator.next();
-            String bodongzhi = "";
-            if (reportcontentList.size() > 0 ) {
-                for (Reportcontent reportcontent2 : reportcontentList) {
-                    if (reportcontent2.getCheckname().equals(reportcontent.getCheckname())) {
-                        if (taskreportinfo.getExamstate() != 0) {
-                            if (reportcontent.getCheckvalue() != null && !reportcontent.getCheckvalue().isEmpty() && reportcontent2.getCheckvalue() != null && !reportcontent2.getCheckvalue().isEmpty()) {
-                                double maxfluctudte = 1 + fluctudte;
-                                double minfluctudte = 1 - fluctudte;
-                                if (Double.parseDouble(reportcontent.getCheckvalue()) / Double.parseDouble(reportcontent2.getCheckvalue()) > maxfluctudte) {
-                                    bodongzhi = "/↑↑↑";
-                                }
-                                if (Double.parseDouble(reportcontent.getCheckvalue()) / Double.parseDouble(reportcontent2.getCheckvalue()) < minfluctudte) {
-                                    bodongzhi = "/↓↓↓";
-                                }
-                            }
-                        } else {
-                            if (reportcontent.getNumvalue() != null && !reportcontent.getNumvalue().isEmpty() && reportcontent2.getCheckvalue() != null && !reportcontent2.getCheckvalue().isEmpty()) {
-                                if (Double.parseDouble(reportcontent.getNumvalue()) / Double.parseDouble(reportcontent2.getCheckvalue()) > (1 + fluctudte)) {
-                                    bodongzhi = "/↑↑↑";
-                                }
-                                if (Double.parseDouble(reportcontent.getNumvalue()) / Double.parseDouble(reportcontent2.getCheckvalue()) < (1 - fluctudte)) {
-                                    bodongzhi = "/↓↓↓";
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (taskreportinfo.getExamstate() != 0 && reportcontent.getCheckvalue() != null && !reportcontent.getCheckvalue().isEmpty()) {
-                //大于低值 小于高值
-                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
-                        Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getCheckvalue()) &&
-                        Double.parseDouble(reportcontent.getCheckvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else{
-                        reportcontent.setErrcontent("-" + bodongzhi);
-                        iterator.remove();
-                    }
-
-                }
-                //大于最低值  小于低值
-                else if (!reportcontent.getNormalmin().equals("-")
-                        && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↓" + bodongzhi);
-                }
-                //大于高值  小于最高值
-                else if (!reportcontent.getNormalmax().equals("-")
-                        && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↑" + bodongzhi);
-                }
-                //大于最高上限值
-                else if (!reportcontent.getUpperwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getUpperwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else
-                        reportcontent.setErrcontent("↑↑" + bodongzhi);
-                }
-                //小于最低上限值
-                else if (!reportcontent.getLowerwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else
-                        reportcontent.setErrcontent("↓↓" + bodongzhi);
-                } else {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else {
-                        reportcontent.setErrcontent("-" + bodongzhi);
-                    }
-                }
-            } else if (taskreportinfo.getExamstate() == 0 && !reportcontent.getNumvalue().isEmpty()) {
-                if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                    reportcontent.setErrcontent(reportcontent.getErrcontent());
-                } else {
-                    reportcontent.setErrcontent("-");
-                    iterator.remove();
-                }
-                //大于低值 小于高值
-                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
-                        Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getNumvalue()) &&
-                        Double.parseDouble(reportcontent.getNumvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else {
-                        reportcontent.setErrcontent("-" + bodongzhi);
-                        iterator.remove();
-                    }
-                }
-                // 小于低值
-                if (!reportcontent.getNormalmin().equals("-")
-                        && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↓" + bodongzhi);
-                }
-                //大于高值
-                if (!reportcontent.getNormalmax().equals("-")
-                        && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↑" + bodongzhi);
-                }
-                //大于最高上限值
-                if (!reportcontent.getUpperwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getUpperwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↑↑" + bodongzhi);
-                }
-                //小于最低上限值
-                if (!reportcontent.getLowerwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↓↓" + bodongzhi);
-                }
-
-            } else {
-                if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                    reportcontent.setErrcontent(reportcontent.getErrcontent());
-                } else {
-                    reportcontent.setErrcontent("-");
-                    iterator.remove();
-                }
-            }
-        }
-        m.addAttribute("reportinfos", reportcontents);
-        m.addAttribute("type", type);
-        m.addAttribute("taskreportid", id);
-        m.addAttribute("taskcode", taskreportinfo.getTaskcode());
-        Date now = new Date();
-        if (taskreportinfos.size() > 0) {
-            m.addAttribute("taskreport", taskreportinfos.get(0));
-        } else {
-            m.addAttribute("taskreport", null);
-        }
-        long nd = 1000 * 24 * 60 * 60;
-        long nh = 1000 * 60 * 60;
-        long diff = now.getTime() - taskreportinfo.getDonetime().getTime();
-        // 计算差多少天
-        long day = diff / nd;
-        // 计算差多少小时
-        long hour = diff % nd / nh;
-        long hours = day * 24 + hour;
-        if (hours <= 36) {
-            if (taskreportinfo.getExamstate() == 0)
-                m.addAttribute("examtime", 0);
-            else
-                m.addAttribute("examtime", 1);
-        }
+        List<Reportcontent> reportcontents = reportcontentMapper.selectByExample2(reportid);
 
         List<Reportsetting> reportsettings = systemService.showReportSetting();
         for (Reportsetting reportsetting : reportsettings) {
             m.addAttribute(reportsetting.getName(), reportsetting.getIsshow());
         }
+        m.addAttribute("reportinfos", reportcontents);
+        m.addAttribute("reportid", reportid);
+        m.addAttribute("taskcode", taskreportinfo.getTaskcode());
         m.addAttribute("taskreportinfo", taskreportinfo);
         m.addAttribute("page", page);
-        m.addAttribute("type2", type2);
         return "exceptionreportdetail";
     }
 
@@ -429,7 +231,7 @@ public class TaskExceptionController {
             }
             BeanUtils.copyProperties(exceptionhandlerinfo,info);
             exceptionhandlerinfo.setAttachment(JsonUtil.toJSON(attach));
-            exceptionhandlerinfo.setCheckuserid(admininfo.getId().intValue());
+            exceptionhandlerinfo.setCheckuserid(admininfo.getId());
             exceptionhandlerinfo.setExceptionclosetime(new Date());
             int result=exceptionhandlerinfoService.updateByExample(exceptionhandlerinfo,example);
             return result;
@@ -468,7 +270,7 @@ public class TaskExceptionController {
         if(infoList!=null && infoList.size()>0){
             Exceptionhandlerinfo info = infoList.get(0);
             if(info.getAppointedtime()==null){
-                exceptionhandlerinfo.setCheckuserid(admininfo.getId().intValue());
+                exceptionhandlerinfo.setCheckuserid(admininfo.getId());
                 exceptionhandlerinfo.setAppointedtime(new Date());
             }
 

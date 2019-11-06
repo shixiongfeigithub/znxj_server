@@ -116,7 +116,7 @@
     select c.*,r.taskcode,r.worker,r.tasktype,r.starttime,r.endtime
     from reportcontent c
     left join taskreportinfo r on r.id=c.reportid
-    where c.reportid = #{reportid} and c.reportstate !='0';
+    where c.reportid = #{reportid} and c.reportstate ='1';
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
