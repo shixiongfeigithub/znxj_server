@@ -47,13 +47,6 @@
                         <li><shiro:hasPermission name="item:contact"><a href="showallcont?page=1" target="center"><%--<i class="glyphicon glyphicon-user"></i>--%>联系人管理</a></shiro:hasPermission></li>
                     </ul>
                 </li>
-                <li class="accordion" id="taskExceptionManager">
-                    <a href="#"><i class=" glyphicon glyphicon-certificate"></i><span> 任务异常管理</span></a>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li><shiro:hasPermission name="item:exceptionreport"><a href="showexceptionreport?page=1&type=0" target="center"><%--<i class="glyphicon glyphicon-cog"></i>--%>巡检异常</a></shiro:hasPermission></li>
-                        <li><shiro:hasPermission name="item:exceptionhse"><a href="showexceptionhse?page=1&type=1"  target="center"><%--<i class="glyphicon glyphicon-zoom-in"></i>--%>HSE隐患异常</a></shiro:hasPermission></li>
-                    </ul>
-                </li>
                 <li class="accordion" id="taskManager">
                     <a href="#"><i class=" glyphicon glyphicon-tasks"></i><span> 任务管理</span></a>
                     <ul class="nav nav-pills nav-stacked">
@@ -64,7 +57,13 @@
                         <li><shiro:hasPermission name="item:quick"><a href="showQuickReport?page=1" target="center"><%--<i class="glyphicon glyphicon-camera"></i>--%>即拍即传</a></shiro:hasPermission></li>
                     </ul>
                 </li>
-
+                <li class="accordion" id="taskExceptionManager">
+                    <a href="#"><i class=" glyphicon glyphicon-certificate"></i><span> 异常报告管理</span></a>
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><shiro:hasPermission name="item:exceptionreport"><a href="showexceptionreport?page=1&type=0" target="center"><%--<i class="glyphicon glyphicon-cog"></i>--%>巡检异常</a></shiro:hasPermission></li>
+                        <li><shiro:hasPermission name="item:exceptionhse"><a href="showexceptionhse?page=1&type=1"  target="center"><%--<i class="glyphicon glyphicon-zoom-in"></i>--%>HSE隐患异常</a></shiro:hasPermission></li>
+                    </ul>
+                </li>
                 <li class="accordion" id="knowManager">
                     <a href="#"><i class=" glyphicon glyphicon-calendar"></i><span> 知识库管理</span></a>
                     <ul class="nav nav-pills nav-stacked">
@@ -78,7 +77,6 @@
                                 <a href="showknowledgetype?page=1" target="center"><%--<i class="glyphicon glyphicon-headphones"></i>--%>知识类别</a>
                             </shiro:hasPermission>
                         </li>
-                        <%--<li><a href="testPage?page=1">poss</a></li>--%>
                     </ul>
                 </li>
                 <li class="accordion" id="logsManager">

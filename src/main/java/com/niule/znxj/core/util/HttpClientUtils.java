@@ -16,11 +16,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
-import com.niule.znxj.core.entity.Xjjl;
-import com.niule.znxj.core.entity.Yhjl;
 import com.niule.znxj.core.util.json.JsonUtil;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
@@ -40,7 +36,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 
-public class HttpRequestUtils {
+public class HttpClientUtils {
 	
 	private static Log accessLog = LogFactory.getLog("access");
 	
@@ -511,7 +507,7 @@ public class HttpRequestUtils {
             FileInputStream inputStream = new FileInputStream(file);
             MultipartFile multipartFile = new MockMultipartFile(file.getName(), inputStream);
 			map.put("file", multipartFile.getBytes());
-			str = HttpRequestUtils.httpPost(url,JsonUtil.toJSON(map));
+			str = HttpClientUtils.httpPost(url,JsonUtil.toJSON(map));
 			System.out.println(str);
 
 
