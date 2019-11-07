@@ -38,14 +38,9 @@ public class QuickReportServiceImpl implements QuickReportService{
     public List<Quickreport> selectByExample(int page,int pagesize,int type) {
         return quickreportMapper.selectByExample(type,(page-1)*pagesize,pagesize);
     }
-//    @Override
-//    public List<Quickreport> showQuickreport(int page, int size) {
-//        PageHelper.startPage(page,size);
-//        return quickreportMapper.showQuickreport2();
-//    }
 
     @Override
-    public List<Quickreport> showQuickreport2(HashMap<String,Object> map) {
+    public List<Quickreport> showQuickreport(HashMap<String,Object> map) {
         int page=Integer.parseInt(map.get("page").toString());
         int size=Integer.parseInt(map.get("size").toString());
         PageHelper.startPage(page,size);

@@ -49,12 +49,7 @@ public class WebQuickReportController {
         map.put("reportcode",reportcode==null||reportcode.isEmpty()?"":"%"+reportcode+"%");
         map.put("time",uploadtime);
         map.put("siteid",admininfo.getSiteid());
-        PageInfo<Quickreport> info=new PageInfo<>(quickReportService.showQuickreport2(map));
-//        if((reportcode==null||"".equals(reportcode))&&(uploadtime==null||"".equals(uploadtime))){
-//            info= new PageInfo<>(quickReportService.showQuickreport(page,size));
-//        }else{
-//            info=
-//        }
+        PageInfo<Quickreport> info=new PageInfo<>(quickReportService.showQuickreport(map));
         m.addAttribute("info",info);
         m.addAttribute("reportcode",reportcode);
         return "showreport4";

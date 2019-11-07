@@ -14,6 +14,5 @@ public interface QuickReportService {
     int countByExample(int type);
     Quickreport selectByPrimaryKey(Long id);
     int deleteByPrimaryKey(Long id);
-//    List<Quickreport> showQuickreport(int page,int size);
-    List<Quickreport> showQuickreport2(HashMap<String, Object> map);
+    List<Quickreport> showQuickreport(HashMap<String, Object> map);
 }
