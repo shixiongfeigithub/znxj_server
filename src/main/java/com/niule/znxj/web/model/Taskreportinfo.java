@@ -58,6 +58,9 @@ public class Taskreportinfo {
 
     private Date exceptionclosetime;
 
+
+    private Date operatorname;
+
     public Integer getExceptionstate() {
         return exceptionstate;
     }
@@ -224,6 +227,14 @@ public class Taskreportinfo {
 
     public void setOperationstate(Integer operationstate) {
         this.operationstate = operationstate;
+    }
+
+    public Date getOperatorname() {
+        return operatorname;
+    }
+
+    public void setOperatorname(Date operatorname) {
+        this.operatorname = operatorname;
     }
 
     public String getTaskcode() {

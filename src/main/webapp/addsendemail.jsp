@@ -32,7 +32,7 @@
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
                             <h2>
-                                <i class="glyphicon glyphicon-globe"></i> 发送日报
+                                <i class="glyphicon glyphicon-globe"></i> 发送邮件设置
                             </h2>
                         </div>
                         <div class="box-content">
@@ -44,6 +44,7 @@
                                                 <option value="0">日报</option>
                                                 <option value="1">周报</option>
                                                 <option value="2">月报</option>
+                                                <option value="3">异常报告</option>
                                             </select>
                                         </td>
                                     </tr>

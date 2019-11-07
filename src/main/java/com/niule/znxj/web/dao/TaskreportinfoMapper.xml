@@ -43,6 +43,7 @@
     <result column="realname" property="temp.user.realname" jdbcType="VARCHAR" />
     <result column="exceptionstate" property="exceptionstate" jdbcType="INTEGER" />
     <result column="exceptionclosetime" property="exceptionclosetime" jdbcType="TIMESTAMP" />
+    <result column="operatorname" property="operatorname" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.niule.znxj.web.model.TaskreportinfoWithBLOBs" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -652,7 +653,8 @@
     ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
     u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.type tasktype,temp.operationstate tempoperationstate,
     temp.stopstate,temp.taskcode temptaskcode,temp.executetime,temp.updatetime,st.id stopid,st.reason stopreason,
-    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,ex.exceptionstate,ex.exceptionclosetime
+    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,
+    ex.exceptionstate,ex.exceptionclosetime,ex.operatorname
     from tasktempinfo temp
     left join taskreportinfo ter on ter.taskcode=temp.taskcode
     left join taskstopinfo st on temp.id=st.tasktempid
@@ -696,6 +698,7 @@
     left join userinfo u on t.directorid=u.id
     left join terminalinfo term on ter.termimalid=term.id
     left join siteareainfo s on s.id=t.siteid
+    left join exceptionhandlerinfo ex on ter.id = ex.reportid
     where temp.type in
     <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
       #{type}
@@ -723,14 +726,13 @@
     and ter.examstate !=0 order by temp.id DESC
   </select>
 
-
-
   <select id="findByPageReport4" parameterType="map" resultMap="BaseResultMap">
     select ter.id,ter.taskid,ter.donetime,ter.uploadtime,ter.reportstate,ter.worker,ter.termimalid,
     ter.operationstate,ter.taskcode,ter.examtime,ter.examstate,ter.examuser,ter.starttime,ter.endtime,
     u.realname,term.customid tercustomid,temp.id tempid,temp.state tempstate,temp.type tasktype,temp.operationstate tempoperationstate,
     temp.stopstate,temp.taskcode temptaskcode,temp.executetime,temp.updatetime,st.id stopid,st.reason stopreason,
-    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,ex.exceptionstate,ex.exceptionclosetime
+    st.content stopcontent,st.stoptime stoptime,st.classname stopclassname,st.directorname stopdirectorname,
+    ex.exceptionstate,ex.exceptionclosetime,ex.operatorname
     from exceptionhandlerinfo ex
     left join tasktempinfo temp on temp.taskcode = ex.taskcode
     left join taskreportinfo ter on ter.taskcode=temp.taskcode
@@ -739,7 +741,7 @@
     left join userinfo u on t.directorid=u.id
     left join terminalinfo term on ter.termimalid=term.id
     left join siteareainfo s on s.id=t.siteid
-    where ex.operatorname =#{username}
+    where ex.operatorname =#{operatorname}
     and temp.type in
     <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
       #{type}
@@ -776,7 +778,7 @@
     left join userinfo u on t.directorid=u.id
     left join terminalinfo term on ter.termimalid=term.id
     left join siteareainfo s on s.id=t.siteid
-    where ex.operatorname =#{username}
+    where ex.operatorname =#{operatorname}
     and temp.type in
     <foreach collection="tasktypes"  item="type" open="(" separator="," close=")" >
       #{type}

@@ -25,7 +25,6 @@ public interface CommonService {
     void doGenerate();
     //生成任务附表
     void generateByTask(Taskplaninfo info);
-
     //上传任务报告
     Result uploadReport(Taskreportinfo taskreportinfo)throws Exception;
     //上传即拍即传任务
@@ -68,6 +67,9 @@ public interface CommonService {
     void sendmonthemail();
     //定时自动审核
     void automaticExamine();
+
+    //发送任务报告（异常）
+    void sendReportEmail(Long taskid,Long reportid);
 
     Result doTask(Long userId, Long taskId);
 

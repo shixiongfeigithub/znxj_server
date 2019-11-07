@@ -15,7 +15,7 @@
 
         function tasknum(){
             var siteid = $("#name2 option:selected")[0].value;
-            var taskcode='${taskcode}';
+            var taskAcode='${taskAcode}';
             var type="";
             $("#taskno").empty();
             if($("#roleid").val()==null){
@@ -27,7 +27,7 @@
                     url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
                     success : function(task){
                         for(var i=0;i<task.length;i++){
-                            if(task[i].identifyingid==taskcode){
+                            if(task[i].identifyingid==taskAcode){
                                 $("#taskno").append("<option  value='"+task[i].identifyingid+"' selected>"+task[i].identifyingid+"</option>");
                             }else{
                                 $("#taskno").append("<option  value='"+task[i].identifyingid+"' >"+task[i].identifyingid+"</option>");
@@ -109,8 +109,8 @@
                                             <label class="control-label" for="exceptionstate">异常状态：</label>
                                             <select class="form-control" id="exceptionstate" name="exceptionstate">
                                                 <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
-                                                <option ${exceptionstate eq '0' ? 'selected' : ''} value="1">已关闭</option>
-                                                <option ${exceptionstate eq '1' ? 'selected' : ''} value="2">处理中</option>
+                                                <option ${exceptionstate eq '0' ? 'selected' : ''} value="0">已关闭</option>
+                                                <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">处理中</option>
                                             </select>
                                             <label class="control-label" for="worker">任务负责人：</label>
                                             <input type="text" style="width: 100px;" id="worker" name="worker" value="${worker}">
@@ -171,19 +171,17 @@
                                                 <td>
                                                     <shiro:hasPermission name="item:closereport">
                                                         <a href="javascript:;" onclick="closetaskreport('${report.temp.id}','${report.id==null?'':report.id}')">
-                                                            <i class="glyphicon glyphicon-lock"></i></a>
-
+                                                            <i class="glyphicon glyphicon-lock"></i></a>&nbsp;
                                                     </shiro:hasPermission>
                                                     <shiro:hasPermission name="item:assignprincipal">
                                                         <a href="javascript:;" onclick="assignprincipal('${report.temp.id}','${report.id==null?'':report.id}')">
-                                                            <i class="glyphicon glyphicon-barcode"></i></a>
+                                                            <i class="glyphicon glyphicon-share"></i></a>
                                                     </shiro:hasPermission>
-
                                                 </td>
                                                 <td>
                                                     <c:if test="${report.id==null}">${fn:substring(report.temp.taskcode,0,report.temp.taskcode.indexOf('-'))}</c:if>
                                                     <c:if test="${report.id!=null}">
-                                                        <a href="reportcount2?taskid=${report.taskid}&page=${pageBean.currentPage}&donetime=<sdf:formatDate value="${report.temp.executetime}" pattern="yyyy-MM-dd"></sdf:formatDate>&type=${type}&taskname=${fn:substring(report.taskcode,0,report.taskcode.indexOf('-'))}">
+                                                        <a href="reportcount2?taskid=${report.taskid}&page=${pageBean.currentPage}&donetime=<sdf:formatDate value="${report.temp.executetime}" pattern="yyyy-MM-dd"></sdf:formatDate>&type=${report.tasktype}&taskname=${fn:substring(report.taskcode,0,report.taskcode.indexOf('-'))}">
                                                                 ${fn:substring(report.temp.taskcode,0,report.temp.taskcode.indexOf('-'))}
                                                         </a>
                                                     </c:if>

@@ -178,6 +178,10 @@
             $("#pic")[0].appendChild(video);
         }
 
+        $(function(){
+            showequip();
+        })
+
         /*根据区域编号显示所有的设备*/
         function showequip() {
             var areaid = $("#areaname option:selected")[0].value;
@@ -240,14 +244,9 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="box-content">
-
-
-
-
-
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showexceptiondetail?page=1" method="post">
-                                            <input type="hidden" value="${reportid}" id="reportid">
+                                            <input type="hidden" id="reportid" name="reportid" value="${reportid}">
                                             <label class="control-label" for="areaname">区域：</label>
                                             <select id="areaname" class="form-control" name="areaid" onchange="showequip()">
                                                 <c:if test="${areaid==null}">
@@ -269,12 +268,6 @@
                                         </form>
                                     </div>
 
-
-
-
-
-
-
                                     <table id="table" class="table table-striped table-bordered table-hover ">
                                         <tr>
                                             <c:if test="${areaname==1}">
@@ -289,9 +282,6 @@
                                             <c:if test="${checktype==1}">
                                                 <th class="fontcenter">巡检项类型</th>
                                             </c:if>
-                                            <%--<c:if test="${unitname==1}">--%>
-                                                <th class="fontcenter">单位</th>
-                                            <%--</c:if>--%>
                                             <c:if test="${operationtime==1}">
                                                 <th class="fontcenter">执行时间</th>
                                             </c:if>
@@ -313,12 +303,12 @@
                                             <c:if test="${errcontent==1}">
                                                 <th class="fontcenter">异常描述</th>
                                             </c:if>
-                                            <c:if test="${recordname==1}">
+                                            <%--<c:if test="${recordname==1}">
                                                 <th class="fontcenter">数据名称</th>
                                             </c:if>
                                             <c:if test="${unitname==1}">
                                                 <th class="unitname">单位</th>
-                                            </c:if>
+                                            </c:if>--%>
                                             <%--<c:if test="${firstval==1}">
                                                 <c:if test="${taskreport==null}">
                                                     <th class="fontcenter">前次复核值</th>
@@ -337,6 +327,7 @@
                                             <c:if test="${checkvalue==1}">
                                                 <th class="fontcenter">复核值</th>
                                             </c:if>--%>
+                                            <th>异常记录链接</th>
                                         </tr>
                                         <c:forEach items="${reportinfos}" var="reports" varStatus="status">
                                             <input type="hidden" id="img${status.index}" value='${reports.img}'>
@@ -373,9 +364,6 @@
                                                 <c:if test="${checktype==1}">
                                                     <td class="fontcenter">${reports.checktype}</td>
                                                 </c:if>
-                                                <%--<c:if test="${unitname == 1}">--%>
-                                                    <td class="fontcenter">${reports.unitname}</td>
-                                                <%--</c:if>--%>
                                                 <c:if test="${operationtime==1}">
                                                     <td class="fontcenter">${reports.operationtime}</td>
                                                 </c:if>
@@ -425,12 +413,12 @@
                                                 <c:if test="${errcontent==1}">
                                                     <td class="fontcenter" id="error${status.index}">${reports.errcontent}</td>
                                                 </c:if>
-                                                <c:if test="${recordname==1}">
+                                                <%--<c:if test="${recordname==1}">
                                                     <td class="fontcenter">${reports.recordname}</td>
                                                 </c:if>
                                                 <c:if test="${unitname==1}">
                                                     <td class="fontcenter">${reports.unitname}</td>
-                                                </c:if>
+                                                </c:if>--%>
                                                 <%--<c:if test="${firstval==1}">
                                                     <td class="fontcenter" id="first${status.index}">
                                                         <c:if test="${taskreport==null}">-</c:if>
@@ -460,6 +448,11 @@
                                                         <c:if test="${reports.checktype=='状态项'}">-</c:if>
                                                     </td>
                                                 </c:if>--%>
+                                                <td>
+                                                    <c:if test="${reports.img != 'null' or reports.audio != 'null' or reports.video != 'null'}">
+                                                        <a href='http://${ip}/toException?img=${reports.img}&audio=${reports.audio}&video=${reports.video}'  target="_Blank">查看异常详情</a>
+                                                    </c:if>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                         <input type="hidden" id="statuslen" value="${fn:length(reportinfos)}">

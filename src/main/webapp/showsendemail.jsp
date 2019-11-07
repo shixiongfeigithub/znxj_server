@@ -95,17 +95,15 @@
                                         <td>
                                                 ${send.task.customid}
                                             <c:if test="${send.task.type == 0}">日常巡检</c:if>
-                                            <c:if test="${send.type == 1}">计划巡检</c:if>
+                                            <c:if test="${send.task.type == 1}">计划巡检</c:if>
                                             <c:if test="${send.task.type == 2}">隐患排查</c:if>
-                                            <c:if test="${send.type == 3}">视频巡检</c:if>
-                                            <c:if test="${send.type == 0}">日报</c:if>
-                                            <c:if test="${send.type == 1}">周报</c:if>
-                                            <c:if test="${send.type == 2}">月报</c:if>
+                                            <c:if test="${send.task.type == 3}">视频巡检</c:if>
                                         </td>
                                         <td>
                                             <c:if test="${send.type == 0}">日报</c:if>
                                             <c:if test="${send.type == 1}">周报</c:if>
                                             <c:if test="${send.type == 2}">月报</c:if>
+                                            <c:if test="${send.type == 3}">异常报告</c:if>
                                         </td>
                                         <td>${send.task.identifyingid}</td>
                                         <td id="conname${status.index}">${send.contactid}</td>

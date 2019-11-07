@@ -11,7 +11,6 @@
 
 <script type="text/javascript">
     function formSubmit(){
-        debugger;
         var count=$("#operationuser").val();
         if(count==0){
             alert("操作员不能为空");
@@ -66,8 +65,8 @@
 
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="operationuser">操作员:</label>
-                                            <select name="operationuser" id="operationuser" class="form-control">
+                                            <label class="control-label" for="operatorname">操作员:</label>
+                                            <select name="operatorname" id="operatorname" class="form-control">
                                                 <c:forEach items="${operationuserList}" var="user">
                                                     <option value="${user.id}">${user.username}</option>
                                                 </c:forEach>
