@@ -346,12 +346,6 @@ public class CommonServiceImpl implements CommonService {
         }
     }
 
-    @Override
-    public void doGenerate() {
-        System.out.println("xianshishengchengrenwu");
-        generate();
-    }
-
     /**
      * 查看任务的执行状态
      *

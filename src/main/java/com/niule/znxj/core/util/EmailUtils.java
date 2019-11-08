@@ -22,13 +22,6 @@ public class EmailUtils {
     private static final String TITLE = "智能巡检";
     private static final String CHARSET = "utf-8";
 
-
-//    public static void main(String[] args) {
-//        String[] strings = new String[]{"13203927924@163.com","1497665236@qq.com"};
-//        sendEmails(strings,"测试邮件发送","这是一个测试");
-//    }
-
-
     public static boolean sendEmails(String USER ,String PASSWORD ,String SMTP_ADDRESS ,String SMTP_PORT,String[] emails, String title, String content){
         try {
             HtmlEmail email = new HtmlEmail();

@@ -14,7 +14,7 @@ public class MyServletContextListener implements ServletContextListener {
         //获取容器和相关的Service
         ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(servletContextEvent.getServletContext());
         CommonService service = (CommonService) ac.getBean("commonService");
-        service.doGenerate();
+        service.generate();
 
     }
 

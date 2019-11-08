@@ -22,8 +22,6 @@ public interface CommonService {
     //生成任务附表
     void generate();
     //生成任务附表
-    void doGenerate();
-    //生成任务附表
     void generateByTask(Taskplaninfo info);
     //上传任务报告
     Result uploadReport(Taskreportinfo taskreportinfo)throws Exception;

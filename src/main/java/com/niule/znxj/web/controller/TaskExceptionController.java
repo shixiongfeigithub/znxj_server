@@ -1,6 +1,7 @@
 package com.niule.znxj.web.controller;
 
 import com.niule.znxj.core.common.Resources;
+import com.niule.znxj.core.util.DateUtils;
 import com.niule.znxj.core.util.PageBean;
 import com.niule.znxj.core.util.json.JsonUtil;
 import com.niule.znxj.web.dao.ReportcontentMapper;
@@ -103,8 +104,8 @@ public class TaskExceptionController {
         map.put("tasktypes",tasktypeList);//任务类型
         map.put("taskAcode", taskAcode); //任务号(T3000A)
         map.put("reportstate", 1); //异常报告
-        map.put("time1", time1);//开始时间
-        map.put("time2", time2);//结束时间
+        map.put("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);//开始时间
+        map.put("time2", time2==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time2);//结束时间
         map.put("siteids", siteids);//厂区
         map.put("worker",worker); //巡检责任人
         map.put("exceptionstate",exceptionstate);

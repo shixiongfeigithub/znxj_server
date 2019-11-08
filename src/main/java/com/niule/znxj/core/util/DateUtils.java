@@ -1,6 +1,7 @@
 package com.niule.znxj.core.util;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,6 +76,27 @@ public final class DateUtils  {
         date = org.apache.commons.lang.time.DateUtils.addMinutes(date,minute);
         date = org.apache.commons.lang.time.DateUtils.setSeconds(date,0);
         return date;
+    }
+
+    /**
+     * 日期转化为字符串
+     *
+     */
+    public static String parseDateToStr(Date date,String format)
+    {
+        SimpleDateFormat simFormat=new SimpleDateFormat(format);
+        return simFormat.format(date);
+
+    }
+
+    /**
+     * 字符串转化为日期
+     *
+     */
+    public static Date parseStrToDate(String date,String format) throws ParseException
+    {
+        SimpleDateFormat simFormat=new SimpleDateFormat(format);
+        return simFormat.parse(date);
     }
 
 

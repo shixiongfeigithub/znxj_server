@@ -1,22 +1,9 @@
 package com.niule.znxj.core.util;
 
-import java.io.*;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.SSLContext;
-
+import com.niule.znxj.core.entity.Xjjl;
+import com.niule.znxj.core.entity.Yhjl;
 import com.niule.znxj.core.util.json.JsonUtil;
+import com.squareup.okhttp.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
@@ -35,11 +22,25 @@ import org.apache.http.message.BasicNameValuePair;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.net.ssl.SSLContext;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.*;
+
 
 public class HttpClientUtils {
 	
 	private static Log accessLog = LogFactory.getLog("access");
-	
+
+	private static final String IMGUR_CLIENT_ID = "9199fdef135c122";
+	private static final MediaType MEDIA_TYPE_DATA = MediaType.parse("multipart/form-data");
+
 	/**
 	 * http请求工具类 post方式请求
 	 * @param url
@@ -494,42 +495,57 @@ public class HttpClientUtils {
          }
         return  HttpClients.createDefault();
     }
-    
-    
-    
+
+    public  static String uploadFile(String url,String filePath)throws Exception {
+		OkHttpClient client = new OkHttpClient();
+    	File file = new File(filePath);
+    	RequestBody requestBody = new MultipartBuilder()
+					.type(MultipartBuilder.FORM)
+					.addFormDataPart("dir", "newfile")
+					.addFormDataPart("file", file.getName(),
+							RequestBody.create(MEDIA_TYPE_DATA, file))
+					.build();
+    	Request request = new Request.Builder()
+					.header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
+					.url(url)
+					.post(requestBody)
+					.build();
+
+    	Response response = client.newCall(request).execute();
+    	if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+    		return response.body().string();
+
+	}
+
+
+
     public static void main(String args[])
     {
     	String str;
 		try {
-			String url = "http://58.211.129.134:8866/appupload/uploadfile";
-			Map<String,Object> map = new HashMap<String,Object>();
-			File file = new File("F:\\600000.png");
-            FileInputStream inputStream = new FileInputStream(file);
-            MultipartFile multipartFile = new MockMultipartFile(file.getName(), inputStream);
-			map.put("file", multipartFile.getBytes());
-			str = HttpClientUtils.httpPost(url,JsonUtil.toJSON(map));
-			System.out.println(str);
-
-
-			/*String url1 = "http://58.211.129.134:8866/system/hotsync/xjjl";
-            Xjjl xjjl1 = new Xjjl("123","一班","测试111","","一号检查点","1","2019-11-07 16:24:56","备注");
-            Xjjl xjjl2 = new Xjjl("124","二班","测试222","","二号检查点","0","2019-11-07 16:24:56","备注");
-            Xjjl xjjl3 = new Xjjl("125","是班","测试233","","仨号检查点","1","2019-11-07 16:24:56","备注");
-			List<Xjjl> list = new ArrayList<Xjjl>();
-			list.add(xjjl1);
-			list.add(xjjl2);
-			str = HttpRequestUtils.httpPost(url1,JsonUtil.toJSON(list));
+			/*String url = "http://58.211.129.134:8866/appupload/uploadfile";
+			String filePath = "F:\\600000.png";
+			str = HttpClientUtils.uploadFile(url,filePath);
 			System.out.println(str);*/
 
 
-            /*String url2 = "http://58.211.129.134:8866/system/hotsync/yhjl";
-            Yhjl yhjl = new Yhjl("123","111","111","1","张某某 ","2019-11-07 16:24:56","2019-11-07 16:24:56","危险隐患",
+			/*String url1 = "http://58.211.129.134:8866/system/hotsync/xjjl";
+            Xjjl xjjl1 = new Xjjl("abcd1234","一班","张三","/upload/newfile/20191108/20191108100125_602.png",
+					"设备一","0","2019-11-08 10:24:56","经巡检设备无异常");
+			List<Xjjl> list = new ArrayList<Xjjl>();
+			list.add(xjjl1);
+			str = HttpClientUtils.httpPost(url1,JsonUtil.toJSON(list));
+			System.out.println("result ===="+str);*/
+
+
+            String url2 = "http://58.211.129.134:8866/system/hotsync/yhjl";
+            Yhjl yhjl = new Yhjl("abcd1234","设备一","111","1","张某某 ","2019-11-07 16:24:56","2019-11-07 16:24:56","危险隐患",
                     "/upload/image/20191105/20191105110142_75.jpg","放荡","fdgfgf","2019-11-07 16:24:56",
                     "/upload/image/20191105/20191105110142_75.jpg","大范甘迪发给发");
             List<Yhjl> list = new ArrayList<Yhjl>();
             list.add(yhjl);
-            str = HttpRequestUtils.httpPost(url2,JsonUtil.toJSON(list));
-            System.out.println(str);*/
+            str = HttpClientUtils.httpPost(url2,JsonUtil.toJSON(list));
+            System.out.println("result2==="+str);
 
 
 		} catch (Exception e) {
