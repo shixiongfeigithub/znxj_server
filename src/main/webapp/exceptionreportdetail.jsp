@@ -256,7 +256,7 @@
                                                     <option  value="${area.id}" ${areaid eq area.id ?'selected':''}>${area.customid}</option>
                                                 </c:forEach>
                                             </select>
-                                            <label class="control-label" for="equipment">任务号：</label>
+                                            <label class="control-label" for="equipment">设备：</label>
                                             <select class="form-control" id="equipment" name="equipmentid" >
                                                 <c:choose>
                                                     <c:when test="${equipmentid==null and equipmentid==''}">

@@ -665,7 +665,7 @@ public class TaskreportServiceImpl implements TaskreportService {
         if(exceptionhandlerinfos!=null && exceptionhandlerinfos.size()>0){
             Exceptionhandlerinfo info = exceptionhandlerinfos.get(0);
             info.setConfirmtime(new Date());
-            exceptionhandlerinfoMapper.insert(info);
+            exceptionhandlerinfoMapper.updateByPrimaryKey(info);
         }
 
         if (updCheckTime > 0 && updReportContent > 0) {

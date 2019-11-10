@@ -109,8 +109,8 @@
                                             <label class="control-label" for="exceptionstate">异常状态：</label>
                                             <select class="form-control" id="exceptionstate" name="exceptionstate">
                                                 <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
-                                                <option ${exceptionstate eq '0' ? 'selected' : ''} value="0">已关闭</option>
-                                                <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">处理中</option>
+                                                <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
+                                                <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
                                             <label class="control-label" for="worker">任务负责人：</label>
                                             <input type="text" style="width: 100px;" id="worker" name="worker" value="${worker}">
@@ -159,9 +159,10 @@
                                             <th>报告完成时间</th>
                                             <%--<th>子任务更新时间</th>--%>
                                             <th>工人</th>
-                                            <th>终端</th>
+                                            <%--<th>终端</th>--%>
                                             <%--<th>操作状态</th>--%>
                                             <th>有无异常项</th>
+                                            <th>异常状态</th>
                                             <th>责任人</th>
                                             <th>数据提交时间</th>
                                             <th>复核状态</th>
@@ -222,12 +223,15 @@
                                                 </td>
                                                     <%--<td><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>--%>
                                                 <td>${report.worker}</td>
-
-                                                <td>${report.ter.customid}</td>
-
+                                                <%--<td>${report.ter.customid}</td>--%>
                                                 <td>
                                                     <c:if test="${report.reportstate ==0}">无</c:if>
                                                     <c:if test="${report.reportstate ==1}">有</c:if>
+                                                </td>
+                                                <td>
+                                                    <c:if test="${report.exceptionstate ==0}">待处理</c:if>
+                                                    <c:if test="${report.exceptionstate ==1}">已关闭</c:if>
+                                                    <c:if test="${report.exceptionstate ==2}">已分配处理人</c:if>
                                                 </td>
                                                 <td>${report.temp.user.realname}</td>
                                                 <td><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>

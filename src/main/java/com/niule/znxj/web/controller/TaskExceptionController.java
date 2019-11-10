@@ -100,6 +100,7 @@ public class TaskExceptionController {
         List<Integer> tasktypeList = new ArrayList<>();
         tasktypeList.add(0); //日常巡检
         tasktypeList.add(1); //计划巡检
+        tasktypeList.add(2); //HSE任务
         tasktypeList.add(3); //视频巡检
         map.put("tasktypes",tasktypeList);//任务类型
         map.put("taskAcode", taskAcode); //任务号(T3000A)
@@ -254,7 +255,7 @@ public class TaskExceptionController {
         List<Exceptionhandlerinfo> infoList = exceptionhandlerinfoService.selectByExample(example);
         if(infoList!=null && infoList.size()>0){
            Exceptionhandlerinfo info = infoList.get(0);
-           if (info.getExceptionclosetime()!=null)
+           if (info.getExceptionclosetime()!=null && info.getExceptionstate()==1)
                 return 0;
 
             List<String> attach=new ArrayList<>();
@@ -266,7 +267,7 @@ public class TaskExceptionController {
             info.setDescontent(exceptionhandlerinfo.getDescontent());
             info.setCheckuserid(admininfo.getId());
             info.setExceptionclosetime(new Date());
-            info.setExceptionstate(0); //已关闭
+            info.setExceptionstate(1); //已关闭
             int result=exceptionhandlerinfoService.updateByExample(info,example);
             return result;
         }
@@ -309,7 +310,7 @@ public class TaskExceptionController {
                 info.setAppointedtime(new Date());
             }
             info.setOperatorname(exceptionhandlerinfo.getOperatorname());
-            info.setExceptionstate(1); //已分配责任人
+            info.setExceptionstate(2); //已分配责任人
             int result=exceptionhandlerinfoService.updateByExample(info,example);
             //发送异常报告给负责人
             commonService.sendReportEmail(taskReportInfo.getTaskid(),info.getReportid());
