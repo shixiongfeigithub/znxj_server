@@ -54,7 +54,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         return tasktempinfoMapper.dadiyreport(example);
     }
 
-    //    dadiyreportlist
     @Override
     public List<Taskreportinfo> dadiyreportlist(Long taskidstr, String date1,String date2) throws ParseException {
         TaskreportinfoExample example = new TaskreportinfoExample();
@@ -125,12 +124,6 @@ public class TaskreportServiceImpl implements TaskreportService {
 
     @Override
     public List<Taskreportinfo> queryByTaskidAndDonetime2(int type, int taskid, String donetime) {
-//        TaskreportinfoExample example=new TaskreportinfoExample();
-//        TaskreportinfoExample.Criteria criteria=example.createCriteria();
-//        criteria.andTaskidEqualTo(Long.valueOf(taskid)).andTasktypeEqualTo(type);
-//        if(donetime!=null&&donetime!=""){
-//            criteria.andDonetimeEqualTo(donetime);
-//        }
         return taskreportinfoMapper.huiZong(type, taskid, donetime);
     }
 
@@ -157,7 +150,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         ReportcontentExample.Criteria criteria = example.createCriteria();
         criteria.andReportidIn(reportid);
         List<Reportcontent> reportcontentList = reportcontentMapper.selectByExample(example);
-
         return reportcontentList;
     }
 
@@ -176,11 +168,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         return taskreportinfoMapper.countReport(map);
     }
 
-    //    @Override
-//    public PageInfo<Taskreportinfo> gettaskreportlog(int page, int pagesize) {
-//        PageHelper.startPage(page,pagesize);
-//        return new PageInfo<>(taskreportinfoMapper.gettaskreportlog());
-//    }
     @Override
     public PageInfo<Taskreportinfo> gettaskreportlog2(HashMap<String, Object> map) {
         int page = (int) map.get("page");
@@ -196,8 +183,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         return taskreportinfoMapper.updateByPrimaryKeyWithBLOBs(taskreportinfo);
     }
 
-
-
     @Override
     public int deleteByExample(TaskreportinfoExample example) {
         return taskreportinfoMapper.deleteByExample(example);
@@ -212,6 +197,7 @@ public class TaskreportServiceImpl implements TaskreportService {
     public List<Taskreportinfo> getreportbytype(int type) {
         return taskreportinfoMapper.getreportbytype(type);
     }
+
     @Override
     public List<Taskreportinfo> findByPageReport2(HashMap<String, Object> map) {
         return taskreportinfoMapper.findByPageReport2(map);
@@ -292,7 +278,6 @@ public class TaskreportServiceImpl implements TaskreportService {
                 Date date2 = sdf.parse(time2);
                 criteria.andexecutetimeBetween(getDaysDate(0, date1), getDaysDate(-1, date2));
             }
-//                criteria.andDonetimeBetween3(time1,time2);
             criteria.andTempTaskidEqualTo(taskid);
             PageHelper.startPage(page, size);
             return new PageInfo<>(taskreportinfoMapper.selectByExample(taskreportinfoExample));
@@ -321,10 +306,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         }
 
         WebChartRes res = new WebChartRes();
-//        Integer[] monthArray = (Integer[])        taskMonthMap.values().toArray();
-//        Arrays.sort(monthArray);
-//        List<Integer> monthList = new ArrayList<>();
-//        Integer[]montharray = (Integer[]) taskMonthMap.values().toArray();
         List<String> monthList = new ArrayList<>();
         CollectionUtils.addAll(monthList, taskMonthMap.values().toArray());
 
@@ -393,8 +374,6 @@ public class TaskreportServiceImpl implements TaskreportService {
             if (time1 != null && time2 != null)
                 criteria.andDonetimeBetween3(time1, time2);
             criteria.andTaskidEqualTo(taskid);
-//            criteria.andStarttimeIsNotNull().andEndtimeIsNotNull();
-//            return taskreportinfoMapper.timeChart(taskid);
             return taskreportinfoMapper.selectByExample(taskreportinfoExample);
         }
         return taskreportinfoMapper.reportList2(map);
@@ -402,7 +381,6 @@ public class TaskreportServiceImpl implements TaskreportService {
 
     @Override
     public List<TaskReportContent> equipSateInfo(int page, int size) {
-//        PageHelper.startPage(page,size);
         TaskreportinfoExample taskreportinfoExample = new TaskreportinfoExample();
         List<Taskreportinfo> taskreportinfos = taskreportinfoMapper.selectByExample(taskreportinfoExample);
 
@@ -418,10 +396,6 @@ public class TaskreportServiceImpl implements TaskreportService {
                 }
             }
         }
-        System.out.print(reportContents.size());
-//        PageInfo res = new PageInfo();
-//        res.setList(reportContents);
-//        return res;
         return reportContents;
     }
 
@@ -449,69 +423,18 @@ public class TaskreportServiceImpl implements TaskreportService {
             }
             if ((startTime != "" && startTime != null) && (endTime != "" && endTime != null)) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//                Calendar calendar = new GregorianCalendar();
-//                calendar.setTime(sdf.parse(endTime));
-//                calendar.add(calendar.DATE,1);
-//              getDaysDate(-1,calendar.getTime())
-//                Date date =  calendar.getTime() ;
                 criteria.andOperationtimeBetween(startTime, sdf.format(getDaysDate(-1, sdf.parse(endTime))));
-
             }
             pageInfo = reportcontentMapper.selectByExample(reportcontentExample);
         }
-
         return new PageInfo<>(pageInfo);
     }
 
-    /* public PageInfo<Reportcontent>  equipSateInfo2(int page,int size,String checkname,String monthstr,String yearstr,String sitename,String areaname,String equipname) {
-         PageHelper.startPage(page,size);
-         List<Reportcontent> pageInfo=null;
-         ReportcontentExample reportcontentExample=new ReportcontentExample();
-         ReportcontentExample.Criteria criteria = reportcontentExample.createCriteria();
-         if((checkname==""&&checkname==null)&&(monthstr==""&&monthstr==null)&&(sitename==""||sitename==null)&&(areaname.equals("")||areaname==null)&&(equipname.equals("")||equipname==null)){
-             pageInfo=reportcontentMapper.selectByExample(reportcontentExample);
-         }else{
-             if(areaname!=""&&areaname!=null){
-                 criteria.andAreanameEqualTo(areaname);
-             }
-             if(equipname!=""&&equipname!=null){
-                 criteria.andEquipnameEqualTo(equipname);
-             }
-             if(checkname!=""&&checkname!=null){
-                 criteria.andChecknameEqualTo(checkname);
-             }
-             if(monthstr!=""&&monthstr!=null){
- //                SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
- //                Date date = new Date();
- //                String yearstr = sdf.format(date);
-
-                 int year = Integer.parseInt(yearstr);
-                 int month = Integer.parseInt(monthstr);
-                 SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                 //某月的最后一天
-                 Calendar cal = Calendar.getInstance();
-                 cal.set(Calendar.YEAR, year);
-                 cal.set(Calendar.MONTH, month - 1);
-                 cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DATE));
-                 String time1 = sdf2.format(cal.getTime());
-                 //某月的第一天
-                 cal.set(Calendar.YEAR, year);
-                 cal.set(Calendar.MONTH, month - 1);
-                 cal.set(Calendar.DAY_OF_MONTH, cal.getMinimum(Calendar.DATE));
-                 String time2 = sdf2.format(cal.getTime());
-                 criteria.andOperationtimeBetween(time2,time1);
-             }
-             pageInfo=reportcontentMapper.selectByExample(reportcontentExample);
-         }
-         return new PageInfo<>(pageInfo);
-     }*/
     public List<TaskReportContent> selectByExampleEquipState(int page, int size, List<Long> taskid, Date time1, Date time2, String sitename, String areaname, String equipname, String checkname) {
-//        PageHelper.startPage(page,size);
         //获取满足条件的报告
         TaskreportinfoExample taskreportinfoExample = new TaskreportinfoExample();
         taskreportinfoExample.createCriteria().andTaskidIn(taskid).andDonetimeBetween(time2, time1);
         List<Taskreportinfo> taskreportinfos = taskreportinfoMapper.selectByExample(taskreportinfoExample);
-
         List<TaskReportContent> reportContents = new ArrayList<>();
         for (Taskreportinfo report : taskreportinfos) {
             String content = "{" + "\"res\":" + report.getContent() + "}";
@@ -551,40 +474,6 @@ public class TaskreportServiceImpl implements TaskreportService {
         }
         return pageInfo;
     }
-   /* /**
-     * 根据巡检项名称和月份查询reportcontent
-     * @param checkname
-     * @param monthstr
-     * @return/*/
-   /*public List<Reportcontent>  equipSateInfo3(String checkname,String monthstr,String yearstr,String areaname,String equipname) {
-        List<Reportcontent> pageInfo=null;
-        ReportcontentExample reportcontentExample=new ReportcontentExample();
-        if(checkname!=""&&checkname!=null&&monthstr!=""&&monthstr!=null&&(areaname!=null||areaname!="")&&(equipname!=null||equipname!="")){
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-//            Date date = new Date();
-//            String yearstr = sdf.format(date);
-
-            int year = Integer.parseInt(yearstr);
-            int month = Integer.parseInt(monthstr);
-            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-            //某月的最后一天
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, month - 1);
-            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DATE));
-            String time1 = sdf2.format(cal.getTime());
-            //某月的第一天
-            cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, month - 1);
-            cal.set(Calendar.DAY_OF_MONTH, cal.getMinimum(Calendar.DATE));
-            String time2 = sdf2.format(cal.getTime());
-            reportcontentExample.createCriteria().andChecknameEqualTo(checkname).andOperationtimeBetween(time2,time1).andAreanameEqualTo(areaname).andEquipnameEqualTo(equipname);
-            pageInfo=reportcontentMapper.selectByExample(reportcontentExample);
-        }else{
-            pageInfo=reportcontentMapper.selectByExample(reportcontentExample);
-        }
-        return pageInfo;
-    }*/
 
     /**
      * 设备状态情况折线图
@@ -607,15 +496,7 @@ public class TaskreportServiceImpl implements TaskreportService {
         List<Double> dataList = new ArrayList<Double>();
         for (Reportcontent item : equipstates) {
             Calendar time = Calendar.getInstance();
-//            if(item.getNumvalue()!=null&&!"".equals(item.getNumvalue()))
-//                dataList.add(Double.parseDouble(item.getNumvalue()));
-//            if(item.getNumvalue()==null&&"".equals(item.getNumvalue()))
-//                dataList.add(0.0);
             if (item.getOperationtime() != null && !"".equals(item.getOperationtime())) {
-               /* if(item.getNumvalue()!=null&&!"".equals(item.getNumvalue())){
-                    monthList.add(item.getOperationtime());
-                    dataList.add(Double.parseDouble(item.getNumvalue()));
-                }*/
                 if (item.getCheckvalue() != null && !"".equals(item.getCheckvalue())) {
                     monthList.add(item.getOperationtime());
                     dataList.add(Double.parseDouble(item.getCheckvalue()));
@@ -658,21 +539,26 @@ public class TaskreportServiceImpl implements TaskreportService {
             reportcontent.setCheckvalue(checkReport.getCheckvalue());
             updReportContent = reportcontentMapper.updateCheckValue(reportcontent);
         }
-        //更新异常报告表中的确认时间
-        ExceptionhandlerinfoExample exceptionhandlerinfoExample = new ExceptionhandlerinfoExample();
-        exceptionhandlerinfoExample.createCriteria().andReportidEqualTo(reportId);
-        List<Exceptionhandlerinfo> exceptionhandlerinfos = exceptionhandlerinfoMapper.selectByExample(exceptionhandlerinfoExample);
-        if(exceptionhandlerinfos!=null && exceptionhandlerinfos.size()>0){
-            Exceptionhandlerinfo info = exceptionhandlerinfos.get(0);
-            info.setConfirmtime(new Date());
-            exceptionhandlerinfoMapper.updateByPrimaryKey(info);
-        }
-
         if (updCheckTime > 0 && updReportContent > 0) {
             String info = "用户" + examuser + "复核报告" + taskcode + "成功";
             return insertSelective(examuser, info);
         } else
             return 0;
+    }
+
+    @Override
+    public Reportcontent selectReportContentByPrimaryKey(Long id) {
+        return reportcontentMapper.selectByPrimaryKey(id.intValue());
+    }
+
+    @Override
+    public List<Reportcontent> selectReportcontentByParam(HashMap<String, Object> map) {
+        return reportcontentMapper.selectByExample2(map);
+    }
+
+    @Override
+    public int countReportcontentByParam(HashMap<String, Object> map) {
+        return reportcontentMapper.countByExample2(map);
     }
 
     public int insertSelective(String username, String operate) {

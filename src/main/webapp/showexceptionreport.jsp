@@ -10,59 +10,74 @@
     <script type="text/javascript" src="js/formatdate.js"></script>
     <script type="text/javascript">
         $(function () {
-            tasknum();
+            sitechange();
         })
 
-        function tasknum(){
-            var siteid = $("#name2 option:selected")[0].value;
-            var taskAcode='${taskAcode}';
-            var type="";
-            $("#taskno").empty();
-            if($("#roleid").val()==null){
-                $("#taskno").append("<option  value='' selected>所有任务</option>");
-            }
-
+        function sitechange(){
+            var siteId= $("#siteid option:selected")[0].value;
+            var areaId = '${areaid}';
+            if(siteId == null || siteId == undefined || siteId == ''){
+                $("#areainfo").append("<option  value='' >所有区域</option>");
+            }else{
+                $("#areainfo").empty();
                 $.ajax({
-                    type : "GET",
-                    url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
-                    success : function(task){
-                        for(var i=0;i<task.length;i++){
-                            if(task[i].identifyingid==taskAcode){
-                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' selected>"+task[i].identifyingid+"</option>");
-                            }else{
-                                $("#taskno").append("<option  value='"+task[i].identifyingid+"' >"+task[i].identifyingid+"</option>");
+                    url:"queryareabysiteid",
+                    type:"post",
+                    data:{
+                        siteid:siteId,
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data!=null){
+                            for(var i=0;i<data.length;i++){
+                                if(data[i].id==areaId){
+                                    $("#areainfo").append("<option  value='"+data[i].id+"' selected>"+data[i].customid+"</option>");
+                                }else{
+                                    $("#areainfo").append("<option  value='"+data[i].id+"' >"+data[i].customid+"</option>");
+                                }
                             }
                         }
                     }
-                })
+                });
+            }
+            //areachange();
         }
 
-        function showstop(tempid){
-            $("#showstop").empty();
-            $.ajax({
-                url: "queryByTempid?tempid=" + tempid,
-                type: "post",
-                datatype: "json",
-                success: function (data) {
-                    if (data !=null) {
-                        $("#showstop").append("<p>终止原因："+data.reason+"</p>" +
-                            "<p>终止内容："+data.content+"</p><p>终止时间："+ data.stoptime2+"</p>" +
-                            "<p>班组名称："+data.classname+"</p><p>负责人名称："+data.directorname+"</p>");
-                        $("#myModal").modal("show");
-                    } else {
-                        alert("暂时没有其他信息");
-                        return false;
+        function areachange(){
+            var areaId= $("#areaid option:selected")[0].value;
+            var equipmentId = '${equipmentid}';
+            if(areaId == null || areaId == undefined || areaId == ''){
+                $("#equipmentinfo").append("<option  value='' >所有设备</option>");
+            }else{
+                $("#equipmentinfo").empty();
+                $.ajax({
+                    url:"queryequipment",
+                    type:"post",
+                    data:{
+                        areaid:areaid,
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data!=null){
+                            for(var i=0;i<data.length;i++){
+                                if(data[i].id==areaId){
+                                    $("#equipmentinfo").append("<option  value='"+data[i].id+"' selected>"+data[i].name+"</option>");
+                                }else{
+                                    $("#equipmentinfo").append("<option  value='"+data[i].id+"' >"+data[i].name+"</option>");
+                                }
+                            }
+                        }
                     }
-                }
-            })
+                });
+            }
         }
 
-        function closetaskreport(tempid,reportid) {
-            window.location="/toclosetaskreport?reportid="+reportid+"&tempid="+tempid;
+        function closetaskreport(id) {
+            window.location="/toclosetaskreport?id="+id;
         }
 
-        function assignprincipal(tempid,reportid) {
-            window.location="/toassignprincipal?reportid="+reportid+"&tempid="+tempid;
+        function assignprincipal(id) {
+            window.location="/toassignprincipal?id="+id;
         }
     </script>
 </head>
@@ -88,8 +103,8 @@
                                 <div class="box-content">
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showexceptionreport?page=1" method="post">
-                                            <label class="control-label" for="name2">厂区：</label>
-                                            <select id="name2" class="form-control" name="siteid" onchange="tasknum()">
+                                            <label class="control-label" for="siteid">厂区：</label>
+                                            <select id="siteid" class="form-control" name="siteid" onchange="tasknum()">
                                                 <c:if test="${siteid==null}">
                                                     <option value="">所有厂区</option>
                                                 </c:if>
@@ -97,25 +112,27 @@
                                                     <option  value="${site.id}" ${siteid eq site.id ?'selected':''}>${site.customid}</option>
                                                 </c:forEach>
                                             </select>
-                                            <label class="control-label" for="taskno">任务号：</label>
-                                            <select class="form-control" id="taskno" name="taskAcode" >
-                                                <c:choose>
-                                                    <c:when test="${taskAcode==null and taskAcode==''}">
-                                                        <option value="" selected>所有任务</option>
-                                                    </c:when>
-                                                </c:choose>
+
+                                            <label class="control-label" for="areainfo">区域：</label>
+                                            <select class="form-control" id="areainfo" name="areaid" >
+                                                <option value="" selected>所有区域</option>
                                             </select>
 
-                                            <label class="control-label" for="exceptionstate">异常状态：</label>
+                                            <label class="control-label" for="equipmentinfo">设备：</label>
+                                            <select class="form-control" id="equipmentinfo" name="equipmentid" >
+                                                <option value="" selected>所有设备</option>
+                                            </select>
+
+                                            <label class="control-label" for="exceptionstate">处理状态：</label>
                                             <select class="form-control" id="exceptionstate" name="exceptionstate">
                                                 <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
                                                 <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
-                                            <label class="control-label" for="worker">任务负责人：</label>
-                                            <input type="text" style="width: 100px;" id="worker" name="worker" value="${worker}">
+                                            <label class="control-label" for="operatorname">负责人：</label>
+                                            <input type="text" style="width: 100px;" id="operatorname" name="operatorname" value="${operatorname}">
                                             <br>
-                                            <label class="control-label" style="margin-top: 10px">报告完成时间：</label>
+                                            <label class="control-label" style="margin-top: 10px">执行时间：</label>
                                             <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
                                             <script language="JavaScript">
@@ -149,111 +166,219 @@
 
                                         </form>
                                     </div>
-                                    <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
+
+                                    <table id="table" class="table table-striped table-bordered table-hover ">
                                         <tr>
                                             <th>操作</th>
-                                            <th>任务号</th>
-                                            <th>报告编号</th>
-                                            <th>执行状态</th>
-                                            <%-- <th>子任务状态</th>--%>
-                                            <th>报告完成时间</th>
-                                            <%--<th>子任务更新时间</th>--%>
-                                            <th>工人</th>
-                                            <%--<th>终端</th>--%>
-                                            <%--<th>操作状态</th>--%>
-                                            <th>有无异常项</th>
-                                            <th>异常状态</th>
-                                            <th>责任人</th>
-                                            <th>数据提交时间</th>
-                                            <th>复核状态</th>
+                                            <th>厂区</th>
+                                            <c:if test="${areaname==1}">
+                                                <th class="fontcenter">区域</th>
+                                            </c:if>
+                                            <c:if test="${equipname==1}">
+                                                <th class="fontcenter">设备</th>
+                                            </c:if>
+                                            <c:if test="${checkname==1}">
+                                                <th class="fontcenter">巡检项</th>
+                                            </c:if>
+                                            <c:if test="${checktype==1}">
+                                                <th class="fontcenter">巡检项类型</th>
+                                            </c:if>
+                                            <c:if test="${operationtime==1}">
+                                                <th class="fontcenter">执行时间</th>
+                                            </c:if>
+                                            <c:if test="${normalmin==1}">
+                                                <th class="fontcenter">低值</th>
+                                            </c:if>
+                                            <c:if test="${normalmax==1}">
+                                                <th class="fontcenter">高值</th>
+                                            </c:if>
+                                            <c:if test="${lowerwarning==1}">
+                                                <th class="fontcenter">告警下限</th>
+                                            </c:if>
+                                            <c:if test="${upperwarning==1}">
+                                                <th class="fontcenter">告警上限</th>
+                                            </c:if>
+                                            <c:if test="${numvalue==1}">
+                                                <th class="fontcenter">报告值</th>
+                                            </c:if>
+                                            <c:if test="${errcontent==1}">
+                                                <th class="fontcenter">异常描述</th>
+                                            </c:if>
+                                            <%--<c:if test="${recordname==1}">
+                                                <th class="fontcenter">数据名称</th>
+                                            </c:if>
+                                            <c:if test="${unitname==1}">
+                                                <th class="unitname">单位</th>
+                                            </c:if>--%>
+                                            <%--<c:if test="${firstval==1}">
+                                                <c:if test="${taskreport==null}">
+                                                    <th class="fontcenter">前次复核值</th>
+                                                </c:if>
+                                                <c:if test="${taskreport.examstate==0}">
+                                                    <th class="fontcenter">前次复核值</th>
+                                                </c:if>
+                                                <c:if test="${taskreport.examstate==1}">
+                                                    <th class="fontcenter">前次复核值(人工)</th>
+                                                </c:if>
+                                                <c:if test="${taskreport.examstate==2}">
+                                                    <th class="fontcenter">前次复核值(自动)</th>
+                                                </c:if>
+                                                &lt;%&ndash;<th class="fontcenter">前次复核值</th>&ndash;%&gt;
+                                            </c:if>
+                                            <c:if test="${checkvalue==1}">
+                                                <th class="fontcenter">复核值</th>
+                                            </c:if>--%>
+                                            <th>异常记录链接</th>
                                         </tr>
-                                        <c:forEach items="${pageBean.list}" var="report">
-                                            <tr>
-                                                <td>
-                                                    <shiro:hasPermission name="item:closereport">
-                                                        <a href="javascript:;" onclick="closetaskreport('${report.temp.id}','${report.id==null?'':report.id}')">
-                                                            <i class="glyphicon glyphicon-lock"></i></a>&nbsp;
-                                                    </shiro:hasPermission>
-                                                    <shiro:hasPermission name="item:assignprincipal">
-                                                        <a href="javascript:;" onclick="assignprincipal('${report.temp.id}','${report.id==null?'':report.id}')">
-                                                            <i class="glyphicon glyphicon-share"></i></a>
-                                                    </shiro:hasPermission>
-                                                </td>
-                                                <td>
-                                                    <c:if test="${report.id==null}">${fn:substring(report.temp.taskcode,0,report.temp.taskcode.indexOf('-'))}</c:if>
-                                                    <c:if test="${report.id!=null}">
-                                                        <a href="reportcount2?taskid=${report.taskid}&page=${pageBean.currentPage}&donetime=<sdf:formatDate value="${report.temp.executetime}" pattern="yyyy-MM-dd"></sdf:formatDate>&type=${report.tasktype}&taskname=${fn:substring(report.taskcode,0,report.taskcode.indexOf('-'))}">
-                                                                ${fn:substring(report.temp.taskcode,0,report.temp.taskcode.indexOf('-'))}
-                                                        </a>
+                                        <c:forEach items="${pageBean.list}" var="report" varStatus="status">
+                                        <input type="hidden" id="img${status.index}" value='${reports.img}'>
+                                        <input type="hidden" id="audio${status.index}" value='${reports.audio}'>
+                                        <input type="hidden" id="video${status.index}" value='${reports.video}'>
+                                        <tr>
+                                            <td>
+                                                <shiro:hasPermission name="item:closereport">
+                                                    <a href="javascript:;" onclick="closetaskreport('${report.id==null?'':report.id}')">
+                                                        <i class="glyphicon glyphicon-lock"></i></a>&nbsp;
+                                                </shiro:hasPermission>
+                                                <shiro:hasPermission name="item:assignprincipal">
+                                                    <a href="javascript:;" onclick="assignprincipal('${report.id==null?'':report.id}')">
+                                                        <i class="glyphicon glyphicon-share"></i></a>
+                                                </shiro:hasPermission>
+                                            </td>
+                                            <td>一厂</td>
+                                            <c:if test="${areaname==1}">
+                                                <td class="fontcenter">
+                                                    <c:if test="${reports.areaskip==1}">
+                                                        <span style="color: red">${reports.areaname}(${reports.areaskipdesc})</span>
+                                                    </c:if>
+                                                    <c:if test="${reports.areaskip==0}">
+                                                        <span>${reports.areaname}</span>
                                                     </c:if>
                                                 </td>
-                                                <td>
-                                                    <c:if test="${report.id==null}">${report.temp.taskcode}${report.task.taskdesc}</c:if>
-                                                    <c:if test="${report.id!=null}">
-                                                        <a href="showexceptiondetail?reportid=${report.id}&page=${pageBean.currentPage}">${report.temp.taskcode}</a>
+                                            </c:if>
+                                            <c:if test="${equipname==1}">
+                                                <td class="fontcenter">
+                                                    <c:if test="${reports.equipmentskip==1}">
+                                                        <span style="color: red">${reports.equipname}(${reports.equipmentskipdesc})</span>
+                                                    </c:if>
+                                                    <c:if test="${reports.equipmentskip==0}">
+                                                        <span>${reports.equipname}</span>
                                                     </c:if>
                                                 </td>
-                                                <td>
-                                                    <c:if test="${report.temp.state ==0}">未执行</c:if>
-                                                    <c:if test="${report.temp.state ==1}">进行中 </c:if>
-                                                    <c:if test="${report.temp.state ==2}">
-                                                        <c:if test="${report.temp.operationstate==1}">已漏检</c:if>
-                                                        <c:if test="${report.temp.operationstate==2}">已跳检</c:if>
-                                                        <c:if test="${report.temp.operationstate==3}">已完成</c:if>
+                                            </c:if>
+                                            <c:if test="${checkname==1}">
+                                                <td class="fontcenter">
+                                                        ${reports.checkname}
+                                                </td>
+                                            </c:if>
+
+                                            <c:if test="${checktype==1}">
+                                                <td class="fontcenter">${reports.checktype}</td>
+                                            </c:if>
+                                            <c:if test="${operationtime==1}">
+                                                <td class="fontcenter">${reports.operationtime}</td>
+                                            </c:if>
+                                            <c:if test="${normalmin==1}">
+                                                <td class="fontcenter">${reports.normalmin}</td>
+                                            </c:if>
+                                            <c:if test="${normalmax==1}">
+                                                <td class="fontcenter">${reports.normalmax}</td>
+                                            </c:if>
+                                            <c:if test="${lowerwarning==1}">
+                                                <td class="fontcenter">${reports.lowerwarning}</td>
+                                            </c:if>
+                                            <c:if test="${upperwarning==1}">
+                                                <td class="fontcenter">${reports.upperwarning}</td>
+                                            </c:if>
+                                            <c:if test="${numvalue==1}">
+                                                <td class="fontcenter"id="numvalue${status.index}">
+                                                    <c:if test="${reports.checktype == '枚举项'}">
+                                                        <c:if test="${reports.enumitem == ''}">-</c:if>
+                                                        <c:if test="${reports.enumitem != ''}">${reports.enumitem}</c:if>
                                                     </c:if>
-                                                    <c:if test="${report.temp.state ==3}">
-                                                        <c:if test="${report.temp.stopstate==2}">已超时</c:if>
-                                                        <c:if test="${report.temp.stopstate==1}">
-                                                            <a href="javascript:void(0)" onclick="showstop(${report.temp.id})">已终止</a>
+                                                    <c:if test="${reports.checktype == '记录项'}">
+                                                        <c:if test="${reports.numvalue == ''}">-</c:if>
+                                                        <c:if test="${reports.numvalue != ''}">${reports.numvalue}</c:if>
+                                                    </c:if>
+                                                    <c:if test="${reports.checktype == '状态项'}">
+                                                        <c:if test="${reports.areaskipdesc != null or reports.equipmentskipdesc != null}">
+                                                            -
                                                         </c:if>
-                                                    </c:if>
-                                                </td>
-                                                <td>
-                                                    <c:if test="${report.temp.state ==2}">
-                                                        <c:if test="${report.temp.operationstate==1}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
-                                                        <c:if test="${report.temp.operationstate==2}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
-                                                        <c:if test="${report.temp.operationstate==3}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
-                                                    </c:if>
-                                                    <c:if test="${report.temp.state ==3}">
-                                                        <c:if test="${report.temp.stopstate==2}"><sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></c:if>
-                                                        <c:if test="${report.temp.stopstate==1}">
-                                                            <sdf:formatDate value="${report.endtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate>
+
+                                                        <c:if test="${reports.areaskipdesc == null and reports.equipmentskipdesc == null}">
+                                                            <c:if test="${reports.reportstate == ''}">-</c:if>
+                                                            <c:if test="${reports.reportstate != ''}">
+                                                                <c:if test="${reports.reportstate == 1}">
+                                                                    异常
+                                                                </c:if>
+                                                                <c:if test="${reports.reportstate == 0}">
+                                                                    正常
+                                                                </c:if>
+                                                            </c:if>
                                                         </c:if>
+
                                                     </c:if>
+
                                                 </td>
-                                                    <%--<td><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>--%>
-                                                <td>${report.worker}</td>
-                                                <%--<td>${report.ter.customid}</td>--%>
-                                                <td>
-                                                    <c:if test="${report.reportstate ==0}">无</c:if>
-                                                    <c:if test="${report.reportstate ==1}">有</c:if>
-                                                </td>
-                                                <td>
-                                                    <c:if test="${report.exceptionstate ==0}">待处理</c:if>
-                                                    <c:if test="${report.exceptionstate ==1}">已关闭</c:if>
-                                                    <c:if test="${report.exceptionstate ==2}">已分配处理人</c:if>
-                                                </td>
-                                                <td>${report.temp.user.realname}</td>
-                                                <td><sdf:formatDate value="${report.temp.updatetime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>
-                                                <td>
-                                                    <c:if test="${report.examstate ==0}">待复核</c:if>
-                                                    <c:if test="${report.examstate ==1}">${report.examuser}</c:if>
-                                                    <c:if test="${report.examstate ==2}">自动复核</c:if>
-                                                </td>
-                                            </tr>
+                                            </c:if>
+                                            <c:if test="${errcontent==1}">
+                                                <td class="fontcenter" id="error${status.index}">${reports.errcontent}</td>
+                                            </c:if>
+                                                <%--<c:if test="${recordname==1}">
+                                                    <td class="fontcenter">${reports.recordname}</td>
+                                                </c:if>
+                                                <c:if test="${unitname==1}">
+                                                    <td class="fontcenter">${reports.unitname}</td>
+                                                </c:if>--%>
+                                                <%--<c:if test="${firstval==1}">
+                                                    <td class="fontcenter" id="first${status.index}">
+                                                        <c:if test="${taskreport==null}">-</c:if>
+                                                    </td>
+                                                </c:if>
+                                                <c:if test="${checkvalue==1}">
+                                                    <td class="fontcenter">
+                                                        <c:if test="${reports.checktype=='记录项'}">
+                                                            <c:if test="${taskreportinfo.examstate==0}">
+                                                                <input type="text" onblur="javascript:CheckInputIntFloat(this);" style="width: 50px"
+                                                                       value="${reports.numvalue}">
+                                                            </c:if>
+                                                            <c:if test="${taskreportinfo.examstate==1}">
+                                                                <c:if test="${reports.checkvalue!=reports.numvalue}">
+                                                                    <span style="color: white"><input type="number" style="width: 50px;background:red;color: white;text-align: center;border:0;" value="${reports.checkvalue}" readonly></span>
+                                                                </c:if>
+                                                                <c:if test="${reports.checkvalue==reports.numvalue}">
+                                                                    <input type="number" style="width: 50px;text-align: center;background:#f9f9f9;border:0;"
+                                                                           value="${reports.checkvalue}" readonly>
+                                                                </c:if>
+                                                            </c:if>
+                                                            <c:if test="${taskreportinfo.examstate==2}">
+                                                                <input type="number" style="width: 50px;text-align: center;background:#f9f9f9;border:0;"
+                                                                           value="${reports.checkvalue}" readonly>
+                                                            </c:if>
+                                                        </c:if>
+                                                        <c:if test="${reports.checktype=='状态项'}">-</c:if>
+                                                    </td>
+                                                </c:if>--%>
+                                            <td>
+                                                <c:if test="${reports.img != 'null' or reports.audio != 'null' or reports.video != 'null'}">
+                                                    <a href='http://${ip}/toException?img=${reports.img}&audio=${reports.audio}&video=${reports.video}'  target="_Blank">查看异常详情</a>
+                                                </c:if>
+                                            </td>
+                                        </tr>
                                         </c:forEach>
+                                        <input type="hidden" id="statuslen" value="${fn:length(reportinfos)}">
                                     </table>
                                     <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                                        <a href="showexceptionreport?page=1&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">第一页</a>
+                                        <a href="showexceptionreport?page=1&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">第一页</a>
                                         <c:if test="${pageBean.currentPage>1}">
-                                            <a href="showexceptionreport?page=${pageBean.currentPage-1}&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">上一页</a>
+                                            <a href="showexceptionreport?page=${pageBean.currentPage-1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">上一页</a>
                                         </c:if>
 
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                            <a href="showexceptionreport?page=${pageBean.currentPage+1}&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">下一页</a>
+                                            <a href="showexceptionreport?page=${pageBean.currentPage+1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">下一页</a>
                                         </c:if>
 
-                                        <a href="showexceptionreport?page=${pageBean.totalPage}&tasktype=${tasktype}&taskcode=${taskcode}&time1=${time1}&time2=${time2}&operationstate=${operationstate}&siteid=${siteid}">最后一页</a>
+                                        <a href="showexceptionreport?page=${pageBean.totalPage}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">最后一页</a>
 
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
                                     </div>

@@ -123,7 +123,38 @@
     <if test="equipname != null and equipname !=''" >
       and c.equipname =#{equipname}
     </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and r.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(c.operationtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by c.id DESC
+    limit #{page},#{pagesize}
   </select>
+  <select id="countByExample2" resultType="java.lang.Integer" parameterType="map" >
+    select count(*)
+    from reportcontent c
+    left join taskreportinfo r on r.id=c.reportid
+    where c.reportid = #{reportid} and c.reportstate ='1'
+    <if test="areaname != null and areaname !=''" >
+      and c.areaname =#{areaname}
+    </if>
+    <if test="equipname != null and equipname !=''" >
+      and c.equipname =#{equipname}
+    </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and r.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(c.operationtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by c.id DESC
+    limit #{page},#{pagesize}
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
     <include refid="Base_Column_List" />

@@ -26,11 +26,8 @@ public interface TaskreportService {
 
     List<Taskreportinfo> dadiyreportlist(Long taskid, String date1, String date2) throws ParseException;
 
-    //    List<Reportcontent> reportcontent(HashMap<String,Object> map);
     //周报
     List<Tasktempinfo> dadiyreport2(String date1, String date2, Long taskid);
-//    List<Taskreportinfo> dadiyreportlist2(String taskid);
-
 
     public List<Taskreportinfo> findByPageReport2(HashMap<String, Object> map);
 
@@ -60,7 +57,6 @@ public interface TaskreportService {
     /*查询某一天某项任务操作状态是正常或者异常的任务报告的信息*/
     List<Taskreportinfo> queryByState(HashMap<String, Object> map);
 
-    //    PageInfo<Taskreportinfo> gettaskreportlog(int page, int pagesize);
     PageInfo<Taskreportinfo> gettaskreportlog2(HashMap<String, Object> map);
 
     int delTaskLog(Long id);
@@ -96,12 +92,16 @@ public interface TaskreportService {
 
     List<TaskReportContent> selectByExampleEquipState(int page, int size, List<Long> taskid, Date time1, Date time2, String sitename, String areaname, String equipname, String checkname);
 
-    //    public WebChartRes2 equipStateChart(int page, int size,String checkname,String monthstr,String yearstr,String areaname,String equipname);
     public WebChartRes2 equipStateChart(int page, int size, String checkname, String monthstr, String yearstr, String areaname, String equipname) throws ParseException;
 
-    //    public PageInfo<Reportcontent>  equipSateInfo2(int page,int size,String checkname,String monthstr,String yearstr,String sitename,String areaname,String equipname) ;
     public PageInfo<Reportcontent> equipSateInfo2(int page, int size, String checkname, String startTime, String endTime, String sitename, String areaname, String equipname) throws ParseException;
 
     //报告复核
     int updReportContent(String reportData, Long reportId, String examuser, String taskcode);
+    //查询所有巡检项报告内容
+    List<Reportcontent> selectReportcontentByParam(HashMap<String,Object> map);
+
+    int countReportcontentByParam(HashMap<String, Object> map);
+
+    Reportcontent selectReportContentByPrimaryKey(Long id);
 }
