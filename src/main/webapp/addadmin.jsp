@@ -33,9 +33,20 @@
         if(!reg.test(pwd)){
             alert("密码必须包含字母、数字和特殊符号");
             return false;
-        }else {
-            return true;
         }
+        var email = $("#email").val();
+        if(email==null || email ==''){
+            alert("邮箱不能为空！");
+            return false;
+        }
+        if (email != '') {
+            var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+            if (!reg.test(email)) {
+                alert('邮箱格式不正确，请重新填写!');
+                return false;
+            }
+        }
+        return true;
     }
 </script>
 <!-- topbar ends -->
@@ -98,7 +109,14 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><img src="http://localhost:8080/report/images/2017/10/10/092bf524-5e57-4829-b34a-7f5a667c6fb7_IMG_20171010_105354.jpg"></td>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="email">邮箱:</label>
+                                            <input type="text" class="form-control" style="width: 300px;" id="email" name="email" required="required">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><img src="/report/images/2017/10/10/092bf524-5e57-4829-b34a-7f5a667c6fb7_IMG_20171010_105354.jpg"></td>
                                     </tr>
 
                                     <tr>

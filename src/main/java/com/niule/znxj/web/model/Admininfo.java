@@ -22,6 +22,8 @@ public class Admininfo {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date freezetime;
 
+    private String email;
+
     private Integer roleid;
 
     private Integer siteid;
@@ -30,6 +32,14 @@ public class Admininfo {
 
     public Siteareainfo getSite() {
         return site;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setSite(Siteareainfo site) {

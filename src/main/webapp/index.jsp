@@ -37,6 +37,7 @@
                         <li><shiro:hasPermission name="item:nfc"><a href="showallnfc?page=1"  target="center"><%--<i class="glyphicon glyphicon-barcode"></i>--%>NFC标签管理</a></shiro:hasPermission></li>
                         <li><shiro:hasPermission name="item:check"><a href="showallcheck?page=1"  target="center"><%--<i class="glyphicon glyphicon-list-alt"></i>--%>巡检项管理</a></shiro:hasPermission></li>
                         <li><shiro:hasPermission name="item:interface"><a href="showallinterface?page=1"  target="center"><%--<i class="glyphicon glyphicon-list-alt"></i>--%>接口配置管理</a></shiro:hasPermission></li>
+                        <li><shiro:hasPermission name="item:taskupload"><a href="/showalltaskupload?page=1"  target="center"><%--<i class="glyphicon glyphicon-list-alt"></i>--%>任务上传配置管理</a></shiro:hasPermission></li>
                     </ul>
                 </li>
                 <li class="accordion" id="userManager">

@@ -53,7 +53,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="siteid">厂区:</label>
-                                           <select name="siteid" id="siteid" required="required">
+                                           <select class="form-control" name="siteid" id="siteid" required="required">
                                                <option value="">--请选择--</option>
                                                <c:forEach items="${siteareainfos}" var="site">
                                                    <option value="${site.id}">${site.customid}</option>
@@ -77,7 +77,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="enginetype">接口类型:</label>
-                                            <select  id="enginetype" name="enginetype">
+                                            <select class="form-control" id="enginetype" name="enginetype">
                                                 <option selected="selected"value="1">苏州公司接口</option>
                                             </select>
                                         </td>
@@ -86,7 +86,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="state">状态:</label>
-                                            <select  id="state" name="state">
+                                            <select  class="form-control" id="state" name="state">
                                                 <option selected="selected" value="1">有效</option>
                                                 <option value="0">失效</option>
                                             </select>

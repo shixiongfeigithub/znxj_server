@@ -14,9 +14,20 @@
 	        if(!reg.test(pwd)){
 	            alert("密码必须包含字母、数字和特殊符号");
 	            return false;
-	        }else {
-	            return true;
 	        }
+            var email = $("#email").val();
+            if(email==null || email ==''){
+                alert("邮箱不能为空！");
+                return false;
+            }
+            if (email != '') {
+                var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+                if (!reg.test(email)) {
+                    alert('邮箱格式不正确，请重新填写!');
+                    return false;
+                }
+            }
+            return true;
 	    }
 	</script>
 </head>
@@ -79,6 +90,12 @@
                                             <span>状态:</span>
                                             <input type="radio" name="state" value="0" ${ad.state eq '0'?'checked':''}>禁用
                                             <input type="radio" name="state" value="1" ${ad.state eq '1'?'checked':''}>启用
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="email">邮箱:</label>
+                                            <input type="text" class="form-control" style="width: 300px;" id="email" name="email" value="${ad.email}" required="required">
                                         </td>
                                     </tr>
                                     <tr>

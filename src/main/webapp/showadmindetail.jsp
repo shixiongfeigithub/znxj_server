@@ -43,6 +43,12 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="date">邮箱:</label>
+                                            <input type="text" readonly="readonly" class="form-control" style="width: 300px;" id="email" name="email" value="${adm.email}">
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td>
                                             <input type="reset" class="btn btn-primary white" value="返回" onclick="javascript:history.go(-1);"></td>
                                     </tr>

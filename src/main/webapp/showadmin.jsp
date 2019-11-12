@@ -64,6 +64,7 @@
                                     <th>厂区</th>
                                     <th>有效期至</th>
                                     <th>创建时间</th>
+                                    <th>邮箱</th>
                                 </tr>
                                 <c:forEach items="${admininfos.list}" var="a">
                                     <tr>
@@ -77,6 +78,7 @@
                                         <td><c:if test="${a.site.customid==null}">所有厂区</c:if>${a.site.customid}</td>
                                         <td><sdf:formatDate value="${a.expirydate}" pattern="yyyy-MM-dd"></sdf:formatDate></td>
                                         <td><sdf:formatDate value="${a.createdate}" pattern="yyyy-MM-dd"></sdf:formatDate></td>
+                                        <td>${a.email}</td>
                                     </tr>
                                 </c:forEach>
                             </table>
