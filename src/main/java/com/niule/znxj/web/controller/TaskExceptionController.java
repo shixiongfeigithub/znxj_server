@@ -123,6 +123,7 @@ public class TaskExceptionController {
 
         m.addAttribute("sites", siteareainfos);
         m.addAttribute("roleid", admininfo.getRoleid());
+        m.addAttribute("ip", ip);
         return "showexceptionreport";
     }
 

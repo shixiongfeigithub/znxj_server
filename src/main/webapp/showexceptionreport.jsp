@@ -14,12 +14,11 @@
         })
 
         function sitechange(){
+            $("#areainfo").empty();
             var siteId= $("#siteid option:selected")[0].value;
             var areaId = '${areaid}';
-            if(siteId == null || siteId == undefined || siteId == ''){
-                $("#areainfo").append("<option  value='' >所有区域</option>");
-            }else{
-                $("#areainfo").empty();
+            $("#areainfo").append("<option  value='' >所有区域</option>");
+            if(siteId != null && siteId !=''){
                 $.ajax({
                     url:"queryareabysiteid",
                     type:"post",
@@ -48,15 +47,14 @@
         function areachange() {
             $("#equipment").empty();
             var areaid = $("#areainfo option:selected")[0].value;
-            if(areaid == null || areaid == undefined || areaid == ''){
-                $("#equipment").append("<option  value='' >所有设备</option>");
-            }
+            $("#equipment").append("<option  value='' >所有设备</option>");
             var equipmentid = '${equipmentid}';
-            $.ajax({
-                url: "showequipment?areaid=" + areaid,
-                type: "post",
-                dataType: "json",
-                success: function (data) {
+            if(areaid != null && areaid != '') {
+                $.ajax({
+                    url: "showequipment?areaid=" + areaid,
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
                         for (var i = 0; i < data.length; i++) {
                             if (data[i].id == equipmentid) {
                                 $("#equipment").append("<option  value='" + data[i].id + "' selected>" + data[i].name + "</option>");
@@ -64,8 +62,9 @@
                                 $("#equipment").append("<option  value='" + data[i].id + "' >" + data[i].name + "</option>");
                             }
                         }
-                }
-            })
+                    }
+                })
+            }
         }
 
         function closetaskreport(id) {
@@ -182,6 +181,8 @@
                                             <c:if test="${operationtime==1}">
                                                 <th class="fontcenter">执行时间</th>
                                             </c:if>
+                                            <th class="fontcenter">状态</th>
+                                            <th class="fontcenter">责任人</th>
                                             <c:if test="${normalmin==1}">
                                                 <th class="fontcenter">低值</th>
                                             </c:if>
@@ -237,8 +238,10 @@
                                                         <i class="glyphicon glyphicon-lock"></i></a>&nbsp;
                                                 </shiro:hasPermission>
                                                 <shiro:hasPermission name="item:assignprincipal">
+                                                    <c:if test="${item.exceptionstate != 1}">
                                                     <a href="javascript:;" onclick="assignprincipal('${item.id==null?'':item.id}')">
                                                         <i class="glyphicon glyphicon-share"></i></a>
+                                                    </c:if>
                                                 </shiro:hasPermission>
                                             </td>
                                             <td>${item.sitename}</td>
@@ -264,6 +267,12 @@
                                             <c:if test="${operationtime==1}">
                                                 <td class="fontcenter">${item.operationtime}</td>
                                             </c:if>
+                                            <td class="fontcenter">
+                                                <c:if test="${item.exceptionstate == 0}">待处理</c:if>
+                                                <c:if test="${item.exceptionstate == 1}">已关闭</c:if>
+                                                <c:if test="${item.exceptionstate == 2}">处理中</c:if>
+                                            </td>
+                                            <td class="fontcenter">${item.operatorname}</td>
                                             <c:if test="${normalmin==1}">
                                                 <td class="fontcenter">${item.normalmin}</td>
                                             </c:if>

@@ -32,7 +32,6 @@
                 alert("详情不能为空");
                 return false;
             }
-
             var pic="";
             for(var i=0;i<photo.length;i++){
                 pic+=photo[i]+",";
@@ -96,7 +95,6 @@
                 return;
             }
             var  backpic="";
-            var imgurl;
             var formData = new FormData();
             formData.append("img",file);
             $.ajax({
@@ -185,18 +183,5 @@
     </div>
 
 </div>
-<%--<div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade in" style="z-index: 0">
-    <div class="modal-dialog" style="z-index: 9999;">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>提示</h3>
-            </div>
-            <div class="modal-body">
-                    请稍后。。。。。
-            </div>
-        </div>
-    </div>
-</div>--%>
 </body>
 </html>
