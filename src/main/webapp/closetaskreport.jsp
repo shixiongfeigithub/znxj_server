@@ -43,7 +43,6 @@
                     type:"post",
                     data:$("#form").serialize(),
                     success: function(data){
-                        console.log(data);
                         if(data>0){
                             alert("任务关闭成功");
                             showexceptionreport();
@@ -80,7 +79,6 @@
                 alert("请选择要删除的选项");
                 return false;
             }
-//            filesFormData.delete($li.text());
             $($li).remove();
         }
         function selectfile(obj){
@@ -110,7 +108,6 @@
                 contentType: false,
                 dataType: "json",
                 success: function (data) {
-                    // pic.push(data.data);
                     photo.push(data.message);
                     backpic=data.message;
                 }
@@ -136,17 +133,18 @@
                         <div class="box-content">
                             <form action="" enctype="multipart/form-data" method="post" id="form">
                                 <input type="hidden"  name="attachment" id="attachvalue">
-                                <input type="hidden"  name="reportid" id="reportid" value="${reportid}">
+                                <input type="hidden"  name="reportid" id="reportid" value="${reportcontent.reportid}">
+                                <input type="hidden"  name="reportcontentid" id="reportcontentid" value="${reportcontent.id}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="taskcode">任务编号:</label>
-                                            <input type="text" class="form-control" style="width: 300px;" id="taskcode" name="taskcode" value="${taskcode}" readonly>
+                                            <label class="control-label" >巡检项名称:</label>
+                                            ${reportcontent.checkname}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
-                                            <span>详细描述:</span>
+                                            <span>描述:</span>
                                             <textarea name="descontent" id="descontent" cols="20" rows="5" style="width: 300px;" required></textarea>
 
                                         </td>

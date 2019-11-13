@@ -62,6 +62,8 @@ public class CommonServiceImpl implements CommonService {
     private ContactinfoMapper contactinfoMapper;
     @Resource
     private  ExceptionhandlerinfoMapper exceptionhandlerinfoMapper;
+    @Resource
+    private AdmininfoMapper admininfoMapper;
 
     @Override
     public Userinfo userLogin(String username, String password) {
@@ -426,14 +428,6 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //删除已有的相同exceptionhandlerinfo
-        ExceptionhandlerinfoExample exceptionhandlerinfoExample = new ExceptionhandlerinfoExample();
-        exceptionhandlerinfoExample.createCriteria().andTaskcodeEqualTo(taskreportinfo.getTaskcode());
-        exceptionhandlerinfoMapper.deleteByExample(exceptionhandlerinfoExample);
-        final Exceptionhandlerinfo exceptionhandlerinfo = new Exceptionhandlerinfo();
-        exceptionhandlerinfo.setReportid(taskreportinfos.get(0).getId());
-        exceptionhandlerinfo.setTaskcode(taskreportinfo.getTaskcode());
-        exceptionhandlerinfo.setReporttime(new Date());
 
         ThreadPoolExecutorFactory.getInstance().run(new Runnable() {
             @Override
@@ -521,7 +515,7 @@ public class CommonServiceImpl implements CommonService {
                 //存在异常发送邮件
                 if (hasException) {
                     //初始化任务报告异常汇总表（exceptionhandlerinfo） qbxu add 20191106
-                    exceptionhandlerinfoMapper.insert(exceptionhandlerinfo);
+                    //exceptionhandlerinfoMapper.insert(exceptionhandlerinfo);
                     sendExceptionEmail(taskreportinfo.getId(), taskreportinfo.getTaskid());
                 }
             }
@@ -929,26 +923,20 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public void sendReportEmail(Long taskid, Long reportid) {
+    public void sendReportEmail(Long userid,Long reportcontentid) {
         try {
             //获取发件人邮箱和授权码
-            List<Sendemail> sendemails = querySendEmailByTypeAndTask(3,taskid);
-            for (Sendemail send : sendemails) {
-                //获取要发送的邮箱列表
-                String[] contactidsstr = send.getContactid().split(",");
-                List<Long> contactids = new ArrayList<>();
-                for (String contactid : contactidsstr) {
-                    contactids.add(Long.parseLong(contactid));
-                }
-                List<Contactinfo> contactinfolist = queryContactEmail(contactids);
-                List<String> emails = new ArrayList<>();
-                for (Contactinfo item : contactinfolist) {
-                    emails.add(item.getEmail());
-                }
-                String content = "http://" + ip + "/exceptionReport?reportId=" + reportid;
+            List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
+            List<String> emails = new ArrayList<>();
+            if(sendemails!=null && sendemails.size()>0){
+                Sendemail sendemail = sendemails.get(0);
+                Admininfo user = admininfoMapper.selectByPrimaryKey(userid);
+                emails.add(user.getEmail());
+                String content = "http://" + ip + "/exceptionReportContent?id=" + reportcontentid;
                 String res = HttpRequestUtil.get(content, null, 3000, 60000, "utf-8");
-                EmailUtils.sendEmails(send.getEmail(), send.getPwd(), send.getSmtpAddress(), send.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "智能巡检异常报告", res);
+                EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "智能巡检异常报告", res);
             }
+
         } catch (Exception ex) {
             System.err.println("邮件发送失败的原因是：" + ex.getMessage());
             System.err.println("具体的错误原因");

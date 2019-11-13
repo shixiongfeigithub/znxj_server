@@ -54,7 +54,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="siteid">厂区:</label>
-                                            <select name="siteid" id="siteid" required="required">
+                                            <select name="siteid" id="siteid" required="required" readonly="true">
                                                 <c:forEach items="${siteareainfos}" var="site">
                                                     <option ${engine.siteid eq site.id ?'selected':''} value="${site.id}">${site.customid}</option>
                                                 </c:forEach>

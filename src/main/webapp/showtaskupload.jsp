@@ -15,20 +15,24 @@
             var siteid = $("#name2 option:selected")[0].value;
             var taskId='${taskid}';
             var type="";
-            $("#taskid").empty();
-            $.ajax({
-                type : "GET",
-                url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
-                success : function(task){
-                    for(var i=0;i<task.length;i++){
-                        if(task[i].id==taskId){
-                            $("#taskid").append("<option  value='"+task[i].id+"' selected>"+task[i].customid+"</option>");
-                        }else{
-                            $("#taskid").append("<option  value='"+task[i].id+"' >"+task[i].customid+"</option>");
+            if(siteid ==null || siteid==''){
+                $("#taskid").append("<option  value='' selected>所有任务</option>");
+            }else {
+                $("#taskid").empty();
+                $.ajax({
+                    type: "GET",
+                    url: "taskbysiteandtype?searchtype=" + type + "&siteid=" + siteid,
+                    success: function (task) {
+                        for (var i = 0; i < task.length; i++) {
+                            if (task[i].id == taskId) {
+                                $("#taskid").append("<option  value='" + task[i].id + "' selected>" + task[i].customid + "</option>");
+                            } else {
+                                $("#taskid").append("<option  value='" + task[i].id + "' >" + task[i].customid + "</option>");
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
         }
 
         function deltaskupload(id){

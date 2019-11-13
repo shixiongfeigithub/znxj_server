@@ -1,10 +1,7 @@
 package com.niule.znxj.web.controller;
 
 import com.niule.znxj.core.util.PageBean;
-import com.niule.znxj.web.model.Admininfo;
-import com.niule.znxj.web.model.Contactinfo;
-import com.niule.znxj.web.model.Siteareainfo;
-import com.niule.znxj.web.model.Taskuploadconfig;
+import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -121,7 +118,21 @@ public class WebTaskUploadConfigController {
      * @return
      */
     @RequestMapping("addtaskupload")
-    public String addtaskupload(Taskuploadconfig taskuploadconfig, HttpSession session){
+    public String addtaskupload(Model m,Taskuploadconfig taskuploadconfig, HttpSession session){
+
+        TaskuploadconfigExample example = new TaskuploadconfigExample();
+        example.createCriteria().andTaskidEqualTo(taskuploadconfig.getTaskid());
+        List<Taskuploadconfig> list = taskUploadConfigService.selectByExample(example);
+        if (list!=null && list.size()>0){
+            Admininfo admininfo=(Admininfo) session.getAttribute("userInfo");
+            List<Siteareainfo> siteareainfos=siteService.selectByExample2(admininfo.getSiteid());
+            List<Contactinfo> contactinfoList = contactinfoService.sendAllPersion();
+            m.addAttribute("siteareainfos",siteareainfos);
+            m.addAttribute("contactinfoList",contactinfoList);
+            m.addAttribute("message","一个任务只能添加一次，不能重复添加！");
+            return "addtaskupload";
+        }
+
         int addresult=taskUploadConfigService.insert(taskuploadconfig);
         //获取登录用户的信息
         String info="新增了任务上传配置："+taskuploadconfig.getTaskid();

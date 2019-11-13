@@ -2309,6 +2309,20 @@ public class WebTaskreportController {
     }
 
     /**
+     * 某一巡检项的异常邮件内容
+     */
+    @RequestMapping("exceptionReportContent")
+    public String exceptionReportContent(Model m, Integer id) {
+
+        Reportcontent reportcontent = reportcontentMapper.selectByPrimaryKey(id);
+        Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(reportcontent.getReportid());
+        m.addAttribute("reportcontent", reportcontent);
+        m.addAttribute("taskreportinfo", taskreportinfo);
+        m.addAttribute("ip", ip);
+        return "exceptionReportContent";
+    }
+
+    /**
      * 获取要显示列的index 。
      *
      * @param list

@@ -29,13 +29,15 @@
     <result column="enumitem" property="enumitem" jdbcType="VARCHAR" />
     <result column="equipinouttime" property="equipinouttime" jdbcType="VARCHAR" />
     <result column="areainouttime" property="areainouttime" jdbcType="VARCHAR" />
-    <result column="reportid" property="reportid" jdbcType="BIGINT" />
-    <result column="taskcode" property="report.taskcode"/>
-    <result column="sitename" property="report.task.site.customid" jdbcType="VARCHAR" />
+    <result column="taskcode" property="taskcode" jdbcType="VARCHAR"/>
+    <result column="taskname" property="taskname" jdbcType="VARCHAR"/>
+    <result column="sitename" property="sitename" jdbcType="VARCHAR" />
     <result column="worker" property="report.worker"/>
     <result column="tasktype" property="report.tasktype"/>
     <result column="starttime" property="report.starttime" jdbcType="TIMESTAMP" />
     <result column="endtime" property="report.endtime" jdbcType="TIMESTAMP" />
+    <result column="operatorname" property="operatorname" jdbcType="VARCHAR"/>
+    <result column="exceptionstate" property="exceptionstate" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -113,46 +115,66 @@
     </if>
   </select>
   <select id="selectByExample2" resultMap="BaseResultMap" parameterType="map" >
-    select c.*,r.taskcode,r.worker,r.tasktype,r.starttime,r.endtime
-    from reportcontent c
-    left join taskreportinfo r on r.id=c.reportid
-    where c.reportid = #{reportid} and c.reportstate ='1'
+    SELECT r.*,t.taskcode,p.customid taskname,s.customid sitename,e.operatorname,e.exceptionstate
+    FROM
+    reportcontent r
+    LEFT JOIN taskreportinfo t ON r.reportid = t.id
+    LEFT JOIN taskplaninfo p ON t.taskid = p.id
+    LEFT JOIN siteareainfo s ON p.siteid = s.id
+    LEFT JOIN exceptionhandlerinfo e ON r.id = e.reportcontentid
+    WHERE  r.reportstate =1
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
     <if test="areaname != null and areaname !=''" >
-      and c.areaname =#{areaname}
+      and r.areaname =#{areaname}
     </if>
     <if test="equipname != null and equipname !=''" >
-      and c.equipname =#{equipname}
+      and r.equipname =#{equipname}
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND e.operatorname =#{operatorname}
     </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
-      and r.exceptionstate=#{exceptionstate}
+      and e.exceptionstate=#{exceptionstate}
     </if>
     <if test="time1!=null and time1!=''">
-      and date_format(c.operationtime, '%Y-%m-%d'
+      and date_format(r.operationtime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
-    order by c.id DESC
+    order by r.id DESC
     limit #{page},#{pagesize}
   </select>
   <select id="countByExample2" resultType="java.lang.Integer" parameterType="map" >
-    select count(*)
-    from reportcontent c
-    left join taskreportinfo r on r.id=c.reportid
-    where c.reportid = #{reportid} and c.reportstate ='1'
+    SELECT count(r.id) FROM
+    reportcontent r
+    LEFT JOIN taskreportinfo t ON r.reportid = t.id
+    LEFT JOIN taskplaninfo p ON t.taskid = p.id
+    LEFT JOIN siteareainfo s ON p.siteid = s.id
+    LEFT JOIN exceptionhandlerinfo e ON r.id = e.reportcontentid
+    WHERE  r.reportstate =1
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
     <if test="areaname != null and areaname !=''" >
-      and c.areaname =#{areaname}
+      and r.areaname =#{areaname}
     </if>
     <if test="equipname != null and equipname !=''" >
-      and c.equipname =#{equipname}
+      and r.equipname =#{equipname}
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND e.operatorname =#{operatorname}
     </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
-      and r.exceptionstate=#{exceptionstate}
+      and e.exceptionstate=#{exceptionstate}
     </if>
     <if test="time1!=null and time1!=''">
-      and date_format(c.operationtime, '%Y-%m-%d'
+      and date_format(r.operationtime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
-    order by c.id DESC
-    limit #{page},#{pagesize}
+    order by r.id DESC
   </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >

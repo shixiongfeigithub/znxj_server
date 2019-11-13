@@ -51,7 +51,11 @@ public class Reportcontent {
 
     private String enumitem;
 
-
+    private String taskcode;
+    private String taskname;
+    private String sitename;
+    private String operatorname;
+    private String exceptionstate;
     private String firstValue;
 
     private Taskreportinfo report;
@@ -71,6 +75,46 @@ public class Reportcontent {
     }
     public void setFirstValue(String firstValue) {
         this.firstValue = firstValue;
+    }
+
+    public String getTaskcode() {
+        return taskcode;
+    }
+
+    public void setTaskcode(String taskcode) {
+        this.taskcode = taskcode;
+    }
+
+    public String getTaskname() {
+        return taskname;
+    }
+
+    public void setTaskname(String taskname) {
+        this.taskname = taskname;
+    }
+
+    public String getSitename() {
+        return sitename;
+    }
+
+    public void setSitename(String sitename) {
+        this.sitename = sitename;
+    }
+
+    public String getOperatorname() {
+        return operatorname;
+    }
+
+    public void setOperatorname(String operatorname) {
+        this.operatorname = operatorname;
+    }
+
+    public String getExceptionstate() {
+        return exceptionstate;
+    }
+
+    public void setExceptionstate(String exceptionstate) {
+        this.exceptionstate = exceptionstate;
     }
 
     public Taskreportinfo getReport() {

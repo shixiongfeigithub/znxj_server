@@ -13,20 +13,24 @@
             var siteid = $("#name2 option:selected")[0].value;
             var taskId='${taskid}';
             var type="";
-            $("#taskid").empty();
-            $.ajax({
-                type : "GET",
-                url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
-                success : function(task){
-                    for(var i=0;i<task.length;i++){
-                        if(task[i].id==taskId){
-                            $("#taskid").append("<option  value='"+task[i].id+"' selected>"+task[i].customid+"</option>");
-                        }else{
-                            $("#taskid").append("<option  value='"+task[i].id+"' >"+task[i].customid+"</option>");
+            if(siteid ==null || siteid==''){
+                $("#taskid").append("<option  value='' selected>--请选择--</option>");
+            }else {
+                $("#taskid").empty();
+                $.ajax({
+                    type: "GET",
+                    url: "taskbysiteandtype?searchtype=" + type + "&siteid=" + siteid,
+                    success: function (task) {
+                        for (var i = 0; i < task.length; i++) {
+                            if (task[i].id == taskId) {
+                                $("#taskid").append("<option  value='" + task[i].id + "' selected>" + task[i].customid + "</option>");
+                            } else {
+                                $("#taskid").append("<option  value='" + task[i].id + "' >" + task[i].customid + "</option>");
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
         }
         function validateForm() {
             var siteid = $("#name2").val();
@@ -79,7 +83,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="name2">厂区:</label>
-                                            <select class="form-control" name="siteid" id="name2" required="required">
+                                            <select class="form-control" name="siteid" id="name2" required="required" readonly="true">
                                                 <c:forEach items="${siteareainfos}" var="site">
                                                     <option ${taskuploadconfig.siteid eq site.id ?'selected':''} value="${site.id}">${site.customid}</option>
                                                 </c:forEach>
@@ -89,7 +93,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="taskid">任务:</label>
-                                            <select class="form-control" id="taskid" name="taskid" >
+                                            <select class="form-control" id="taskid" name="taskid" readonly="true">
                                                 <c:choose>
                                                     <c:when test="${taskid==null and taskid==''}">
                                                         <option value="" selected>所有任务</option>

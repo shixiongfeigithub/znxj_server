@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
     function formSubmit(){
-        var count=$("#operationuser").val();
+        var count=$("#operatorid").val();
         if(count==0){
             alert("操作员不能为空");
             return false;
@@ -38,37 +38,54 @@
         window.location="showexceptionreport?page=1";
     }
 </script>
-<!-- topbar ends -->
 <div class="ch-container">
     <div class="row">
-        <%--<jsp:include page="/WEB-INF/pages/common/menu.jsp" />--%>
         <div id="content"class="col-lg-12 col-sm-12">
             <div class="row">
                 <div class="box col-md-12">
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
                             <h2>
-                                <i class="glyphicon glyphicon-globe"></i> 异常任务分配责任人
+                                <i class="glyphicon glyphicon-globe"></i> 异常巡检任务分配责任人
                             </h2>
                         </div>
                         <div class="box-content">
                             <form action="" method="post" id="form">
-                                <input type="hidden"  name="reportid" id="reportid" value="${reportid}">
+                                <input type="hidden"  name="reportid" id="reportid" value="${reportcontent.reportid}">
+                                <input type="hidden"  name="reportcontentid" id="reportcontentid" value="${reportcontent.id}">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="taskcode">任务编号:</label>
-                                            <input type="text" class="form-control" style="width: 300px;" id="taskcode" name="taskcode" value="${taskcode}" readonly>
+                                            <label class="control-label" >巡检项名称:</label>
+                                            ${reportcontent.checkname}
                                         </td>
                                     </tr>
-
-
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="operatorname">操作员:</label>
-                                            <select name="operatorname" id="operatorname" class="form-control">
+                                            <label class="control-label" for="operatorid">操作员:</label>
+                                            <select name="operatorid" id="operatorid" class="form-control" required>
                                                 <c:forEach items="${operationuserList}" var="user">
                                                     <option value="${user.id}">${user.username}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="exceptiontype">异常类型:</label>
+                                            <select name="exceptiontype" id="exceptiontype" class="form-control" required>
+                                                <c:forEach items="${exceptiontypeList}" var="type">
+                                                    <option value="${type.id}">${type.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="exceptionlever">异常等级:</label>
+                                            <select name="exceptionlever" id="exceptionlever" class="form-control" required>
+                                                <c:forEach items="${levertype1List}" var="lever">
+                                                    <option value="${lever.id}">${lever.name}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>

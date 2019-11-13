@@ -40,36 +40,32 @@
                     }
                 });
             }
-            //areachange();
+            areachange();
         }
 
-        function areachange(){
-            var areaId= $("#areaid option:selected")[0].value;
-            var equipmentId = '${equipmentid}';
-            if(areaId == null || areaId == undefined || areaId == ''){
-                $("#equipmentinfo").append("<option  value='' >所有设备</option>");
-            }else{
-                $("#equipmentinfo").empty();
-                $.ajax({
-                    url:"queryequipment",
-                    type:"post",
-                    data:{
-                        areaid:areaid,
-                    },
-                    dataType:"json",
-                    success:function(data){
-                        if(data!=null){
-                            for(var i=0;i<data.length;i++){
-                                if(data[i].id==areaId){
-                                    $("#equipmentinfo").append("<option  value='"+data[i].id+"' selected>"+data[i].name+"</option>");
-                                }else{
-                                    $("#equipmentinfo").append("<option  value='"+data[i].id+"' >"+data[i].name+"</option>");
-                                }
+
+        /*根据区域编号显示所有的设备*/
+        function areachange() {
+            $("#equipment").empty();
+            var areaid = $("#areainfo option:selected")[0].value;
+            if(areaid == null || areaid == undefined || areaid == ''){
+                $("#equipment").append("<option  value='' >所有设备</option>");
+            }
+            var equipmentid = '${equipmentid}';
+            $.ajax({
+                url: "showequipment?areaid=" + areaid,
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].id == equipmentid) {
+                                $("#equipment").append("<option  value='" + data[i].id + "' selected>" + data[i].name + "</option>");
+                            } else {
+                                $("#equipment").append("<option  value='" + data[i].id + "' >" + data[i].name + "</option>");
                             }
                         }
-                    }
-                });
-            }
+                }
+            })
         }
 
         function closetaskreport(id) {
@@ -104,7 +100,7 @@
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showexceptionreport?page=1" method="post">
                                             <label class="control-label" for="siteid">厂区：</label>
-                                            <select id="siteid" class="form-control" name="siteid" onchange="tasknum()">
+                                            <select id="siteid" class="form-control" name="siteid" onchange="sitechange()">
                                                 <c:if test="${siteid==null}">
                                                     <option value="">所有厂区</option>
                                                 </c:if>
@@ -114,12 +110,12 @@
                                             </select>
 
                                             <label class="control-label" for="areainfo">区域：</label>
-                                            <select class="form-control" id="areainfo" name="areaid" >
+                                            <select class="form-control" id="areainfo" name="areaid" onchange="areachange()">
                                                 <option value="" selected>所有区域</option>
                                             </select>
 
-                                            <label class="control-label" for="equipmentinfo">设备：</label>
-                                            <select class="form-control" id="equipmentinfo" name="equipmentid" >
+                                            <label class="control-label" for="equipment">设备：</label>
+                                            <select class="form-control" id="equipment" name="equipmentid" >
                                                 <option value="" selected>所有设备</option>
                                             </select>
 
@@ -224,94 +220,84 @@
                                                     <th class="fontcenter">前次复核值(自动)</th>
                                                 </c:if>
                                                 &lt;%&ndash;<th class="fontcenter">前次复核值</th>&ndash;%&gt;
-                                            </c:if>
+                                            </c:if>--%>
                                             <c:if test="${checkvalue==1}">
                                                 <th class="fontcenter">复核值</th>
-                                            </c:if>--%>
+                                            </c:if>
                                             <th>异常记录链接</th>
                                         </tr>
-                                        <c:forEach items="${pageBean.list}" var="report" varStatus="status">
-                                        <input type="hidden" id="img${status.index}" value='${reports.img}'>
-                                        <input type="hidden" id="audio${status.index}" value='${reports.audio}'>
-                                        <input type="hidden" id="video${status.index}" value='${reports.video}'>
+                                        <c:forEach items="${pageBean.list}" var="item" varStatus="status">
+                                        <input type="hidden" id="img${status.index}" value='${item.img}'>
+                                        <input type="hidden" id="audio${status.index}" value='${item.audio}'>
+                                        <input type="hidden" id="video${status.index}" value='${item.video}'>
                                         <tr>
                                             <td>
                                                 <shiro:hasPermission name="item:closereport">
-                                                    <a href="javascript:;" onclick="closetaskreport('${report.id==null?'':report.id}')">
+                                                    <a href="javascript:;" onclick="closetaskreport('${item.id==null?'':item.id}')">
                                                         <i class="glyphicon glyphicon-lock"></i></a>&nbsp;
                                                 </shiro:hasPermission>
                                                 <shiro:hasPermission name="item:assignprincipal">
-                                                    <a href="javascript:;" onclick="assignprincipal('${report.id==null?'':report.id}')">
+                                                    <a href="javascript:;" onclick="assignprincipal('${item.id==null?'':item.id}')">
                                                         <i class="glyphicon glyphicon-share"></i></a>
                                                 </shiro:hasPermission>
                                             </td>
-                                            <td>一厂</td>
+                                            <td>${item.sitename}</td>
                                             <c:if test="${areaname==1}">
                                                 <td class="fontcenter">
-                                                    <c:if test="${reports.areaskip==1}">
-                                                        <span style="color: red">${reports.areaname}(${reports.areaskipdesc})</span>
-                                                    </c:if>
-                                                    <c:if test="${reports.areaskip==0}">
-                                                        <span>${reports.areaname}</span>
-                                                    </c:if>
+                                                    <span>${item.areaname}</span>
                                                 </td>
                                             </c:if>
                                             <c:if test="${equipname==1}">
                                                 <td class="fontcenter">
-                                                    <c:if test="${reports.equipmentskip==1}">
-                                                        <span style="color: red">${reports.equipname}(${reports.equipmentskipdesc})</span>
-                                                    </c:if>
-                                                    <c:if test="${reports.equipmentskip==0}">
-                                                        <span>${reports.equipname}</span>
-                                                    </c:if>
+                                                    <span>${item.equipname}</span>
                                                 </td>
                                             </c:if>
                                             <c:if test="${checkname==1}">
                                                 <td class="fontcenter">
-                                                        ${reports.checkname}
+                                                        ${item.checkname}
                                                 </td>
                                             </c:if>
 
                                             <c:if test="${checktype==1}">
-                                                <td class="fontcenter">${reports.checktype}</td>
+                                                <td class="fontcenter">${item.checktype}</td>
                                             </c:if>
                                             <c:if test="${operationtime==1}">
-                                                <td class="fontcenter">${reports.operationtime}</td>
+                                                <td class="fontcenter">${item.operationtime}</td>
                                             </c:if>
                                             <c:if test="${normalmin==1}">
-                                                <td class="fontcenter">${reports.normalmin}</td>
+                                                <td class="fontcenter">${item.normalmin}</td>
                                             </c:if>
                                             <c:if test="${normalmax==1}">
-                                                <td class="fontcenter">${reports.normalmax}</td>
+                                                <td class="fontcenter">${item.normalmax}</td>
                                             </c:if>
                                             <c:if test="${lowerwarning==1}">
-                                                <td class="fontcenter">${reports.lowerwarning}</td>
+                                                <td class="fontcenter">${item.lowerwarning}</td>
                                             </c:if>
                                             <c:if test="${upperwarning==1}">
-                                                <td class="fontcenter">${reports.upperwarning}</td>
+                                                <td class="fontcenter">${item.upperwarning}</td>
                                             </c:if>
                                             <c:if test="${numvalue==1}">
                                                 <td class="fontcenter"id="numvalue${status.index}">
-                                                    <c:if test="${reports.checktype == '枚举项'}">
-                                                        <c:if test="${reports.enumitem == ''}">-</c:if>
-                                                        <c:if test="${reports.enumitem != ''}">${reports.enumitem}</c:if>
+                                                    <c:if test="${item.checktype == '枚举项'}">
+                                                        <c:if test="${item.enumitem == ''}">-</c:if>
+                                                        <c:if test="${item.enumitem != ''}">${reports.enumitem}</c:if>
                                                     </c:if>
-                                                    <c:if test="${reports.checktype == '记录项'}">
-                                                        <c:if test="${reports.numvalue == ''}">-</c:if>
-                                                        <c:if test="${reports.numvalue != ''}">${reports.numvalue}</c:if>
+                                                    <c:if test="${item.checktype == '记录项'}">
+                                                        <c:if test="${item.numvalue == ''}">-</c:if>
+                                                        <c:if test="${item.numvalue != ''}">${item.numvalue}</c:if>
                                                     </c:if>
-                                                    <c:if test="${reports.checktype == '状态项'}">
-                                                        <c:if test="${reports.areaskipdesc != null or reports.equipmentskipdesc != null}">
+                                                    <c:if test="${item.checktype == '状态项'}">
+                                                        <c:if test="${item.areaskipdesc != null or item.equipmentskipdesc != null}">
                                                             -
                                                         </c:if>
 
-                                                        <c:if test="${reports.areaskipdesc == null and reports.equipmentskipdesc == null}">
-                                                            <c:if test="${reports.reportstate == ''}">-</c:if>
-                                                            <c:if test="${reports.reportstate != ''}">
-                                                                <c:if test="${reports.reportstate == 1}">
+                                                        <c:if test="${item.areaskipdesc == null and item.equipmentskipdesc == null}">
+                                                            <c:if test="${item.reportstate == ''}">-</c:if>
+                                                            <c:if test="${item.reportstate != ''}">
+                                                                <c:if test="${item.reportstate == 1}">
                                                                     异常
                                                                 </c:if>
-                                                                <c:if test="${reports.reportstate == 0}">
+                                                                <c:if test="${item.reportstate == 0}">
                                                                     正常
                                                                 </c:if>
                                                             </c:if>
@@ -322,51 +308,34 @@
                                                 </td>
                                             </c:if>
                                             <c:if test="${errcontent==1}">
-                                                <td class="fontcenter" id="error${status.index}">${reports.errcontent}</td>
+                                                <td class="fontcenter" id="error${status.index}">${item.errcontent}</td>
                                             </c:if>
                                                 <%--<c:if test="${recordname==1}">
-                                                    <td class="fontcenter">${reports.recordname}</td>
+                                                    <td class="fontcenter">${item.recordname}</td>
                                                 </c:if>
                                                 <c:if test="${unitname==1}">
-                                                    <td class="fontcenter">${reports.unitname}</td>
+                                                    <td class="fontcenter">${item.unitname}</td>
                                                 </c:if>--%>
                                                 <%--<c:if test="${firstval==1}">
                                                     <td class="fontcenter" id="first${status.index}">
                                                         <c:if test="${taskreport==null}">-</c:if>
                                                     </td>
-                                                </c:if>
+                                                </c:if>--%>
                                                 <c:if test="${checkvalue==1}">
                                                     <td class="fontcenter">
-                                                        <c:if test="${reports.checktype=='记录项'}">
-                                                            <c:if test="${taskreportinfo.examstate==0}">
-                                                                <input type="text" onblur="javascript:CheckInputIntFloat(this);" style="width: 50px"
-                                                                       value="${reports.numvalue}">
-                                                            </c:if>
-                                                            <c:if test="${taskreportinfo.examstate==1}">
-                                                                <c:if test="${reports.checkvalue!=reports.numvalue}">
-                                                                    <span style="color: white"><input type="number" style="width: 50px;background:red;color: white;text-align: center;border:0;" value="${reports.checkvalue}" readonly></span>
-                                                                </c:if>
-                                                                <c:if test="${reports.checkvalue==reports.numvalue}">
-                                                                    <input type="number" style="width: 50px;text-align: center;background:#f9f9f9;border:0;"
-                                                                           value="${reports.checkvalue}" readonly>
-                                                                </c:if>
-                                                            </c:if>
-                                                            <c:if test="${taskreportinfo.examstate==2}">
-                                                                <input type="number" style="width: 50px;text-align: center;background:#f9f9f9;border:0;"
-                                                                           value="${reports.checkvalue}" readonly>
-                                                            </c:if>
+                                                        <c:if test="${item.checktype=='记录项'}">
+                                                            ${item.checkvalue}
                                                         </c:if>
-                                                        <c:if test="${reports.checktype=='状态项'}">-</c:if>
+                                                        <c:if test="${item.checktype=='状态项'}">-</c:if>
                                                     </td>
-                                                </c:if>--%>
+                                                </c:if>
                                             <td>
-                                                <c:if test="${reports.img != 'null' or reports.audio != 'null' or reports.video != 'null'}">
-                                                    <a href='http://${ip}/toException?img=${reports.img}&audio=${reports.audio}&video=${reports.video}'  target="_Blank">查看异常详情</a>
+                                                <c:if test="${item.img != 'null' or item.audio != 'null' or item.video != 'null'}">
+                                                    <a href='http://${ip}/toException?img=${item.img}&audio=${item.audio}&video=${item.video}'  target="_Blank">查看异常详情</a>
                                                 </c:if>
                                             </td>
                                         </tr>
                                         </c:forEach>
-                                        <input type="hidden" id="statuslen" value="${fn:length(reportinfos)}">
                                     </table>
                                     <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
                                         <a href="showexceptionreport?page=1&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">第一页</a>

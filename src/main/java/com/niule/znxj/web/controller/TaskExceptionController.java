@@ -80,12 +80,19 @@ public class TaskExceptionController {
         long totalpage = 0;
         int pagesize = 15;
 
+        Areainfo areainfo = null;
+        Equipmentinfo equipmentinfo = null;
+        if (areaid!=null)
+            areainfo = areaService.selectByPrimaryKey(areaid);
+        if (equipmentid !=null)
+            equipmentinfo = equipmentService.selectByPrimaryKey(equipmentid);
+
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("page", (page - 1) * pagesize);
         map.put("pagesize", pagesize);
         map.put("siteids", siteids);//厂区
-        map.put("areaid", areaid);//区域
-        map.put("equipmentid", equipmentid);//设备
+        map.put("areaname", areainfo!=null?areainfo.getCustomid():null);
+        map.put("equipname",equipmentinfo!=null?equipmentinfo.getName():null);
         map.put("exceptionstate",exceptionstate);//异常处理状态
         map.put("operatorname",operatorname); //巡检责任人
         map.put("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);//开始时间
@@ -119,118 +126,27 @@ public class TaskExceptionController {
         return "showexceptionreport";
     }
 
-    /**
-     * 异常任务报告的详细信息
-     * @return
-     */
-/*    @RequestMapping("/showexceptiondetail")
-    public String showexceptiondetail(Model m, int page, Long reportid,Long areaid,Long equipmentid) throws Exception {
-        //得到报告明细
-        Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(reportid);
-        Taskplaninfo taskplaninfo = taskPlanService.selectByPrimaryKey(taskreportinfo.getTaskid());
-        List<Areainfo> areainfoList = areaService.selectByExample1(taskplaninfo.getSiteid().intValue());
-        Areainfo areainfo = null;
-        Equipmentinfo equipmentinfo = null;
-        if (areaid!=null)
-            areainfo = areaService.selectByPrimaryKey(areaid);
-        if (equipmentid !=null)
-            equipmentinfo = equipmentService.selectByPrimaryKey(equipmentid);
-
-        //根据任务报告ID得到所有报告内容reportcontent
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("reportid", reportid);
-        map.put("areaname", areainfo!=null?areainfo.getCustomid():null);
-        map.put("equipname",equipmentinfo!=null?equipmentinfo.getName():null);
-        List<Reportcontent> reportcontents = reportcontentMapper.selectByExample2(map);
-        List<Reportsetting> reportsettings = systemService.showReportSetting();
-        for (Reportsetting reportsetting : reportsettings) {
-            m.addAttribute(reportsetting.getName(), reportsetting.getIsshow());
-        }
-        m.addAttribute("reportinfos", reportcontents);
-        m.addAttribute("reportid", reportid);
-        m.addAttribute("taskcode", taskreportinfo.getTaskcode());
-        m.addAttribute("taskreportinfo", taskreportinfo);
-        m.addAttribute("areaid",areaid);
-        m.addAttribute("areainfos",areainfoList);
-        m.addAttribute("equipmentid",equipmentid);
-        m.addAttribute("ip", ip);
-        m.addAttribute("page", page);
-        return "exceptionreportdetail";
-    }*/
-
-    public List<Taskreportinfo> getTaskCode(String taskCode) throws Exception {
-        String code = taskCode.substring(0, taskCode.lastIndexOf("-"));
-        //得到当前子任务是第几次执行
-        Integer i = Integer.valueOf(taskCode.substring(taskCode.lastIndexOf("-") + 1));
-        String oldTaskCode = "";
-        if (i != 1) {
-            oldTaskCode = code + "-" + (i - 1);
-        } else {
-            //如果当前子任务是第一次执行，获取到昨天当前任务最后一次执行的任务报告
-            int index = taskCode.indexOf("-");
-//            //根据第一个点的位置 获得第二个点的位置
-            index = taskCode.indexOf("-", index + 1);
-            int taskNameIndex = taskCode.indexOf("-");
-            String taskName = taskCode.substring(0, taskNameIndex);
-            String time = taskCode.substring(index + 1, taskCode.lastIndexOf("-"));
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            Date date = sdf.parse(time);
-            Calendar now = Calendar.getInstance();
-            now.setTime(date);
-            now.set(Calendar.DATE, now.get(Calendar.DATE) - 1);
-            String time2 = sdf.format(now.getTime());
-            TaskreportinfoExample example = new TaskreportinfoExample();
-            example.createCriteria().andTaskcode2Like(taskName + "%" + time2 + "%");
-            List<Taskreportinfo> taskreportinfos = taskreportService.selectByExample(example);
-            Integer k = null;
-            String taskversion = "";
-            if (taskreportinfos.size() > 0) {
-                String newTaskCode = taskreportinfos.get(0).getTemp().getTaskcode();
-                int aa = newTaskCode.indexOf("-");
-                int bb = newTaskCode.indexOf("-", aa + 1);
-                taskversion = newTaskCode.substring(aa + 1, bb);//昨天的任务版本
-                List<Integer> counts = new ArrayList<>();
-                for (Taskreportinfo taskreportinfo : taskreportinfos) {
-                    String taskcode2 = taskreportinfo.getTemp().getTaskcode();
-                    Integer j = Integer.valueOf(taskcode2.substring(taskcode2.lastIndexOf("-") + 1));
-                    counts.add(j);
-                }
-                k = Collections.max(counts);
-            }
-            if (k == null)
-                oldTaskCode = null;
-            else
-                oldTaskCode = taskName + "-" + taskversion + "-" + time2 + "-" + k;//昨天最后一个子任务
-        }
-        List<Taskreportinfo> taskreportinfos = new ArrayList<>();
-        if (oldTaskCode != null) {
-            TaskreportinfoExample taskreportinfoExample = new TaskreportinfoExample();
-            taskreportinfoExample.createCriteria().andTaskcode2EqualTo(oldTaskCode);
-            taskreportinfos = taskreportService.selectByExample(taskreportinfoExample);
-        }
-        return taskreportinfos;
-    }
-
 
     /*跳转到关闭异常巡检项页面*/
     @RequestMapping("/toclosetaskreport")
     @RequiresPermissions("item:closereport")
     public String toclosetaskreport(Model m, Long id,HttpServletRequest request) {
-        Reportcontent ceportcontent = taskreportService.selectReportContentByPrimaryKey(id);
-        m.addAttribute("ceportcontent",ceportcontent);
+        Reportcontent reportcontent = taskreportService.selectReportContentByPrimaryKey(id);
+        m.addAttribute("reportcontent",reportcontent);
         return "closetaskreport";
     }
 
     @RequestMapping("/closetaskreport")
     @ResponseBody
     public int closetaskreport(Exceptionhandlerinfo exceptionhandlerinfo,HttpServletRequest request){
+
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
         ExceptionhandlerinfoExample example = new ExceptionhandlerinfoExample();
-        example.createCriteria().andReportidEqualTo(exceptionhandlerinfo.getReportid());
+        example.createCriteria().andReportcontentidEqualTo(exceptionhandlerinfo.getReportcontentid());
         List<Exceptionhandlerinfo> infoList = exceptionhandlerinfoService.selectByExample(example);
         if(infoList!=null && infoList.size()>0){
            Exceptionhandlerinfo info = infoList.get(0);
-           if (info.getExceptionclosetime()!=null && info.getExceptionstate()==1)
+           if (info.getExceptionclosetime()!=null && info.getExceptionstate()==1) //已关闭
                 return 0;
 
             List<String> attach=new ArrayList<>();
@@ -254,17 +170,20 @@ public class TaskExceptionController {
     @RequiresPermissions("item:assignprincipal")
     public String toassignprincipal(Model m, Long id, HttpServletRequest request) {
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
-
         List<Admininfo> operationuserList = admininfoService.selectByRoleId(3); //查询所有角色为操作员的用户
-        Reportcontent ceportcontent = taskreportService.selectReportContentByPrimaryKey(id);
+        Reportcontent reportcontent = taskreportService.selectReportContentByPrimaryKey(id);
         for (Admininfo user : operationuserList){
             if (user.getId()==admininfo.getId()){
                 operationuserList.remove(user);
                 break;
             }
         }
-        m.addAttribute("ceportcontent", ceportcontent);
+        List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
+        List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
+        m.addAttribute("reportcontent", reportcontent);
         m.addAttribute("operationuserList",operationuserList);
+        m.addAttribute("levertype1List",levertype1List);
+        m.addAttribute("exceptiontypeList",exceptiontypeList);
         return "assignprincipal";
     }
 
@@ -272,8 +191,10 @@ public class TaskExceptionController {
     @ResponseBody
     public int assignprincipal(Exceptionhandlerinfo exceptionhandlerinfo,HttpServletRequest request){
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
+
+        Admininfo user = admininfoService.selectByPrimaryKey(exceptionhandlerinfo.getOperatorid());
         ExceptionhandlerinfoExample example = new ExceptionhandlerinfoExample();
-        example.createCriteria().andReportidEqualTo(exceptionhandlerinfo.getReportid());
+        example.createCriteria().andReportcontentidEqualTo(exceptionhandlerinfo.getReportcontentid());
         List<Exceptionhandlerinfo> infoList = exceptionhandlerinfoService.selectByExample(example);
         if(infoList!=null && infoList.size()>0){
             Exceptionhandlerinfo info = infoList.get(0);
@@ -281,11 +202,15 @@ public class TaskExceptionController {
                 info.setCheckuserid(admininfo.getId());
                 info.setAppointedtime(new Date());
             }
-            info.setOperatorname(exceptionhandlerinfo.getOperatorname());
+            info.setOperatorid(exceptionhandlerinfo.getOperatorid());
+            info.setOperatorname(user.getUsername());
             info.setExceptionstate(2); //已分配责任人
+            info.setExceptiontype(exceptionhandlerinfo.getExceptiontype());
+            info.setExceptionlever(exceptionhandlerinfo.getExceptionlever());
             int result=exceptionhandlerinfoService.updateByExample(info,example);
+
             //发送异常报告给负责人
-            //commonService.sendReportEmail(taskReportInfo.getTaskid(),info.getReportid());
+            commonService.sendReportEmail(info.getReportid(),info.getReportcontentid());
             return result;
         }
         return 0;

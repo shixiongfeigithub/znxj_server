@@ -48,6 +48,7 @@
                             </h2>
                         </div>
                         <div class="box-content">
+                            <span style="color: #9a161a">${message}</span>
                             <form action="addinterface" method="post" id="form2" onsubmit="return validateForm()">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>

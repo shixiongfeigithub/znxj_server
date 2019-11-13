@@ -13,16 +13,20 @@
         function tasknum(){
             var siteid = $("#name2 option:selected")[0].value;
             var type="";
-            $("#taskid").empty();
-            $.ajax({
-                type : "GET",
-                url : "taskbysiteandtype?searchtype="+type+"&siteid="+siteid,
-                success : function(task){
-                    for(var i=0;i<task.length;i++){
-                        $("#taskid").append("<option  value='"+task[i].id+"' >"+task[i].customid+"</option>");
+            if(siteid ==null || siteid==''){
+                $("#taskid").append("<option  value='' selected>--请选择--</option>");
+            }else {
+                $("#taskid").empty();
+                $.ajax({
+                    type: "GET",
+                    url: "taskbysiteandtype?searchtype=" + type + "&siteid=" + siteid,
+                    success: function (task) {
+                        for (var i = 0; i < task.length; i++) {
+                            $("#taskid").append("<option  value='" + task[i].id + "' >" + task[i].customid + "</option>");
+                        }
                     }
-                }
-            })
+                })
+            }
         }
         function validateForm(){
             var siteid = $("#name2").val();
@@ -69,6 +73,7 @@
                             </h2>
                         </div>
                         <div class="box-content">
+                            <span style="color: #9a161a">${message}</span>
                             <form action="addtaskupload" method="post" id="form2" onsubmit="return validateForm()">
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>

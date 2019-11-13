@@ -106,7 +106,18 @@ public class WebInterfaceController {
      * @return
      */
     @RequestMapping("addinterface")
-    public String addinterface(Interfaceengine engine, HttpSession session){
+    public String addinterface(Model m,Interfaceengine engine, HttpSession session){
+
+        InterfaceengineExample example = new InterfaceengineExample();
+        example.createCriteria().andSiteidEqualTo(engine.getSiteid());
+        List<Interfaceengine> list = interfaceService.selectByExample(example);
+        if(list!=null && list.size()>0){
+            Admininfo admininfo=(Admininfo) session.getAttribute("userInfo");
+            List<Siteareainfo> siteareainfos=siteService.selectByExample2(admininfo.getSiteid());
+            m.addAttribute("siteareainfos",siteareainfos);
+            m.addAttribute("message","一个厂区只能添加一次，不能重复添加！");
+            return "addinterface";
+        }
         engine.setCreatettime(new Date());
         int addresult=interfaceService.insert(engine);
         //获取登录用户的信息
