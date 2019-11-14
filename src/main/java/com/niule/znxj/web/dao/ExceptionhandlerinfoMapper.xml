@@ -20,6 +20,13 @@
     <result column="frequency" jdbcType="INTEGER" property="frequency" />
     <result column="uploadstate" jdbcType="INTEGER" property="uploadstate" />
     <result column="uploadtime" jdbcType="TIMESTAMP" property="uploadtime" />
+
+    <result column="equipname" jdbcType="VARCHAR" property="equipname" />
+    <result column="checkname" jdbcType="VARCHAR" property="checkname" />
+    <result column="reportimg" jdbcType="VARCHAR" property="reportimg" />
+    <result column="worker" jdbcType="VARCHAR" property="worker" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="donetime" jdbcType="TIMESTAMP" property="donetime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -415,4 +422,15 @@
       uploadtime = #{uploadtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByReportId" parameterType="java.lang.Long">
+    SELECT
+     e.* ,r.equipname,r.checkname,r.img reportimg ,t.donetime,t.worker,a.username
+    FROM
+        exceptionhandlerinfo e
+    LEFT JOIN reportcontent r ON e.reportcontentid= r.id
+    LEFT JOIN taskreportinfo t ON e.reportid = t.id
+    LEFT JOIN admininfo a ON e.checkuserid = a.id
+    WHERE e.uploadstate=0 AND e.reportid = #{reportid}
+  </select>
 </mapper>

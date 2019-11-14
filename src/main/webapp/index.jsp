@@ -63,7 +63,7 @@
                     <a href="#"><i class=" glyphicon glyphicon-certificate"></i><span> 异常报告管理</span></a>
                     <ul class="nav nav-pills nav-stacked">
                         <li><shiro:hasPermission name="item:exceptionreport"><a href="showexceptionreport?page=1&type=0" target="center"><%--<i class="glyphicon glyphicon-cog"></i>--%>巡检异常</a></shiro:hasPermission></li>
-                        <li><shiro:hasPermission name="item:exceptionhse"><a href="showexceptionhse?page=1&type=1"  target="center"><%--<i class="glyphicon glyphicon-zoom-in"></i>--%>HSE隐患异常</a></shiro:hasPermission></li>
+                        <%--<li><shiro:hasPermission name="item:exceptionhse"><a href="showexceptionhse?page=1&type=1"  target="center">&lt;%&ndash;<i class="glyphicon glyphicon-zoom-in"></i>&ndash;%&gt;HSE隐患异常</a></shiro:hasPermission></li>--%>
                     </ul>
                 </li>
                 <li class="accordion" id="knowManager">

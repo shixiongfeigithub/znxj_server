@@ -6,10 +6,13 @@ import com.github.pagehelper.PageInfo;
 import com.niule.znxj.core.common.Resources;
 import com.niule.znxj.core.entity.JSONResult;
 import com.niule.znxj.core.entity.Result;
+import com.niule.znxj.core.entity.Xjjl;
+import com.niule.znxj.core.entity.Yhjl;
 import com.niule.znxj.core.util.*;
 import com.niule.znxj.core.util.json.JsonUtil;
 import com.niule.znxj.web.dao.*;
 import com.niule.znxj.web.model.*;
+import com.niule.znxj.web.model.response.RestfulResponse;
 import com.niule.znxj.web.model.response.TaskSimpleReport;
 import com.niule.znxj.web.model.taskcontent.TaskArea;
 import com.niule.znxj.web.model.taskcontent.TaskContent;
@@ -18,6 +21,7 @@ import com.niule.znxj.web.model.taskresponse.TaskTempRes;
 import com.niule.znxj.web.service.CommonService;
 import com.niule.znxj.web.service.SendEmailService;
 import net.sf.json.JSONObject;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -62,6 +66,8 @@ public class CommonServiceImpl implements CommonService {
     private ContactinfoMapper contactinfoMapper;
     @Resource
     private  ExceptionhandlerinfoMapper exceptionhandlerinfoMapper;
+    @Resource
+    private UploadtaskinfoMapper uploadtaskinfoMapper;
     @Resource
     private AdmininfoMapper admininfoMapper;
 
@@ -514,8 +520,6 @@ public class CommonServiceImpl implements CommonService {
                 }
                 //存在异常发送邮件
                 if (hasException) {
-                    //初始化任务报告异常汇总表（exceptionhandlerinfo） qbxu add 20191106
-                    //exceptionhandlerinfoMapper.insert(exceptionhandlerinfo);
                     sendExceptionEmail(taskreportinfo.getId(), taskreportinfo.getTaskid());
                 }
             }
@@ -972,4 +976,116 @@ public class CommonServiceImpl implements CommonService {
         }
     }
 
+    @Override
+    public void uploadTaskReportInfo() {
+        //1、查询需要发送的任务报告
+        UploadtaskinfoExample example = new UploadtaskinfoExample();
+        example.createCriteria().andStateEqualTo(0).andEnginetypeEqualTo("1");//苏州公司接口
+        List<Uploadtaskinfo> uploadtaskinfoList = uploadtaskinfoMapper.selectByExample(example);
+
+        String uploadMethod = "system/hotsync/yhjl";
+        if(uploadtaskinfoList!=null && uploadtaskinfoList.size()>0){
+            for(Uploadtaskinfo uploadtaskinfo : uploadtaskinfoList) {
+                List<Xjjl> xjjlList = new ArrayList<Xjjl>();
+                Xjjl xjjl = new Xjjl();
+                Taskreportinfo taskreportinfo = taskreportinfoMapper.selectTaskReportInfo(uploadtaskinfo.getReportid());
+                xjjl.setFlag(taskreportinfo.getId() + "");
+                xjjl.setCheckpointname(taskreportinfo.getTaskdesc());
+                xjjl.setCheckorder(taskreportinfo.getTaskcode());
+                xjjl.setCreatetime(DateUtils.parseDateToStr(taskreportinfo.getDonetime(), "yyyy-MM-dd hh:mm:ss"));
+                xjjl.setCheckperson(taskreportinfo.getWorker());
+                xjjlList.add(xjjl);
+
+                try {
+                    String resultStr = HttpClientUtils.httpPost(uploadtaskinfo.getAddress() + uploadMethod, JsonUtil.toJSON(xjjlList));
+                    System.out.println("result ====" + resultStr);
+                    RestfulResponse response = JsonUtil.toObject(resultStr, RestfulResponse.class);
+                    uploadtaskinfo.setUploadtime(new Date());
+                    if (response.getStatus()) {
+                        uploadtaskinfo.setState(1);
+                        uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
+                    } else {
+                        uploadtaskinfo.setState(2);
+                        uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
+                        //发送邮件
+                        //获取发件人邮箱和授权码
+                        List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
+                        List<String> emails = new ArrayList<>();
+                        if (sendemails != null && sendemails.size() > 0) {
+                            Sendemail sendemail = sendemails.get(0);
+                            emails.add(uploadtaskinfo.getEmail());
+                            String content = "上传巡检记录失败，请查看！";
+                            EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检记录上传", content);
+                        }
+                    }
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
+    }
+
+    @Override
+    public void uploadExceptionReport() {
+        //1、查询已经上传成功的巡检任务报告
+        UploadtaskinfoExample example = new UploadtaskinfoExample();
+        example.createCriteria().andUploadtimeEqualTo(new Date()).andStateEqualTo(1).andEnginetypeEqualTo("1");//苏州公司接口
+        List<Uploadtaskinfo> uploadtaskinfoList = uploadtaskinfoMapper.selectByExample(example);
+        String uploadMethod = "system/hotsync/yhjl";
+        for(Uploadtaskinfo uploadtaskinfo : uploadtaskinfoList) {
+            //查询未上报的异常巡检项
+            List<Exceptionhandlerinfo> exceptionhandlerinfoList = exceptionhandlerinfoMapper.selectByReportId(uploadtaskinfo.getReportid());
+            List<Yhjl> yhjlList = new ArrayList<>();
+            for(Exceptionhandlerinfo info: exceptionhandlerinfoList){
+                Yhjl yhjl = new Yhjl();
+                yhjl.setCheckresult_flag(info.getReportid()+"");
+                yhjl.setCheckpointname(info.getEquipname());
+                yhjl.setCheckcontent(info.getCheckname());
+                yhjl.setDangerstatus(info.getExceptionstate()+"");
+                yhjl.setFindperson(info.getWorker());
+                yhjl.setCreatetime(DateUtils.parseDateToStr(info.getDonetime(),"yyyy-MM-dd hh:mm:ss"));
+                yhjl.setHandletime(DateUtils.parseDateToStr(info.getAppointedtime(),"yyyy-MM-dd hh:mm:ss"));
+                yhjl.setHandlepersons(info.getUsername());
+                yhjl.setDangerdesc("");//隐患备注
+                yhjl.setDangerfj(""); //隐患附件
+                yhjl.setReformperson(info.getOperatorname());
+                yhjl.setReformdesc(""); //整改备注
+                yhjl.setReformfj(""); //整改附件
+                yhjl.setReformtime(DateUtils.parseDateToStr(info.getExceptionclosetime(),"yyyy-MM-dd hh:mm:ss"));
+                yhjlList.add(yhjl);
+            }
+            /*try {
+                String resultStr = HttpClientUtils.httpPost(uploadtaskinfo.getAddress() + uploadMethod, JsonUtil.toJSON(yhjlList));
+                System.out.println("result ====" + resultStr);
+                RestfulResponse response = JsonUtil.toObject(resultStr, RestfulResponse.class);
+                uploadtaskinfo.setUploadtime(new Date());
+                if (response.getStatus()) {
+                    uploadtaskinfo.setState(1);
+                    uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
+                } else {
+                    uploadtaskinfo.setState(2);
+                    uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
+                    //发送邮件
+                    //获取发件人邮箱和授权码
+                    List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
+                    List<String> emails = new ArrayList<>();
+                    if (sendemails != null && sendemails.size() > 0) {
+                        Sendemail sendemail = sendemails.get(0);
+                        emails.add(uploadtaskinfo.getEmail());
+                        String content = "上传巡检记录失败，请查看！";
+                        EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检记录上传", content);
+                    }
+                }
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }*/
+
+        }
+
+    }
 }

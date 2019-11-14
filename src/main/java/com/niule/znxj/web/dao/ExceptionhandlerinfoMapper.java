@@ -18,6 +18,8 @@ public interface ExceptionhandlerinfoMapper {
 
     List<Exceptionhandlerinfo> selectByExample(ExceptionhandlerinfoExample example);
 
+    List<Exceptionhandlerinfo> selectByReportId(Long id);
+
     Exceptionhandlerinfo selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") Exceptionhandlerinfo record, @Param("example") ExceptionhandlerinfoExample example);
@@ -27,4 +29,5 @@ public interface ExceptionhandlerinfoMapper {
     int updateByPrimaryKeySelective(Exceptionhandlerinfo record);
 
     int updateByPrimaryKey(Exceptionhandlerinfo record);
+
 }

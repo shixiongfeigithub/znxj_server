@@ -15,6 +15,9 @@ public class Xjjl {
     private String createtime; //检查时间（2019-11-04 16:24:56）
     private String note; //巡检备注
 
+    public Xjjl() {
+    }
+
     public Xjjl(String flag, String checkorder, String checkperson, String checkfj, String checkpointname, String checkresult, String createtime, String note) {
         this.flag = flag;
         this.checkorder = checkorder;

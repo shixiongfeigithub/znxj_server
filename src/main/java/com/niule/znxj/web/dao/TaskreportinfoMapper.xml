@@ -50,6 +50,18 @@
     <result column="logcat" property="logcat" jdbcType="LONGVARCHAR" />
   </resultMap>
 
+  <resultMap id="NewBaseResultMap" type="com.niule.znxj.web.model.Taskreportinfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="taskid" property="taskid" jdbcType="BIGINT" />
+    <result column="donetime" property="donetime" jdbcType="TIMESTAMP" />
+    <result column="tasktype" property="tasktype" jdbcType="INTEGER" />
+    <result column="worker" property="worker" jdbcType="VARCHAR" />
+    <result column="taskcode" property="taskcode" jdbcType="VARCHAR" />
+    <result column="taskdesc" property="taskdesc" jdbcType="VARCHAR" />
+    <result column="customid" property="customid" jdbcType="VARCHAR" />
+    <result column="identifyingid" property="identifyingid" jdbcType="identifyingid" />
+  </resultMap>
+
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -130,6 +142,12 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+  </select>
+  <select id="selectTaskReportInfo" resultMap="NewBaseResultMap" parameterType="java.lang.Long" >
+    select ter.id,ter.taskid,ter.tasktype,ter.taskcode,ter.donetime,ter.worker,t.taskdesc,t.customid,t.identifyingid
+    from taskreportinfo ter
+    left join taskplaninfo t on ter.taskid=t.id
+    where ter.id=#{id}
   </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.TaskreportinfoExample" >
     select

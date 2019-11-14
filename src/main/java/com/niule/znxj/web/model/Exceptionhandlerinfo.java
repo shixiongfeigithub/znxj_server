@@ -39,6 +39,61 @@ public class Exceptionhandlerinfo {
 
     private Date uploadtime;
 
+    private String equipname;
+    private String checkname;
+    private String reportimg;
+    private String worker;
+    private String username;
+    private Date donetime;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEquipname() {
+        return equipname;
+    }
+
+    public void setEquipname(String equipname) {
+        this.equipname = equipname;
+    }
+
+    public String getCheckname() {
+        return checkname;
+    }
+
+    public void setCheckname(String checkname) {
+        this.checkname = checkname;
+    }
+
+    public String getReportimg() {
+        return reportimg;
+    }
+
+    public void setReportimg(String reportimg) {
+        this.reportimg = reportimg;
+    }
+
+    public String getWorker() {
+        return worker;
+    }
+
+    public void setWorker(String worker) {
+        this.worker = worker;
+    }
+
+    public Date getDonetime() {
+        return donetime;
+    }
+
+    public void setDonetime(Date donetime) {
+        this.donetime = donetime;
+    }
+
     public Long getId() {
         return id;
     }

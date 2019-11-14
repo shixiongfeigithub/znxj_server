@@ -176,7 +176,6 @@
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
     order by r.id DESC
   </select>
-
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
     <include refid="Base_Column_List" />

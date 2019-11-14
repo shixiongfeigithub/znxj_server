@@ -58,8 +58,35 @@ public class Taskreportinfo {
 
     private Date exceptionclosetime;
 
-
     private Date operatorname;
+
+    private String taskdesc;
+    private String customid;
+    private String identifyingid;
+
+    public String getTaskdesc() {
+        return taskdesc;
+    }
+
+    public void setTaskdesc(String taskdesc) {
+        this.taskdesc = taskdesc;
+    }
+
+    public String getCustomid() {
+        return customid;
+    }
+
+    public void setCustomid(String customid) {
+        this.customid = customid;
+    }
+
+    public String getIdentifyingid() {
+        return identifyingid;
+    }
+
+    public void setIdentifyingid(String identifyingid) {
+        this.identifyingid = identifyingid;
+    }
 
     public Integer getExceptionstate() {
         return exceptionstate;

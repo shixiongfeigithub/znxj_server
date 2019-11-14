@@ -22,6 +22,8 @@ public interface TaskreportinfoMapper {
 
     int insertSelective(TaskreportinfoWithBLOBs record);
 
+    Taskreportinfo selectTaskReportInfo(Long id);
+
     List<TaskreportinfoWithBLOBs> selectByExampleWithBLOBs(TaskreportinfoExample example);
 
     List<Taskreportinfo> selectByExample(TaskreportinfoExample example);

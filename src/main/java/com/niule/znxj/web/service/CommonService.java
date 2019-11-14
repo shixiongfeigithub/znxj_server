@@ -70,6 +70,9 @@ public interface CommonService {
     void sendReportEmail(Long reportid,Long reportcontentid);
 
     Result doTask(Long userId, Long taskId);
-
+    //上传巡检记录
+    void uploadTaskReportInfo();
+    //上传巡检异常记录
+    void uploadExceptionReport();
 }
 
