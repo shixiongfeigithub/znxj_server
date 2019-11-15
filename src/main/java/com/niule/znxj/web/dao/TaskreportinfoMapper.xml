@@ -59,7 +59,7 @@
     <result column="taskcode" property="taskcode" jdbcType="VARCHAR" />
     <result column="taskdesc" property="taskdesc" jdbcType="VARCHAR" />
     <result column="customid" property="customid" jdbcType="VARCHAR" />
-    <result column="identifyingid" property="identifyingid" jdbcType="identifyingid" />
+    <result column="identifyingid" property="identifyingid" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Example_Where_Clause" >
