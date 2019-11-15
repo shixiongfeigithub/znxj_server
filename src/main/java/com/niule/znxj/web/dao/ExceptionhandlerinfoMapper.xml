@@ -422,7 +422,16 @@
       uploadtime = #{uploadtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
+  <update id="updateByReportId" parameterType="map">
+    update exceptionhandlerinfo
+    set uploadstate = #{uploadstate,jdbcType=INTEGER},
+      uploadtime = now()
+    where reportid = #{reportid,jdbcType=BIGINT}
+    and reportcontentid in
+    <foreach collection="reportcontentids"  item="reportcontentid" open="(" separator="," close=")" >
+      #{reportcontentid}
+    </foreach>
+  </update>
   <select id="selectByReportId" parameterType="java.lang.Long">
     SELECT
      e.* ,r.equipname,r.checkname,r.img reportimg ,t.donetime,t.worker,a.username

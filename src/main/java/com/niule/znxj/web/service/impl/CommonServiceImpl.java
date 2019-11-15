@@ -14,6 +14,7 @@ import com.niule.znxj.web.dao.*;
 import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.model.response.RestfulResponse;
 import com.niule.znxj.web.model.response.TaskSimpleReport;
+import com.niule.znxj.web.model.response.UploadFileResponse;
 import com.niule.znxj.web.model.taskcontent.TaskArea;
 import com.niule.znxj.web.model.taskcontent.TaskContent;
 import com.niule.znxj.web.model.taskcontent.TaskEquipment;
@@ -25,6 +26,7 @@ import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -983,7 +985,7 @@ public class CommonServiceImpl implements CommonService {
         example.createCriteria().andStateEqualTo(0).andEnginetypeEqualTo("1");//苏州公司接口
         List<Uploadtaskinfo> uploadtaskinfoList = uploadtaskinfoMapper.selectByExample(example);
 
-        String uploadMethod = "system/hotsync/yhjl";
+        String uploadMethod = "system/hotsync/xjjl";
         if(uploadtaskinfoList!=null && uploadtaskinfoList.size()>0){
             for(Uploadtaskinfo uploadtaskinfo : uploadtaskinfoList) {
                 List<Xjjl> xjjlList = new ArrayList<Xjjl>();
@@ -1039,36 +1041,44 @@ public class CommonServiceImpl implements CommonService {
         for(Uploadtaskinfo uploadtaskinfo : uploadtaskinfoList) {
             //查询未上报的异常巡检项
             List<Exceptionhandlerinfo> exceptionhandlerinfoList = exceptionhandlerinfoMapper.selectByReportId(uploadtaskinfo.getReportid());
+             List<Long> reportcontentidList = new ArrayList<Long>();
             List<Yhjl> yhjlList = new ArrayList<>();
-            for(Exceptionhandlerinfo info: exceptionhandlerinfoList){
-                Yhjl yhjl = new Yhjl();
-                yhjl.setCheckresult_flag(info.getReportid()+"");
-                yhjl.setCheckpointname(info.getEquipname());
-                yhjl.setCheckcontent(info.getCheckname());
-                yhjl.setDangerstatus(info.getExceptionstate()+"");
-                yhjl.setFindperson(info.getWorker());
-                yhjl.setCreatetime(DateUtils.parseDateToStr(info.getDonetime(),"yyyy-MM-dd hh:mm:ss"));
-                yhjl.setHandletime(DateUtils.parseDateToStr(info.getAppointedtime(),"yyyy-MM-dd hh:mm:ss"));
-                yhjl.setHandlepersons(info.getUsername());
-                yhjl.setDangerdesc("");//隐患备注
-                yhjl.setDangerfj(""); //隐患附件
-                yhjl.setReformperson(info.getOperatorname());
-                yhjl.setReformdesc(""); //整改备注
-                yhjl.setReformfj(""); //整改附件
-                yhjl.setReformtime(DateUtils.parseDateToStr(info.getExceptionclosetime(),"yyyy-MM-dd hh:mm:ss"));
-                yhjlList.add(yhjl);
-            }
-            /*try {
+            try {
+                for(Exceptionhandlerinfo info: exceptionhandlerinfoList){
+                    if(info.getExceptiontype()==1 && info.getExceptionlever()==2){ //暂定异常类型为1，异常级别为2的需要上报（测试）
+                        Yhjl yhjl = new Yhjl();
+                        yhjl.setCheckresult_flag(info.getReportid()+"");
+                        yhjl.setCheckpointname(info.getEquipname());
+                        yhjl.setCheckcontent(info.getCheckname());
+                        yhjl.setDangerstatus(info.getExceptionstate()+"");
+                        yhjl.setFindperson(info.getWorker());
+                        yhjl.setCreatetime(DateUtils.parseDateToStr(info.getDonetime(),"yyyy-MM-dd hh:mm:ss"));
+                        yhjl.setHandletime(DateUtils.parseDateToStr(info.getAppointedtime(),"yyyy-MM-dd hh:mm:ss"));
+                        yhjl.setHandlepersons(info.getUsername());
+                        yhjl.setDangerdesc("");//隐患备注
+                        yhjl.setDangerfj(getImgUrl(uploadtaskinfo.getAddress(),info.getReportimg())); //隐患附件
+                        yhjl.setReformperson(info.getOperatorname());
+                        yhjl.setReformdesc(""); //整改备注
+                        yhjl.setReformfj(getImgUrl(uploadtaskinfo.getAddress(),info.getAttachment())); //整改附件
+                        yhjl.setReformtime(DateUtils.parseDateToStr(info.getExceptionclosetime(),"yyyy-MM-dd hh:mm:ss"));
+                        yhjlList.add(yhjl);
+                        reportcontentidList.add(info.getReportcontentid());
+                    }
+
+                }
+
                 String resultStr = HttpClientUtils.httpPost(uploadtaskinfo.getAddress() + uploadMethod, JsonUtil.toJSON(yhjlList));
                 System.out.println("result ====" + resultStr);
                 RestfulResponse response = JsonUtil.toObject(resultStr, RestfulResponse.class);
-                uploadtaskinfo.setUploadtime(new Date());
+                HashMap<String,Object> param = new HashMap<String,Object>();
+                param.put("reportid",uploadtaskinfo.getReportid());
+                param.put("reportcontentids", reportcontentidList);
                 if (response.getStatus()) {
-                    uploadtaskinfo.setState(1);
-                    uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
+                    param.put("uploadstate",1);
+                    exceptionhandlerinfoMapper.updateByReportId(param);
                 } else {
-                    uploadtaskinfo.setState(2);
-                    uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
+                    param.put("uploadstate",2);
+                    exceptionhandlerinfoMapper.updateByReportId(param);
                     //发送邮件
                     //获取发件人邮箱和授权码
                     List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
@@ -1076,16 +1086,39 @@ public class CommonServiceImpl implements CommonService {
                     if (sendemails != null && sendemails.size() > 0) {
                         Sendemail sendemail = sendemails.get(0);
                         emails.add(uploadtaskinfo.getEmail());
-                        String content = "上传巡检记录失败，请查看！";
-                        EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检记录上传", content);
+                        String content = "上传巡检异常记录失败，请查看！";
+                        EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检异常记录上传", content);
                     }
                 }
-
             }catch(Exception e){
                 e.printStackTrace();
-            }*/
+            }
 
         }
 
+    }
+
+    public String getImgUrl(String urlAddress,String imgStr) throws Exception{
+
+        String imgurl = "";
+        if (imgStr==null || "[]".equals(imgStr) || "null".equals(imgStr) || "".equals(imgStr)){
+            return imgurl;
+        }
+
+        String uploadFileMethod = "appupload/uploadfile";
+        List<String> imgList = JsonUtil.toObject(imgStr,String.class);
+        for (String str: imgList){
+            String filePath = Resources.ApplicationResources.getString("file.path")+imgStr;
+            String url = urlAddress + uploadFileMethod;
+			String resultStr = HttpClientUtils.uploadFile(url,filePath);
+            UploadFileResponse response = JsonUtil.toObject(resultStr, UploadFileResponse.class);
+            if (response.getError()==0) {
+                imgurl+=response.getUrl()+",";
+            } else {
+                System.out.println("===========img:"+str+" upload error!");
+            }
+        }
+        imgurl = imgurl.substring(0,imgurl.length()-1);
+        return imgurl;
     }
 }
