@@ -29,9 +29,9 @@ public class Exceptionhandlerinfo {
 
     private Integer exceptionstate;
 
-    private Integer exceptiontype;
+    private String exceptiontype;
 
-    private Integer exceptionlever;
+    private String exceptionlever;
 
     private Integer frequency;
 
@@ -198,19 +198,19 @@ public class Exceptionhandlerinfo {
         this.exceptionstate = exceptionstate;
     }
 
-    public Integer getExceptiontype() {
+    public String getExceptiontype() {
         return exceptiontype;
     }
 
-    public void setExceptiontype(Integer exceptiontype) {
+    public void setExceptiontype(String exceptiontype) {
         this.exceptiontype = exceptiontype;
     }
 
-    public Integer getExceptionlever() {
+    public String getExceptionlever() {
         return exceptionlever;
     }
 
-    public void setExceptionlever(Integer exceptionlever) {
+    public void setExceptionlever(String exceptionlever) {
         this.exceptionlever = exceptionlever;
     }
 

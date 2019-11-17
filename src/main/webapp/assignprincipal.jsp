@@ -62,10 +62,10 @@
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="operatorid">操作员:</label>
+                                            <label class="control-label" for="operatorid">问题处理责任人:</label>
                                             <select name="operatorid" id="operatorid" class="form-control" required>
                                                 <c:forEach items="${operationuserList}" var="user">
-                                                    <option value="${user.id}">${user.username}</option>
+                                                    <option value="${user.id}">${user.realname}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
@@ -75,7 +75,7 @@
                                             <label class="control-label" for="exceptiontype">异常类型:</label>
                                             <select name="exceptiontype" id="exceptiontype" class="form-control" required>
                                                 <c:forEach items="${exceptiontypeList}" var="type">
-                                                    <option value="${type.id}">${type.name}</option>
+                                                    <option value="${type.name}">${type.name}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
@@ -85,7 +85,7 @@
                                             <label class="control-label" for="exceptionlever">异常等级:</label>
                                             <select name="exceptionlever" id="exceptionlever" class="form-control" required>
                                                 <c:forEach items="${levertype1List}" var="lever">
-                                                    <option value="${lever.id}">${lever.name}</option>
+                                                    <option value="${lever.name}">${lever.name}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>

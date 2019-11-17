@@ -33,5 +33,5 @@ public interface ExceptionhandlerinfoMapper {
     int updateByPrimaryKey(Exceptionhandlerinfo record);
 
     int updateByReportId(HashMap<String,Object> map);
-
+    Exceptionhandlerinfo selectInfoById(Long id);
 }

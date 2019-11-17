@@ -560,6 +560,10 @@ public class TaskreportServiceImpl implements TaskreportService {
     public int countReportcontentByParam(HashMap<String, Object> map) {
         return reportcontentMapper.countByExample2(map);
     }
+    @Override
+   public int countReportcontentByExceptionState(HashMap<String, Object> map){
+        return reportcontentMapper.countByExample3(map);
+   }
 
     public int insertSelective(String username, String operate) {
         Operatelog operatelog = new Operatelog();

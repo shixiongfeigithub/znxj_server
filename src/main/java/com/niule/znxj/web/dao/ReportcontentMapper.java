@@ -37,4 +37,5 @@ public interface ReportcontentMapper {
     List<Reportcontent> selectByExample2(HashMap<String, Object> map);
 
     int countByExample2(HashMap<String, Object> map);
+    int countByExample3(HashMap<String, Object> map);
 }

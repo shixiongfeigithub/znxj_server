@@ -1,5 +1,7 @@
 package com.niule.znxj.web.model;
 
+import java.util.Date;
+
 public class Reportcontent {
     private Integer id;
 
@@ -58,6 +60,16 @@ public class Reportcontent {
     private String exceptionstate;
     private String firstValue;
 
+    private Date reporttime;
+
+    private Date appointedtime;
+
+    private Date exceptionclosetime;
+
+    private String exceptiontype;
+
+    private String exceptionlever;
+
     private Taskreportinfo report;
 
     private Long userid;
@@ -115,6 +127,46 @@ public class Reportcontent {
 
     public void setExceptionstate(String exceptionstate) {
         this.exceptionstate = exceptionstate;
+    }
+
+    public Date getReporttime() {
+        return reporttime;
+    }
+
+    public void setReporttime(Date reporttime) {
+        this.reporttime = reporttime;
+    }
+
+    public Date getAppointedtime() {
+        return appointedtime;
+    }
+
+    public void setAppointedtime(Date appointedtime) {
+        this.appointedtime = appointedtime;
+    }
+
+    public Date getExceptionclosetime() {
+        return exceptionclosetime;
+    }
+
+    public void setExceptionclosetime(Date exceptionclosetime) {
+        this.exceptionclosetime = exceptionclosetime;
+    }
+
+    public String getExceptiontype() {
+        return exceptiontype;
+    }
+
+    public void setExceptiontype(String exceptiontype) {
+        this.exceptiontype = exceptiontype;
+    }
+
+    public String getExceptionlever() {
+        return exceptionlever;
+    }
+
+    public void setExceptionlever(String exceptionlever) {
+        this.exceptionlever = exceptionlever;
     }
 
     public Taskreportinfo getReport() {

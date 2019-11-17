@@ -30,6 +30,8 @@
                                                 <option value="0">隐患类型</option>
                                                 <option value="1">隐患等级</option>
                                                 <option value="2">终止原因</option>
+                                                <option value="3">异常类型</option>
+                                                <option value="4">异常等级</option>
                                             </select>
                                         </td>
                                     </tr>

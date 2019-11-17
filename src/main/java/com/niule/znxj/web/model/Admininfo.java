@@ -24,11 +24,21 @@ public class Admininfo {
 
     private String email;
 
+    private String realname;
+
     private Integer roleid;
 
     private Integer siteid;
     private Roles roles;
     private Siteareainfo site;
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
 
     public Siteareainfo getSite() {
         return site;

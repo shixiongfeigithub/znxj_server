@@ -46,6 +46,7 @@
                                                 <option ${editsendemail.type eq 0?"selected":""} value="0">日报</option>
                                                 <option ${editsendemail.type eq 1?"selected":""} value="1">周报</option>
                                                 <option ${editsendemail.type eq 2?"selected":""} value="2">月报</option>
+                                                <option ${editsendemail.type eq 3?"selected":""} value="3">>巡检异常</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -58,13 +59,13 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <%--<tr>
                                         <td class="form-inline" >
                                             <label class="control-label" for="sendexception">
                                                 <input name="sendexception" value="${editsendemail.sendexception}" hidden/>
                                                 <input type="checkbox" id="sendexception"  style="width: 15px;height: 15px;" >是否巡检异常推送</label>
                                         </td>
-                                    </tr>
+                                    </tr>--%>
                                     <script type="text/javascript">
                                         $(function () {
                                             var sendException = $("input[name='sendexception']").val();

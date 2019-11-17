@@ -53,7 +53,10 @@ public class ExceptionhandlerinfoServiceImpl implements ExceptionhandlerinfoServ
     public Exceptionhandlerinfo selectByPrimaryKey(Long id) {
         return exceptionhandlerinfoMapper.selectByPrimaryKey(id);
     }
-
+    @Override
+    public Exceptionhandlerinfo selectInfoById(Long id){
+        return exceptionhandlerinfoMapper.selectInfoById(id);
+    }
     @Override
     public int updateByExampleSelective(Exceptionhandlerinfo record, ExceptionhandlerinfoExample example) {
         return exceptionhandlerinfoMapper.updateByExampleSelective(record,example);

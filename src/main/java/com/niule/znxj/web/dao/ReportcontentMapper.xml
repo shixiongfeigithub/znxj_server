@@ -38,6 +38,11 @@
     <result column="endtime" property="report.endtime" jdbcType="TIMESTAMP" />
     <result column="operatorname" property="operatorname" jdbcType="VARCHAR"/>
     <result column="exceptionstate" property="exceptionstate" jdbcType="INTEGER"/>
+    <result column="reporttime" jdbcType="TIMESTAMP" property="reporttime" />
+    <result column="appointedtime" jdbcType="TIMESTAMP" property="appointedtime" />
+    <result column="exceptionclosetime" jdbcType="TIMESTAMP" property="exceptionclosetime" />
+    <result column="exceptiontype" jdbcType="VARCHAR" property="exceptiontype" />
+    <result column="exceptionlever" jdbcType="VARCHAR" property="exceptionlever" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -115,7 +120,8 @@
     </if>
   </select>
   <select id="selectByExample2" resultMap="BaseResultMap" parameterType="map" >
-    SELECT r.*,t.taskcode,p.customid taskname,s.customid sitename,e.operatorname,e.exceptionstate
+    SELECT r.*,t.taskcode,p.customid taskname,s.customid sitename,e.operatorname,
+    e.exceptionstate,e.reporttime,e.appointedtime,e.exceptionclosetime,e.exceptiontype,e.exceptionlever
     FROM
     reportcontent r
     LEFT JOIN taskreportinfo t ON r.reportid = t.id
@@ -154,6 +160,36 @@
     LEFT JOIN siteareainfo s ON p.siteid = s.id
     LEFT JOIN exceptionhandlerinfo e ON r.id = e.reportcontentid
     WHERE  r.reportstate =1
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="areaname != null and areaname !=''" >
+      and r.areaname =#{areaname}
+    </if>
+    <if test="equipname != null and equipname !=''" >
+      and r.equipname =#{equipname}
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND e.operatorname =#{operatorname}
+    </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and e.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(r.operationtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by r.id DESC
+  </select>
+  <select id="countByExample3" resultType="java.lang.Integer" parameterType="map" >
+    SELECT count(r.id) FROM
+    reportcontent r
+    LEFT JOIN taskreportinfo t ON r.reportid = t.id
+    LEFT JOIN taskplaninfo p ON t.taskid = p.id
+    LEFT JOIN siteareainfo s ON p.siteid = s.id
+    LEFT JOIN exceptionhandlerinfo e ON r.id = e.reportcontentid
+    WHERE  r.reportstate =1 and e.exceptionstate=1
     and s.id in
     <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
       #{siteid}

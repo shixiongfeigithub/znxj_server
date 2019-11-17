@@ -15,8 +15,8 @@
     <result column="appointedtime" jdbcType="TIMESTAMP" property="appointedtime" />
     <result column="exceptionclosetime" jdbcType="TIMESTAMP" property="exceptionclosetime" />
     <result column="exceptionstate" jdbcType="INTEGER" property="exceptionstate" />
-    <result column="exceptiontype" jdbcType="INTEGER" property="exceptiontype" />
-    <result column="exceptionlever" jdbcType="INTEGER" property="exceptionlever" />
+    <result column="exceptiontype" jdbcType="VARCHAR" property="exceptiontype" />
+    <result column="exceptionlever" jdbcType="VARCHAR" property="exceptionlever" />
     <result column="frequency" jdbcType="INTEGER" property="frequency" />
     <result column="uploadstate" jdbcType="INTEGER" property="uploadstate" />
     <result column="uploadtime" jdbcType="TIMESTAMP" property="uploadtime" />
@@ -432,7 +432,7 @@
       #{reportcontentid}
     </foreach>
   </update>
-  <select id="selectByReportId" parameterType="java.lang.Long">
+  <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.Long">
     SELECT
      e.* ,r.equipname,r.checkname,r.img reportimg ,t.donetime,t.worker,a.username
     FROM
@@ -441,5 +441,15 @@
     LEFT JOIN taskreportinfo t ON e.reportid = t.id
     LEFT JOIN admininfo a ON e.checkuserid = a.id
     WHERE e.uploadstate=0 AND e.reportid = #{reportid}
+  </select>
+
+  <select id="selectInfoById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    SELECT
+     e.* ,r.checkname,a.username
+    FROM
+        exceptionhandlerinfo e
+    LEFT JOIN reportcontent r ON e.reportcontentid= r.id
+    LEFT JOIN admininfo a ON e.checkuserid = a.id
+    WHERE e.reportcontentid = #{id}
   </select>
 </mapper>

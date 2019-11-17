@@ -44,7 +44,7 @@
                                                 <option value="0">日报</option>
                                                 <option value="1">周报</option>
                                                 <option value="2">月报</option>
-                                                <option value="3">异常报告</option>
+                                                <option value="3">巡检异常</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -57,14 +57,14 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <%--<tr>
                                         <td class="form-inline">
                                             <label class="control-label">
                                                 <input type="checkbox" name="sendexception" id="sendexception" style="width: 15px;height: 15px;">是否巡检异常推送</label>
                                         </td>
-                                    </tr>
+                                    </tr>--%>
                                     
-                                    <script type="text/javascript">
+                                    <%--<script type="text/javascript">
                                         $(function () {
                                             $("#sendexception").click(function () {
                                                 if($("#sendexception").is(":checked")){
@@ -74,7 +74,7 @@
                                                 }
                                             });
                                         });
-                                    </script>
+                                    </script>--%>
                                     <tr>
                                         <td><h4>选择发送人:<input type="checkbox" name="role" id="role" onclick="selectallrole(this,'selectedpersion')" style="width: 16px;height: 16px;"> 全选/全不选</h4><br/>
                                             <c:forEach items="${contactinfos}" var="c" varStatus="status">

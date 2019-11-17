@@ -102,6 +102,7 @@ public interface TaskreportService {
     List<Reportcontent> selectReportcontentByParam(HashMap<String,Object> map);
 
     int countReportcontentByParam(HashMap<String, Object> map);
+    int countReportcontentByExceptionState(HashMap<String, Object> map);
 
     Reportcontent selectReportContentByPrimaryKey(Long id);
 }

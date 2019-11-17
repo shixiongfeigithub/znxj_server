@@ -67,7 +67,7 @@ public interface CommonService {
     void automaticExamine();
 
     //发送任务报告（异常）
-    void sendReportEmail(Long reportid,Long reportcontentid);
+    void sendReportEmail(Long userid,Long reportcontentid);
 
     Result doTask(Long userId, Long taskId);
     //上传巡检记录

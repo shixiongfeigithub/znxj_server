@@ -74,6 +74,9 @@
         function assignprincipal(id) {
             window.location="/toassignprincipal?id="+id;
         }
+        function handlerdetail(id){
+            window.location="/handlerexceptiondetail?id="+id;
+        }
     </script>
 </head>
 <body>
@@ -129,7 +132,7 @@
                                             <br>
                                             <label class="control-label" style="margin-top: 10px">执行时间：</label>
                                             <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px" id="time2">
-                                            <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
+                                            <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
                                             <script language="JavaScript">
                                                 Date.prototype.format = function (format) {
                                                     var args = {
@@ -166,66 +169,16 @@
                                         <tr>
                                             <th>操作</th>
                                             <th>厂区</th>
-                                            <c:if test="${areaname==1}">
-                                                <th class="fontcenter">区域</th>
-                                            </c:if>
-                                            <c:if test="${equipname==1}">
-                                                <th class="fontcenter">设备</th>
-                                            </c:if>
-                                            <c:if test="${checkname==1}">
-                                                <th class="fontcenter">巡检项</th>
-                                            </c:if>
-                                            <c:if test="${checktype==1}">
-                                                <th class="fontcenter">巡检项类型</th>
-                                            </c:if>
-                                            <c:if test="${operationtime==1}">
-                                                <th class="fontcenter">执行时间</th>
-                                            </c:if>
-                                            <th class="fontcenter">状态</th>
+                                            <th class="fontcenter">区域</th>
+                                            <th class="fontcenter">设备</th>
+                                            <th class="fontcenter">巡检项</th>
+                                            <th class="fontcenter">异常描述</th>
+                                            <th class="fontcenter">问题上报时间</th>
+                                            <th class="fontcenter">处理状态</th>
                                             <th class="fontcenter">责任人</th>
-                                            <c:if test="${normalmin==1}">
-                                                <th class="fontcenter">低值</th>
-                                            </c:if>
-                                            <c:if test="${normalmax==1}">
-                                                <th class="fontcenter">高值</th>
-                                            </c:if>
-                                            <c:if test="${lowerwarning==1}">
-                                                <th class="fontcenter">告警下限</th>
-                                            </c:if>
-                                            <c:if test="${upperwarning==1}">
-                                                <th class="fontcenter">告警上限</th>
-                                            </c:if>
-                                            <c:if test="${numvalue==1}">
-                                                <th class="fontcenter">报告值</th>
-                                            </c:if>
-                                            <c:if test="${errcontent==1}">
-                                                <th class="fontcenter">异常描述</th>
-                                            </c:if>
-                                            <%--<c:if test="${recordname==1}">
-                                                <th class="fontcenter">数据名称</th>
-                                            </c:if>
-                                            <c:if test="${unitname==1}">
-                                                <th class="unitname">单位</th>
-                                            </c:if>--%>
-                                            <%--<c:if test="${firstval==1}">
-                                                <c:if test="${taskreport==null}">
-                                                    <th class="fontcenter">前次复核值</th>
-                                                </c:if>
-                                                <c:if test="${taskreport.examstate==0}">
-                                                    <th class="fontcenter">前次复核值</th>
-                                                </c:if>
-                                                <c:if test="${taskreport.examstate==1}">
-                                                    <th class="fontcenter">前次复核值(人工)</th>
-                                                </c:if>
-                                                <c:if test="${taskreport.examstate==2}">
-                                                    <th class="fontcenter">前次复核值(自动)</th>
-                                                </c:if>
-                                                &lt;%&ndash;<th class="fontcenter">前次复核值</th>&ndash;%&gt;
-                                            </c:if>--%>
-                                            <c:if test="${checkvalue==1}">
-                                                <th class="fontcenter">复核值</th>
-                                            </c:if>
-                                            <th>异常记录链接</th>
+                                            <th class="fontcenter">关闭时间</th>
+                                            <th class="fontcenter">分类</th>
+                                            <th class="fontcenter">分级</th>
                                         </tr>
                                         <c:forEach items="${pageBean.list}" var="item" varStatus="status">
                                         <input type="hidden" id="img${status.index}" value='${item.img}'>
@@ -233,116 +186,59 @@
                                         <input type="hidden" id="video${status.index}" value='${item.video}'>
                                         <tr>
                                             <td>
-                                                <shiro:hasPermission name="item:closereport">
-                                                    <a href="javascript:;" onclick="closetaskreport('${item.id==null?'':item.id}')">
-                                                        <i class="glyphicon glyphicon-lock"></i></a>&nbsp;
-                                                </shiro:hasPermission>
-                                                <shiro:hasPermission name="item:assignprincipal">
-                                                    <c:if test="${item.exceptionstate != 1}">
-                                                    <a href="javascript:;" onclick="assignprincipal('${item.id==null?'':item.id}')">
-                                                        <i class="glyphicon glyphicon-share"></i></a>
-                                                    </c:if>
-                                                </shiro:hasPermission>
+                                                <c:if test="${item.exceptionstate != 1}">
+                                                    <shiro:hasPermission name="item:closereport">
+                                                        <a href="javascript:;" onclick="closetaskreport('${item.id==null?'':item.id}')">
+                                                            <i class="glyphicon glyphicon-lock"></i></a>&nbsp;
+                                                    </shiro:hasPermission>
+                                                    <shiro:hasPermission name="item:assignprincipal">
+                                                        <a href="javascript:;" onclick="assignprincipal('${item.id==null?'':item.id}')">
+                                                            <i class="glyphicon glyphicon-share"></i></a>
+                                                    </shiro:hasPermission>
+                                                </c:if>
                                             </td>
                                             <td>${item.sitename}</td>
-                                            <c:if test="${areaname==1}">
-                                                <td class="fontcenter">
-                                                    <span>${item.areaname}</span>
-                                                </td>
-                                            </c:if>
-                                            <c:if test="${equipname==1}">
-                                                <td class="fontcenter">
-                                                    <span>${item.equipname}</span>
-                                                </td>
-                                            </c:if>
-                                            <c:if test="${checkname==1}">
-                                                <td class="fontcenter">
-                                                        ${item.checkname}
-                                                </td>
-                                            </c:if>
-
-                                            <c:if test="${checktype==1}">
-                                                <td class="fontcenter">${item.checktype}</td>
-                                            </c:if>
-                                            <c:if test="${operationtime==1}">
-                                                <td class="fontcenter">${item.operationtime}</td>
-                                            </c:if>
+                                            <td class="fontcenter">${item.areaname}</td>
+                                            <td class="fontcenter">${item.equipname}</td>
+                                            <td class="fontcenter">${item.checkname}</td>
                                             <td class="fontcenter">
+                                                <c:if test="${item.checktype == '枚举项'}">
+                                                    <c:if test="${item.enumitem == ''}">-</c:if>
+                                                    <c:if test="${item.enumitem != ''}">${reports.enumitem}</c:if>
+                                                </c:if>
+                                                <c:if test="${item.checktype == '记录项'}">
+                                                    <c:if test="${item.numvalue == ''}">-</c:if>
+                                                    <c:if test="${item.numvalue != ''}">${item.numvalue}!!</c:if>
+                                                </c:if>
+                                                <c:if test="${item.checktype == '状态项'}">
+                                                        <c:if test="${item.reportstate == ''}">-</c:if>
+                                                        <c:if test="${item.reportstate != ''}">
+                                                            <c:if test="${item.reportstate == 1}">
+                                                                <c:if test="${item.img != 'null' or item.audio != 'null' or item.video != 'null'}">
+                                                                    <a href='http://${ip}/toException?img=${item.img}&audio=${item.audio}&video=${item.video}'  target="_Blank">${item.errcontent}</a>
+                                                                </c:if>
+                                                                <c:if test="${item.img == 'null' and item.audio == 'null' and item.video == 'null'}">
+                                                                    ${item.errcontent}
+                                                                </c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.reportstate == 0}">
+                                                                正常
+                                                            </c:if>
+                                                        </c:if>
+                                                </c:if>
+                                            </td>
+                                            <td class="fontcenter">${item.operationtime}</td>
+                                            <td class="fontcenter">
+                                                <a href="javascript:;" onclick="handlerdetail('${item.id==null?'':item.id}')">
                                                 <c:if test="${item.exceptionstate == 0}">待处理</c:if>
                                                 <c:if test="${item.exceptionstate == 1}">已关闭</c:if>
                                                 <c:if test="${item.exceptionstate == 2}">处理中</c:if>
+                                                </a>
                                             </td>
                                             <td class="fontcenter">${item.operatorname}</td>
-                                            <c:if test="${normalmin==1}">
-                                                <td class="fontcenter">${item.normalmin}</td>
-                                            </c:if>
-                                            <c:if test="${normalmax==1}">
-                                                <td class="fontcenter">${item.normalmax}</td>
-                                            </c:if>
-                                            <c:if test="${lowerwarning==1}">
-                                                <td class="fontcenter">${item.lowerwarning}</td>
-                                            </c:if>
-                                            <c:if test="${upperwarning==1}">
-                                                <td class="fontcenter">${item.upperwarning}</td>
-                                            </c:if>
-                                            <c:if test="${numvalue==1}">
-                                                <td class="fontcenter"id="numvalue${status.index}">
-                                                    <c:if test="${item.checktype == '枚举项'}">
-                                                        <c:if test="${item.enumitem == ''}">-</c:if>
-                                                        <c:if test="${item.enumitem != ''}">${reports.enumitem}</c:if>
-                                                    </c:if>
-                                                    <c:if test="${item.checktype == '记录项'}">
-                                                        <c:if test="${item.numvalue == ''}">-</c:if>
-                                                        <c:if test="${item.numvalue != ''}">${item.numvalue}</c:if>
-                                                    </c:if>
-                                                    <c:if test="${item.checktype == '状态项'}">
-                                                        <c:if test="${item.areaskipdesc != null or item.equipmentskipdesc != null}">
-                                                            -
-                                                        </c:if>
-
-                                                        <c:if test="${item.areaskipdesc == null and item.equipmentskipdesc == null}">
-                                                            <c:if test="${item.reportstate == ''}">-</c:if>
-                                                            <c:if test="${item.reportstate != ''}">
-                                                                <c:if test="${item.reportstate == 1}">
-                                                                    异常
-                                                                </c:if>
-                                                                <c:if test="${item.reportstate == 0}">
-                                                                    正常
-                                                                </c:if>
-                                                            </c:if>
-                                                        </c:if>
-
-                                                    </c:if>
-
-                                                </td>
-                                            </c:if>
-                                            <c:if test="${errcontent==1}">
-                                                <td class="fontcenter" id="error${status.index}">${item.errcontent}</td>
-                                            </c:if>
-                                                <%--<c:if test="${recordname==1}">
-                                                    <td class="fontcenter">${item.recordname}</td>
-                                                </c:if>
-                                                <c:if test="${unitname==1}">
-                                                    <td class="fontcenter">${item.unitname}</td>
-                                                </c:if>--%>
-                                                <%--<c:if test="${firstval==1}">
-                                                    <td class="fontcenter" id="first${status.index}">
-                                                        <c:if test="${taskreport==null}">-</c:if>
-                                                    </td>
-                                                </c:if>--%>
-                                                <c:if test="${checkvalue==1}">
-                                                    <td class="fontcenter">
-                                                        <c:if test="${item.checktype=='记录项'}">
-                                                            ${item.checkvalue}
-                                                        </c:if>
-                                                        <c:if test="${item.checktype=='状态项'}">-</c:if>
-                                                    </td>
-                                                </c:if>
-                                            <td>
-                                                <c:if test="${item.img != 'null' or item.audio != 'null' or item.video != 'null'}">
-                                                    <a href='http://${ip}/toException?img=${item.img}&audio=${item.audio}&video=${item.video}'  target="_Blank">查看异常详情</a>
-                                                </c:if>
-                                            </td>
+                                            <td class="fontcenter"><sdf:formatDate value="${item.exceptionclosetime}" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
+                                            <td class="fontcenter">${item.exceptiontype}</td>
+                                            <td class="fontcenter">${item.exceptionlever}</td>
                                         </tr>
                                         </c:forEach>
                                     </table>

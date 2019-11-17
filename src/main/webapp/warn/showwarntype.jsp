@@ -92,6 +92,8 @@
                                                 <c:if test="${warn.type==0}">隐患类型</c:if>
                                                 <c:if test="${warn.type==1}">隐患等级</c:if>
                                                 <c:if test="${warn.type==2}">终止原因</c:if>
+                                                <c:if test="${warn.type==3}">异常类型</c:if>
+                                                <c:if test="${warn.type==4}">异常等级</c:if>
                                             </td>
                                             <td>${warn.name}</td>
                                         </tr>

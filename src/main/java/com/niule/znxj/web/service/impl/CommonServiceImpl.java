@@ -889,7 +889,7 @@ public class CommonServiceImpl implements CommonService {
      */
     public List<Sendemail> getSendExceptionList(Long taskId) {
         SendemailExample sendemailExample = new SendemailExample();
-        sendemailExample.createCriteria().andSendexceptionEqualTo(1).andTaskidEqualTo(taskId);
+        sendemailExample.createCriteria().andTypeEqualTo(3).andTaskidEqualTo(taskId);
         List<Sendemail> sendemails = sendEmailService.selectByExample(sendemailExample);
         return sendemails;
     }
@@ -1045,7 +1045,7 @@ public class CommonServiceImpl implements CommonService {
             List<Yhjl> yhjlList = new ArrayList<>();
             try {
                 for(Exceptionhandlerinfo info: exceptionhandlerinfoList){
-                    if(info.getExceptiontype()==1 && info.getExceptionlever()==2){ //暂定异常类型为1，异常级别为2的需要上报（测试）
+                    //if(info.getExceptiontype()==1 && info.getExceptionlever()==2){ //暂定异常类型为1，异常级别为2的需要上报（测试）
                         Yhjl yhjl = new Yhjl();
                         yhjl.setCheckresult_flag(info.getReportid()+"");
                         yhjl.setCheckpointname(info.getEquipname());
@@ -1063,7 +1063,7 @@ public class CommonServiceImpl implements CommonService {
                         yhjl.setReformtime(DateUtils.parseDateToStr(info.getExceptionclosetime(),"yyyy-MM-dd hh:mm:ss"));
                         yhjlList.add(yhjl);
                         reportcontentidList.add(info.getReportcontentid());
-                    }
+                    //}
 
                 }
 

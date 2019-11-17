@@ -21,6 +21,8 @@ public interface ExceptionhandlerinfoService {
 
     Exceptionhandlerinfo selectByPrimaryKey(Long id);
 
+    Exceptionhandlerinfo selectInfoById(Long id);
+
     int updateByExampleSelective(@Param("record") Exceptionhandlerinfo record, @Param("example") ExceptionhandlerinfoExample example);
 
     int updateByExample(@Param("record") Exceptionhandlerinfo record, @Param("example") ExceptionhandlerinfoExample example);

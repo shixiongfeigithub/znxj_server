@@ -17,6 +17,7 @@
     <result column="failnums" property="failnums" jdbcType="INTEGER" />
     <result column="freezetime" property="freezetime" jdbcType="TIMESTAMP" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -311,7 +312,8 @@
     select * from admininfo where username=#{0} and password=#{1}
   </select>
   <select id="selectByRoleId" parameterType="int" resultMap="BaseResultMap">
-    select * from admininfo where roleid=#{roleid} and state=1 and expirydate>now()
+    SELECT a.*,c.name realname from admininfo a,contactinfo c WHERE a.email=c.email and a.roleid=#{roleid}
+    and a.state=1 and a.expirydate>now()
   </select>
 
 </mapper>
