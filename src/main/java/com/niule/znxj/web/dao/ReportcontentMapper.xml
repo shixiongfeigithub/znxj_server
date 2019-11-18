@@ -145,6 +145,9 @@
     <if test="operatorname != null and operatorname !=''" >
       AND e.operatorname =#{operatorname}
     </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND e.operatorid =#{operatorid}
+    </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
       and e.exceptionstate=#{exceptionstate}
     </if>
@@ -182,6 +185,9 @@
     <if test="operatorname != null and operatorname !=''" >
       AND e.operatorname =#{operatorname}
     </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND e.operatorid =#{operatorid}
+    </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
       and e.exceptionstate=#{exceptionstate}
     </if>
@@ -211,6 +217,9 @@
     </if>
     <if test="operatorname != null and operatorname !=''" >
       AND e.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND e.operatorid =#{operatorid}
     </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
       and e.exceptionstate=#{exceptionstate}

@@ -26,6 +26,15 @@ public class Quickreport {
     private Integer state;
 
     private String upload;
+
+    private String operatorname;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date reporttime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date dangerclosetime;
+
+    private Integer dangerstate;
+
     private Userinfo u;
     private Classinfo group;
     private Siteareainfo site;
@@ -139,5 +148,37 @@ public class Quickreport {
 
     public void setUpload(String upload) {
         this.upload = upload == null ? null : upload.trim();
+    }
+
+    public String getOperatorname() {
+        return operatorname;
+    }
+
+    public void setOperatorname(String operatorname) {
+        this.operatorname = operatorname;
+    }
+
+    public Date getReporttime() {
+        return reporttime;
+    }
+
+    public void setReporttime(Date reporttime) {
+        this.reporttime = reporttime;
+    }
+
+    public Date getDangerclosetime() {
+        return dangerclosetime;
+    }
+
+    public void setDangerclosetime(Date dangerclosetime) {
+        this.dangerclosetime = dangerclosetime;
+    }
+
+    public Integer getDangerstate() {
+        return dangerstate;
+    }
+
+    public void setDangerstate(Integer dangerstate) {
+        this.dangerstate = dangerstate;
     }
 }

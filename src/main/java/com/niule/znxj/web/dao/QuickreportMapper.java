@@ -33,5 +33,6 @@ public interface QuickreportMapper {
     int updateByPrimaryKey(Quickreport record);
 
     List<Quickreport> showQuickreport(HashMap<String, Object> map);
-//    List<Quickreport> showQuickreport2();
+    List<Quickreport> showQuickreport2(HashMap<String, Object> map);
+    int countByExample2(HashMap<String, Object> map);
 }

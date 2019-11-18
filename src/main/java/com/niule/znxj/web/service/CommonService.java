@@ -68,6 +68,8 @@ public interface CommonService {
 
     //发送任务报告（异常）
     void sendReportEmail(Long userid,Long reportcontentid);
+    //发送隐患信息给责任人
+    void sendDangerEmail(Long userid,Long reportid);
 
     Result doTask(Long userId, Long taskId);
     //上传巡检记录

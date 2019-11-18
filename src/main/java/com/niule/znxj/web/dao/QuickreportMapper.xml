@@ -16,6 +16,10 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="state" property="state" jdbcType="INTEGER" />
     <result column="upLoad" property="upload" jdbcType="VARCHAR" />
+    <result column="operatorname" property="operatorname" jdbcType="VARCHAR" />
+    <result column="reporttime" property="reporttime" jdbcType="TIMESTAMP" />
+    <result column="dangerclosetime" property="dangerclosetime" jdbcType="TIMESTAMP" />
+    <result column="dangerstate" property="dangerstate" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -316,6 +320,71 @@
         and s.id =#{siteid}
       </if>
         and q.type=0 order BY  id desc
+  </select>
+
+  <select id="showQuickreport2" resultMap="BaseResultMap"  parameterType="map" >
+    select q.*,d.operatorname,d.reporttime,d.dangerclosetime,d.dangerstate,u.realname,c.customid classname,s.customid sitename
+    from quickreport q
+    left join dangerhandlerinfo d on d.reportid = q.id
+    left join userinfo u on u.id=q.userid
+    left join classinfo c on u.classid=c.id
+    left join siteareainfo s on c.siteareaid=s.id
+    where 1=1
+    <if test="type!=null and type!=''">
+      and q.type=#{type}
+    </if>
+    <if test="time!=null and time!=''">
+      and str_to_date(q.uploadtime,'%Y-%m-%d')=str_to_date(#{time},'%Y-%m-%d')
+    </if>
+    <if test="siteids!=null and siteids!=''">
+      and s.id in
+      <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+        #{siteid}
+      </foreach>
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND d.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND d.operatorid =#{operatorid}
+    </if>
+    <if test="dangerstate!=null and dangerstate!=''">
+      and d.dangerstate=#{exceptionstate}
+    </if>
+    order BY  q.id desc
+    limit #{page},#{pagesize}
+  </select>
+
+  <select id="countByExample2" resultType="java.lang.Integer" parameterType="map" >
+    select count(*)
+    from quickreport q
+    left join dangerhandlerinfo d on d.reportid = q.id
+    left join userinfo u on u.id=q.userid
+    left join classinfo c on u.classid=c.id
+    left join siteareainfo s on c.siteareaid=s.id
+    where 1=1
+    <if test="type!=null and type!=''">
+      and q.type=#{type}
+    </if>
+    <if test="time!=null and time!=''">
+      and str_to_date(q.uploadtime,'%Y-%m-%d')=str_to_date(#{time},'%Y-%m-%d')
+    </if>
+    <if test="siteids!=null and siteids!=''">
+      and s.id in
+      <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+        #{siteid}
+      </foreach>
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND d.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND d.operatorid =#{operatorid}
+    </if>
+    <if test="dangerstate!=null and dangerstate!=''">
+      and d.dangerstate=#{exceptionstate}
+    </if>
+    order BY  q.id desc
   </select>
 
 </mapper>

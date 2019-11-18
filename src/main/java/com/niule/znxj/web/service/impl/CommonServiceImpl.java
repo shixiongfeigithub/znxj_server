@@ -957,6 +957,29 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
+    public void sendDangerEmail(Long userid,Long reportid) {
+        try {
+
+            Quickreport quickreport = quickreportMapper.selectByPrimaryKey(reportid);
+            //获取发件人邮箱和授权码
+            List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
+            List<String> emails = new ArrayList<>();
+            if(sendemails!=null && sendemails.size()>0){
+                Sendemail sendemail = sendemails.get(0);
+                Admininfo user = admininfoMapper.selectByPrimaryKey(userid);
+                emails.add(user.getEmail());
+                String content = "隐患任务报告为："+quickreport.getReportcode()+" 的任务已分配给你，请及时处理！";
+                EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "隐患巡检报告", content);
+            }
+
+        } catch (Exception ex) {
+            System.err.println("邮件发送失败的原因是：" + ex.getMessage());
+            System.err.println("具体的错误原因");
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    @Override
     public Result doTask(Long userId, Long taskId) {
 
         TasktempinfoExample example = new TasktempinfoExample();

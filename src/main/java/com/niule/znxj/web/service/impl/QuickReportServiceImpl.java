@@ -46,4 +46,14 @@ public class QuickReportServiceImpl implements QuickReportService{
         PageHelper.startPage(page,size);
         return quickreportMapper.showQuickreport(map);
     }
+
+    @Override
+    public List<Quickreport> showQuickreport2(HashMap<String,Object> map) {
+        return quickreportMapper.showQuickreport2(map);
+    }
+
+    @Override
+    public int countByExample2(HashMap<String,Object> map) {
+        return quickreportMapper.countByExample2(map);
+    }
 }
