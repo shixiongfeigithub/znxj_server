@@ -432,7 +432,7 @@
       #{reportcontentid}
     </foreach>
   </update>
-  <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  <select id="selectByParam" resultMap="BaseResultMap" parameterType="map">
     SELECT
      e.* ,r.equipname,r.checkname,r.img reportimg ,t.donetime,t.worker,a.username
     FROM
@@ -440,7 +440,19 @@
     LEFT JOIN reportcontent r ON e.reportcontentid= r.id
     LEFT JOIN taskreportinfo t ON e.reportid = t.id
     LEFT JOIN admininfo a ON e.checkuserid = a.id
-    WHERE e.uploadstate=0 AND e.reportid = #{reportid}
+    WHERE e.reportid = #{reportid}
+    and e.uploadstate in
+    <foreach collection="states"  item="state" open="(" separator="," close=")" >
+      #{state}
+    </foreach>
+    and e.exceptiontype in
+    <foreach collection="array"  item="exceptiontype" open="(" separator="," close=")" >
+      #{exceptiontype}
+    </foreach>
+    and e.exceptionlever in
+    <foreach collection="array"  item="exceptionlever" open="(" separator="," close=")" >
+      #{exceptionlever}
+    </foreach>
   </select>
 
   <select id="selectInfoById" resultMap="BaseResultMap" parameterType="java.lang.Long">

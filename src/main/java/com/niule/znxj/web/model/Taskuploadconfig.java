@@ -23,6 +23,26 @@ public class Taskuploadconfig {
 
     private String contactname;
 
+    private String exceptiontype;
+
+    private String exceptionlever;
+
+    public String getExceptiontype() {
+        return exceptiontype;
+    }
+
+    public void setExceptiontype(String exceptiontype) {
+        this.exceptiontype = exceptiontype;
+    }
+
+    public String getExceptionlever() {
+        return exceptionlever;
+    }
+
+    public void setExceptionlever(String exceptionlever) {
+        this.exceptionlever = exceptionlever;
+    }
+
     public String getSitename() {
         return sitename;
     }

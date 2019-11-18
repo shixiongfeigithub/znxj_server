@@ -20,7 +20,7 @@ public interface ExceptionhandlerinfoMapper {
 
     List<Exceptionhandlerinfo> selectByExample(ExceptionhandlerinfoExample example);
 
-    List<Exceptionhandlerinfo> selectByReportId(Long id);
+    List<Exceptionhandlerinfo> selectByParam(HashMap<String,Object> map);
 
     Exceptionhandlerinfo selectByPrimaryKey(Long id);
 

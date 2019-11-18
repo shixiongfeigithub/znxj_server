@@ -33,16 +33,24 @@
             if(siteid == null || siteid == undefined || siteid == ''){
                 alert("您还没有选择厂区哟！！！");
                 return false;
-            }else{
-                return true;
             }
 
             var taskid = $("#taskid").val();
             if(taskid == null || taskid == undefined || taskid == ''){
                 alert("您还没有选择任务哟！！！");
                 return false;
-            }else{
-                return true;
+            }
+
+            var exceptiontype = $("#exceptiontype").val();
+            if(exceptiontype==null || exceptiontype == ""){
+                alert("请选择需要上传的异常类型！");
+                return false;
+            }
+
+            var exceptionlever = $("#exceptionlever").val();
+            if(exceptionlever==null || exceptionlever == ""){
+                alert("请选择需要上传的异常等级！");
+                return false;
             }
 
             var state = $("#uploadstate").val();
@@ -100,7 +108,26 @@
                                             </select>
                                         </td>
                                     </tr>
-
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="exceptiontype">上传异常类型:</label>
+                                            <select name="exceptiontype" id="exceptiontype" class="form-control" multiple required>
+                                                <c:forEach items="${exceptiontypeList}" var="type">
+                                                    <option value="${type.name}">${type.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="exceptionlever">上传异常等级:</label>
+                                            <select name="exceptionlever" id="exceptionlever" class="form-control" multiple required>
+                                                <c:forEach items="${levertype1List}" var="lever">
+                                                    <option value="${lever.name}" >${lever.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="uploadstate">是否上传:</label>

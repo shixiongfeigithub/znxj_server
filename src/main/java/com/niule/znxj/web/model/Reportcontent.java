@@ -70,9 +70,29 @@ public class Reportcontent {
 
     private String exceptionlever;
 
+    private Date uploadtime;
+
+    private Integer uploadstate;
+
     private Taskreportinfo report;
 
     private Long userid;
+
+    public Date getUploadtime() {
+        return uploadtime;
+    }
+
+    public void setUploadtime(Date uploadtime) {
+        this.uploadtime = uploadtime;
+    }
+
+    public Integer getUploadstate() {
+        return uploadstate;
+    }
+
+    public void setUploadstate(Integer uploadstate) {
+        this.uploadstate = uploadstate;
+    }
 
     public Long getUserid() {
         return userid;

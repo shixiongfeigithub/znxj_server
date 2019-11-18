@@ -127,9 +127,23 @@
                                                 <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
+                                            <label class="control-label" for="exceptiontype">异常分类：</label>
+                                            <select class="form-control" id="exceptiontype" name="exceptiontype">
+                                                <option value="" >所有分类</option>
+                                                <c:forEach items="${exceptiontypeList}" var="type">
+                                                    <option ${exceptiontype eq type.name ?'selected':''} value="${type.name}">${type.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <label class="control-label" for="exceptionlever">异常分级：</label>
+                                            <select class="form-control" id="exceptionlever" name="exceptionlever">
+                                                <option value="" >所有分级</option>
+                                                <c:forEach items="${levertype1List}" var="lever">
+                                                    <option ${exceptionlever eq lever.name ?'selected':''} value="${lever.name}" >${lever.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <br>
                                             <label class="control-label" for="operatorname">负责人：</label>
                                             <input type="text" style="width: 100px;" id="operatorname" name="operatorname" value="${operatorname}">
-                                            <br>
                                             <label class="control-label" style="margin-top: 10px">执行时间：</label>
                                             <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
@@ -179,6 +193,8 @@
                                             <th class="fontcenter">关闭时间</th>
                                             <th class="fontcenter">分类</th>
                                             <th class="fontcenter">分级</th>
+                                            <th class="fontcenter">异常上报状态</th>
+                                            <th class="fontcenter">上报时间</th>
                                         </tr>
                                         <c:forEach items="${pageBean.list}" var="item" varStatus="status">
                                         <input type="hidden" id="img${status.index}" value='${item.img}'>
@@ -208,7 +224,13 @@
                                                 </c:if>
                                                 <c:if test="${item.checktype == '记录项'}">
                                                     <c:if test="${item.numvalue == ''}">-</c:if>
-                                                    <c:if test="${item.numvalue != ''}">${item.numvalue}!!</c:if>
+                                                    <c:if test="${item.numvalue!=''}">
+                                                        <c:if test="${Double.parseDouble(item.numvalue) < Double.parseDouble(item.normalmin)}"><span style="color: red;">${item.numvalue}↓↓</span></c:if>
+                                                        <c:if test="${Double.parseDouble(item.numvalue) > Double.parseDouble(item.normalmax)}"><span style="color: red;">${item.numvalue}↑↑</span></c:if>
+                                                        <c:if test="${ Double.parseDouble(item.normalmin)<=Double.parseDouble(item.numvalue)}">
+                                                            <c:if test="${Double.parseDouble(item.numvalue) <= Double.parseDouble(item.normalmax)}"> <span>${item.numvalue}</span></c:if>
+                                                        </c:if>
+                                                    </c:if>
                                                 </c:if>
                                                 <c:if test="${item.checktype == '状态项'}">
                                                         <c:if test="${item.reportstate == ''}">-</c:if>
@@ -239,6 +261,12 @@
                                             <td class="fontcenter"><sdf:formatDate value="${item.exceptionclosetime}" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
                                             <td class="fontcenter">${item.exceptiontype}</td>
                                             <td class="fontcenter">${item.exceptionlever}</td>
+                                            <td class="fontcenter">
+                                                <c:if test="${item.uploadstate == 0}">未上报</c:if>
+                                                <c:if test="${item.uploadstate == 1}">上报成功</c:if>
+                                                <c:if test="${item.uploadstate == 2}">上报失败</c:if>
+                                            </td>
+                                            <td class="fontcenter"><sdf:formatDate value="${item.uploadtime}" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
                                         </tr>
                                         </c:forEach>
                                     </table>

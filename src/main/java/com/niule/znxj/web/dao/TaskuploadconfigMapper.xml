@@ -7,6 +7,8 @@
     <result column="taskid" property="taskid" jdbcType="BIGINT" />
     <result column="contactid" property="contactid" jdbcType="BIGINT" />
     <result column="uploadstate" property="uploadstate" jdbcType="INTEGER" />
+    <result column="exceptiontype" jdbcType="VARCHAR" property="exceptiontype" />
+    <result column="exceptionlever" jdbcType="VARCHAR" property="exceptionlever" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="sitename" property="sitename" jdbcType="VARCHAR" />
@@ -72,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, siteid, taskid, contactid, uploadstate, createtime, updatetime
+    id, siteid, taskid, contactid, uploadstate,exceptiontype, exceptionlever, createtime, updatetime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.TaskuploadconfigExample" >
     select
@@ -148,10 +150,10 @@
 
   <insert id="insert" parameterType="com.niule.znxj.web.model.Taskuploadconfig" >
     insert into taskuploadconfig (id, siteid, taskid, contactid,
-      uploadstate, createtime, updatetime
+      uploadstate,exceptiontype, exceptionlever, createtime, updatetime
       )
     values (#{id,jdbcType=BIGINT}, #{siteid,jdbcType=BIGINT}, #{taskid,jdbcType=BIGINT}, #{contactid,jdbcType=BIGINT},
-      #{uploadstate,jdbcType=INTEGER}, now(), #{updatetime,jdbcType=TIMESTAMP}
+      #{uploadstate,jdbcType=INTEGER},#{exceptiontype,jdbcType=VARCHAR}, #{exceptionlever,jdbcType=VARCHAR}, now(), #{updatetime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.niule.znxj.web.model.Taskuploadconfig" >
@@ -171,6 +173,12 @@
       </if>
       <if test="uploadstate != null" >
         uploadstate,
+      </if>
+      <if test="exceptiontype != null" >
+        exceptiontype,
+      </if>
+      <if test="exceptionlever != null" >
+        exceptionlever,
       </if>
       <if test="createtime != null" >
         createtime,
@@ -195,6 +203,12 @@
       <if test="uploadstate != null" >
         #{uploadstate,jdbcType=INTEGER},
       </if>
+      <if test="exceptiontype != null" >
+        #{exceptiontype,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionlever != null" >
+        #{exceptionlever,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -218,6 +232,12 @@
       <if test="uploadstate != null" >
         uploadstate = #{uploadstate,jdbcType=INTEGER},
       </if>
+      <if test="exceptiontype != null" >
+        exceptiontype = #{exceptiontype,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionlever != null" >
+        exceptionlever = #{exceptionlever,jdbcType=VARCHAR},
+      </if>
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -233,6 +253,8 @@
       taskid = #{taskid,jdbcType=BIGINT},
       contactid = #{contactid,jdbcType=BIGINT},
       uploadstate = #{uploadstate,jdbcType=INTEGER},
+      exceptiontype = #{exceptiontype,jdbcType=VARCHAR},
+      exceptionlever = #{exceptionlever,jdbcType=VARCHAR},
       createtime = #{createtime,jdbcType=TIMESTAMP},
       updatetime = now()
     where id = #{id,jdbcType=BIGINT}

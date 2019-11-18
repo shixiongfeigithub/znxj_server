@@ -32,6 +32,8 @@ public class WebTaskUploadConfigController {
     private OperateLogService operateLogService;
     @Resource
     private ContactinfoService contactinfoService;
+    @Resource
+    private  CommonService commonService;
 
     protected PageBean pageBean = new PageBean();
 
@@ -106,6 +108,11 @@ public class WebTaskUploadConfigController {
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
         List<Siteareainfo> siteareainfos=siteService.selectByExample2(admininfo.getSiteid());
         List<Contactinfo> contactinfoList = contactinfoService.sendAllPersion();
+
+        List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
+        List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
+        m.addAttribute("levertype1List",levertype1List);
+        m.addAttribute("exceptiontypeList",exceptiontypeList);
         m.addAttribute("siteareainfos",siteareainfos);
         m.addAttribute("contactinfoList",contactinfoList);
         return "addtaskupload";
@@ -127,6 +134,10 @@ public class WebTaskUploadConfigController {
             Admininfo admininfo=(Admininfo) session.getAttribute("userInfo");
             List<Siteareainfo> siteareainfos=siteService.selectByExample2(admininfo.getSiteid());
             List<Contactinfo> contactinfoList = contactinfoService.sendAllPersion();
+            List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
+            List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
+            m.addAttribute("levertype1List",levertype1List);
+            m.addAttribute("exceptiontypeList",exceptiontypeList);
             m.addAttribute("siteareainfos",siteareainfos);
             m.addAttribute("contactinfoList",contactinfoList);
             m.addAttribute("message","一个任务只能添加一次，不能重复添加！");
@@ -175,6 +186,10 @@ public class WebTaskUploadConfigController {
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
         List<Siteareainfo> siteareainfos=siteService.selectByExample2(admininfo.getSiteid());
         List<Contactinfo> contactinfoList = contactinfoService.sendAllPersion();
+        List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
+        List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
+        m.addAttribute("levertype1List",levertype1List);
+        m.addAttribute("exceptiontypeList",exceptiontypeList);
         m.addAttribute("siteareainfos",siteareainfos);
         m.addAttribute("taskuploadconfig",taskuploadconfig);
         m.addAttribute("contactinfoList",contactinfoList);

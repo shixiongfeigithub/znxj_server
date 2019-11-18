@@ -43,6 +43,8 @@
     <result column="exceptionclosetime" jdbcType="TIMESTAMP" property="exceptionclosetime" />
     <result column="exceptiontype" jdbcType="VARCHAR" property="exceptiontype" />
     <result column="exceptionlever" jdbcType="VARCHAR" property="exceptionlever" />
+    <result column="uploadstate" property="uploadstate" jdbcType="INTEGER"/>
+    <result column="uploadtime" jdbcType="TIMESTAMP" property="uploadtime" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -121,7 +123,8 @@
   </select>
   <select id="selectByExample2" resultMap="BaseResultMap" parameterType="map" >
     SELECT r.*,t.taskcode,p.customid taskname,s.customid sitename,e.operatorname,
-    e.exceptionstate,e.reporttime,e.appointedtime,e.exceptionclosetime,e.exceptiontype,e.exceptionlever
+    e.exceptionstate,e.reporttime,e.appointedtime,e.exceptionclosetime,e.exceptiontype,e.exceptionlever,
+    e.uploadtime,e.uploadstate
     FROM
     reportcontent r
     LEFT JOIN taskreportinfo t ON r.reportid = t.id
@@ -144,6 +147,12 @@
     </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
       and e.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="exceptiontype!=null and exceptiontype!=''">
+      and e.exceptiontype=#{exceptiontype}
+    </if>
+    <if test="exceptionlever!=null and exceptionlever!=''">
+      and e.exceptionlever=#{exceptionlever}
     </if>
     <if test="time1!=null and time1!=''">
       and date_format(r.operationtime, '%Y-%m-%d'

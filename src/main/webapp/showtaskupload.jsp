@@ -107,6 +107,8 @@
                                     <th>操作</th>
                                     <th>厂区</th>
                                     <th>任务名</th>
+                                    <th>上传异常类型</th>
+                                    <th>上传异常等级</th>
                                     <th>是否上传</th>
                                     <th>联系人</th>
                                     <th>创建时间</th>
@@ -123,6 +125,8 @@
                                         </td>
                                         <td>${taskuploadconfig.sitename}</td>
                                         <td>${taskuploadconfig.taskname}</td>
+                                        <td>${taskuploadconfig.exceptiontype}</td>
+                                        <td>${taskuploadconfig.exceptionlever}</td>
                                         <td>
                                             <c:if test="${taskuploadconfig.uploadstate==0}">否</c:if>
                                             <c:if test="${taskuploadconfig.uploadstate==1}">是</c:if>

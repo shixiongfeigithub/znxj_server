@@ -54,7 +54,7 @@ public class TaskExceptionController {
      */
     @RequestMapping("/showexceptionreport")
     public String showexceptionreport(Model m, int page,Long siteid,Long areaid,Long equipmentid,Integer exceptionstate,
-                                 String operatorname, String time1, String time2,HttpServletRequest request) {
+                                 String operatorname,String exceptiontype,String exceptionlever, String time1, String time2,HttpServletRequest request) {
 
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
         List<Siteareainfo> siteareainfos = null;
@@ -95,6 +95,8 @@ public class TaskExceptionController {
         map.put("equipname",equipmentinfo!=null?equipmentinfo.getName():null);
         map.put("exceptionstate",exceptionstate);//异常处理状态
         map.put("operatorname",operatorname); //巡检责任人
+        map.put("exceptionlever",exceptionlever); //异常分级
+        map.put("exceptiontype",exceptiontype); //异常分类
         map.put("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);//开始时间
         map.put("time2", time2==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time2);//结束时间
 
@@ -107,148 +109,22 @@ public class TaskExceptionController {
         int closenum = taskreportService.countReportcontentByExceptionState(map);
         int surplusnum = rows-closenum;
 
-
-
-        //得到波动值
-        List<Systemsettinginfo> systems = systemService.selectByExample();
-        Double fluctudte = 0.0;
-        for (Systemsettinginfo info : systems) {
-            m.addAttribute(info.getKeyname(), info.getValue());
-            if (info.getKeyname().equals("FLUCTUATE"))
-                fluctudte = Double.valueOf(info.getValue());
-        }
-
- /*       for (int k = 0; k < reportcontents.size(); k++) {
-            Reportcontent reportcontent = reportcontents.get(k);
-            String bodongzhi = "";
-            if (reportcontentList.size() > 0 && k < reportcontentList.size()) {
-                Reportcontent reportcontent2 = reportcontentList.get(k);
-                if (taskreportinfo.getExamstate() != 0) {
-                    if (reportcontent.getCheckvalue() != null && !reportcontent.getCheckvalue().isEmpty() && reportcontent2.getCheckvalue() != null && !reportcontent2.getCheckvalue().isEmpty()) {
-                        double maxfluctudte = 1 + fluctudte;
-                        double minfluctudte = 1 - fluctudte;
-                        if (Double.parseDouble(reportcontent.getCheckvalue()) / Double.parseDouble(reportcontent2.getCheckvalue()) > maxfluctudte) {
-                            bodongzhi = "/↑↑↑";
-                        }
-                        if (Double.parseDouble(reportcontent.getCheckvalue()) / Double.parseDouble(reportcontent2.getCheckvalue()) < minfluctudte) {
-                            bodongzhi = "/↓↓↓";
-                        }
-                    }
-                } else {
-                    if (reportcontent.getNumvalue() != null && !reportcontent.getNumvalue().isEmpty() && reportcontentList.get(k).getCheckvalue() != null && !reportcontentList.get(k).getCheckvalue().isEmpty()) {
-                        if (Double.parseDouble(reportcontent.getNumvalue()) / Double.parseDouble(reportcontentList.get(k).getCheckvalue()) > (1 + fluctudte)) {
-                            bodongzhi = "/↑↑↑";
-                        }
-                        if (Double.parseDouble(reportcontent.getNumvalue()) / Double.parseDouble(reportcontentList.get(k).getCheckvalue()) < (1 - fluctudte)) {
-                            bodongzhi = "/↓↓↓";
-                        }
-                    }
-                }
-            }
-            if (taskreportinfo.getExamstate() != 0 && reportcontent.getCheckvalue() != null && !reportcontent.getCheckvalue().isEmpty()) {
-                //大于低值 小于高值
-                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
-                        Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getCheckvalue()) &&
-                        Double.parseDouble(reportcontent.getCheckvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else
-                        reportcontent.setErrcontent("-" + bodongzhi);
-                }
-                //大于最低值  小于低值
-                else if (!reportcontent.getNormalmin().equals("-")
-                        && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↓" + bodongzhi);
-                }
-                //大于高值  小于最高值值
-                else if (!reportcontent.getNormalmax().equals("-")
-                        && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↑" + bodongzhi);
-                }
-                //大于最高上限值
-                else if (!reportcontent.getUpperwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getUpperwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else
-                        reportcontent.setErrcontent("↑↑" + bodongzhi);
-                }
-                //小于最低上限值
-                else if (!reportcontent.getLowerwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else
-                        reportcontent.setErrcontent("↓↓" + bodongzhi);
-                } else {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("-" + bodongzhi);
-                }
-            } else if (taskreportinfo.getExamstate() == 0 && !reportcontent.getNumvalue().isEmpty()) {
-                if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                    reportcontent.setErrcontent(reportcontent.getErrcontent());
-                } else reportcontent.setErrcontent("-");
-                //大于低值 小于高值
-                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
-                        Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getNumvalue()) &&
-                        Double.parseDouble(reportcontent.getNumvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("-" + bodongzhi);
-                }
-                // 小于低值
-                if (!reportcontent.getNormalmin().equals("-")
-                        && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↓" + bodongzhi);
-                }
-                //大于高值
-                if (!reportcontent.getNormalmax().equals("-")
-                        && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↑" + bodongzhi);
-                }
-                //大于最高上限值
-                if (!reportcontent.getUpperwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getUpperwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↑↑" + bodongzhi);
-                }
-                //小于最低上限值
-                if (!reportcontent.getLowerwarning().equals("-") &&
-                        Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
-                    if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                        reportcontent.setErrcontent(reportcontent.getErrcontent());
-                    } else reportcontent.setErrcontent("↓↓" + bodongzhi);
-                }
-
-            } else {
-                if (taskreportinfo.getReportstate() == 1 && reportcontent.getErrcontent() != null) {
-                    reportcontent.setErrcontent(reportcontent.getErrcontent());
-                } else reportcontent.setErrcontent("-");
-            }
-        }*/
-
-
-
         totalpage = PageBean.counTotalPage(pagesize, rows);
         pageBean.setList(reportcontents);
         pageBean.setTotalPage((int) totalpage);
         pageBean.setCurrentPage(page);
+        List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
+        List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
+        m.addAttribute("levertype1List",levertype1List);
+        m.addAttribute("exceptiontypeList",exceptiontypeList);
         m.addAttribute("pageBean", pageBean);
         m.addAttribute("siteid", siteid);
         m.addAttribute("areaid", areaid);
         m.addAttribute("equipmentid", equipmentid);
         m.addAttribute("exceptionstate", exceptionstate);
         m.addAttribute("operatorname",operatorname);
+        m.addAttribute("exceptionlever",exceptionlever); //异常分级
+        m.addAttribute("exceptiontype",exceptiontype); //异常分类
         m.addAttribute("time1", time1);
         m.addAttribute("time2", time2);
 
