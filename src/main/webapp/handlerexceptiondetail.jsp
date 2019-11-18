@@ -54,7 +54,7 @@
                                             ${exceptionhandlerinfo.username}
                                         </td>
                                     </tr>
-                                    <tr>
+                                   <%-- <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >处理责任人:</label>
                                             ${exceptionhandlerinfo.operatorname}
@@ -71,14 +71,14 @@
                                             <label class="control-label" >指派时间:</label>
                                             <sdf:formatDate value="${exceptionhandlerinfo.appointedtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
-                                    </tr>
+                                    </tr>--%>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >关闭时间:</label>
                                             <sdf:formatDate value="${exceptionhandlerinfo.exceptionclosetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
                                     </tr>
-                                    <tr>
+                          <%--          <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >处理状态:</label>
                                             <c:if test="${exceptionhandlerinfo.exceptionstate == 0}">待处理</c:if>
@@ -112,7 +112,7 @@
                                             <label class="control-label" >上报时间:</label>
                                             <sdf:formatDate value="${exceptionhandlerinfo.uploadtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
-                                    </tr>
+                                    </tr>--%>
                                     <tr>
                                         <td class="form-inline" colspan="2">
                                             <span>描述:</span>
@@ -124,7 +124,7 @@
                                         <td class="form-inline" colspan="2">
                                             <span>图片:</span>
                                             <c:forEach items="${imgList}" var="imgurl" varStatus="status">
-                                                <img src='/report${imgurl}' width="300" height="200">
+                                                <img src='/report${imgurl}' width="300" height="400">
                                             </c:forEach>
                                         </td>
                                     </tr>
