@@ -446,11 +446,11 @@
       #{state}
     </foreach>
     and e.exceptiontype in
-    <foreach collection="array"  item="exceptiontype" open="(" separator="," close=")" >
+    <foreach collection="exceptiontypeList"  item="exceptiontype" open="(" separator="," close=")" >
       #{exceptiontype}
     </foreach>
     and e.exceptionlever in
-    <foreach collection="array"  item="exceptionlever" open="(" separator="," close=")" >
+    <foreach collection="exceptionleverList"  item="exceptionlever" open="(" separator="," close=")" >
       #{exceptionlever}
     </foreach>
   </select>

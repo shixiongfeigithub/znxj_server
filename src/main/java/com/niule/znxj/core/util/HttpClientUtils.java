@@ -528,24 +528,23 @@ public class HttpClientUtils {
 			str = HttpClientUtils.uploadFile(url,filePath);
 			System.out.println(str);*/
 
-
-			/*String url1 = "http://58.211.129.134:8866/system/hotsync/xjjl";
-            Xjjl xjjl1 = new Xjjl("abcd1234","一班","张三","/upload/newfile/20191108/20191108100125_602.png",
-					"设备一","0","2019-11-08 10:24:56","经巡检设备无异常");
+			String url1 = "http://58.211.129.134:8866/system/hotsync/xjjl";
+            Xjjl xjjl1 = new Xjjl("18555","一班","张三",null,
+					"设备一","0","2019-11-08 10:24:56",null);
 			List<Xjjl> list = new ArrayList<Xjjl>();
 			list.add(xjjl1);
 			str = HttpClientUtils.httpPost(url1,JsonUtil.toJSON(list));
-			System.out.println("result ===="+str);*/
+			System.out.println("result ===="+str);
 
 
-            String url2 = "http://58.211.129.134:8866/system/hotsync/yhjl";
+           /* String url2 = "http://58.211.129.134:8866/system/hotsync/yhjl";
             Yhjl yhjl = new Yhjl("abcd1234","设备一","111","1","张某某 ","2019-11-07 16:24:56","2019-11-07 16:24:56","危险隐患",
                     "/upload/image/20191105/20191105110142_75.jpg","放荡","fdgfgf","2019-11-07 16:24:56",
                     "/upload/image/20191105/20191105110142_75.jpg","大范甘迪发给发");
             List<Yhjl> list = new ArrayList<Yhjl>();
             list.add(yhjl);
             str = HttpClientUtils.httpPost(url2,JsonUtil.toJSON(list));
-            System.out.println("result2==="+str);
+            System.out.println("result2==="+str);*/
 
 
 		} catch (Exception e) {

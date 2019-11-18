@@ -1016,7 +1016,6 @@ public class CommonServiceImpl implements CommonService {
         states.add(2);//上报失败
         example.createCriteria().andStateIn(states).andEnginetypeEqualTo("1");//苏州公司接口
         List<Uploadtaskinfo> uploadtaskinfoList = uploadtaskinfoMapper.selectByExample(example);
-
         String uploadMethod = "system/hotsync/xjjl";
         if(uploadtaskinfoList!=null && uploadtaskinfoList.size()>0){
             for(Uploadtaskinfo uploadtaskinfo : uploadtaskinfoList) {
@@ -1028,9 +1027,11 @@ public class CommonServiceImpl implements CommonService {
                 xjjl.setCheckorder(taskreportinfo.getTaskcode());
                 xjjl.setCreatetime(DateUtils.parseDateToStr(taskreportinfo.getDonetime(), "yyyy-MM-dd hh:mm:ss"));
                 xjjl.setCheckperson(taskreportinfo.getWorker());
+                xjjl.setCheckresult(taskreportinfo.getReportstate()==null?"0":taskreportinfo.getReportstate()+"");
                 xjjlList.add(xjjl);
                 try {
-                    String resultStr = HttpClientUtils.httpPost(uploadtaskinfo.getAddress() + uploadMethod, JsonUtil.toJSON(xjjlList));
+                    String url = uploadtaskinfo.getAddress() + uploadMethod;
+                    String resultStr = HttpClientUtils.httpPost(url, JsonUtil.toJSON(xjjlList));
                     System.out.println("result ====" + resultStr);
                     RestfulResponse response = JsonUtil.toObject(resultStr, RestfulResponse.class);
                     uploadtaskinfo.setUploadtime(new Date());
@@ -1055,6 +1056,7 @@ public class CommonServiceImpl implements CommonService {
                     }
 
                 }catch(Exception e){
+                    System.out.println("---------调用接口失败："+e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -1068,7 +1070,7 @@ public class CommonServiceImpl implements CommonService {
     public void uploadExceptionReport() {
         //1、查询已经上传成功的巡检任务报告
         UploadtaskinfoExample example = new UploadtaskinfoExample();
-        example.createCriteria().andUploadtimeEqualTo(new Date()).andStateEqualTo(1).andEnginetypeEqualTo("1");//苏州公司接口
+        example.createCriteria().andUploadtimeBetween(DateUtils.getWholePointDate(7),new Date()).andStateEqualTo(1).andEnginetypeEqualTo("1");//苏州公司接口
         List<Uploadtaskinfo> uploadtaskinfoList = uploadtaskinfoMapper.selectByExample(example);
         String uploadMethod = "system/hotsync/yhjl";
         for(Uploadtaskinfo uploadtaskinfo : uploadtaskinfoList) {
@@ -1077,8 +1079,8 @@ public class CommonServiceImpl implements CommonService {
             List<Taskuploadconfig> taskuploadconfigList = taskuploadconfigMapper.selectByExample(taskuploadconfigExample);
             Taskreportinfo taskreportinfo = taskreportinfoMapper.selectByPrimaryKey(uploadtaskinfo.getReportid());
             //查询未上报的异常巡检项
-            String[] exceptionlevers = taskuploadconfigList.get(0).getExceptiontype().split(",");
-            String[] exceptiontypes = taskuploadconfigList.get(0).getExceptionlever().split(",");
+            String[] exceptiontypes = taskuploadconfigList.get(0).getExceptiontype().split(",");
+            String[] exceptionlevers = taskuploadconfigList.get(0).getExceptionlever().split(",");
             HashMap<String,Object> paramMap = new HashMap<>();
             List<Integer> states = new ArrayList<>();
             states.add(0); //未上报
@@ -1098,50 +1100,52 @@ public class CommonServiceImpl implements CommonService {
                     yhjl.setCheckcontent(info.getCheckname());
                     yhjl.setDangerstatus(info.getExceptionstate()+"");
                     yhjl.setFindperson(info.getWorker());
-                    yhjl.setCreatetime(DateUtils.parseDateToStr(info.getDonetime(),"yyyy-MM-dd hh:mm:ss"));
-                    yhjl.setHandletime(DateUtils.parseDateToStr(info.getAppointedtime(),"yyyy-MM-dd hh:mm:ss"));
+                    yhjl.setCreatetime(info.getDonetime()!=null?DateUtils.parseDateToStr(info.getDonetime(),"yyyy-MM-dd hh:mm:ss"):null);
+                    yhjl.setHandletime(info.getAppointedtime()!=null?DateUtils.parseDateToStr(info.getAppointedtime(),
+                            "yyyy-MM-dd hh:mm:ss"):"");
                     yhjl.setHandlepersons(info.getUsername());
                     yhjl.setDangerdesc("");//隐患备注
                     yhjl.setDangerfj(getImgUrl(uploadtaskinfo.getAddress(),info.getReportimg())); //隐患附件
                     yhjl.setReformperson(info.getOperatorname());
                     yhjl.setReformdesc(""); //整改备注
                     yhjl.setReformfj(getImgUrl(uploadtaskinfo.getAddress(),info.getAttachment())); //整改附件
-                    yhjl.setReformtime(DateUtils.parseDateToStr(info.getExceptionclosetime(),"yyyy-MM-dd hh:mm:ss"));
+                    yhjl.setReformtime(info.getExceptionclosetime()!=null?DateUtils.parseDateToStr(info.getExceptionclosetime(),
+                            "yyyy-MM-dd hh:mm:ss"):null);
                     yhjlList.add(yhjl);
                     reportcontentidList.add(info.getReportcontentid());
                 }
-
-                String resultStr = HttpClientUtils.httpPost(uploadtaskinfo.getAddress() + uploadMethod, JsonUtil.toJSON(yhjlList));
-                System.out.println("result ====" + resultStr);
-                RestfulResponse response = JsonUtil.toObject(resultStr, RestfulResponse.class);
-                HashMap<String,Object> param = new HashMap<String,Object>();
-                param.put("reportid",uploadtaskinfo.getReportid());
-                param.put("reportcontentids", reportcontentidList);
-                if (response.getStatus()) {
-                    param.put("uploadstate",1);
-                    exceptionhandlerinfoMapper.updateByReportId(param);
-                    operateLogService.insertSelective("autouser","巡检异常记录上传成功，任务编号："+taskreportinfo.getTaskcode());
-                } else {
-                    param.put("uploadstate",2);
-                    exceptionhandlerinfoMapper.updateByReportId(param);
-                    operateLogService.insertSelective("autouser","巡检异常记录上传失败，任务编号："+taskreportinfo.getTaskcode());
-                    //发送邮件
-                    //获取发件人邮箱和授权码
-                    List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
-                    List<String> emails = new ArrayList<>();
-                    if (sendemails != null && sendemails.size() > 0) {
-                        Sendemail sendemail = sendemails.get(0);
-                        emails.add(uploadtaskinfo.getEmail());
-                        String content = "上传巡检异常记录失败，请查看！";
-                        EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检异常记录上传", content);
+                if (yhjlList.size()>0) {
+                    String resultStr = HttpClientUtils.httpPost(uploadtaskinfo.getAddress() + uploadMethod, JsonUtil.toJSON(yhjlList));
+                    System.out.println("result ====" + resultStr);
+                    RestfulResponse response = JsonUtil.toObject(resultStr, RestfulResponse.class);
+                    HashMap<String,Object> param = new HashMap<String,Object>();
+                    param.put("reportid",uploadtaskinfo.getReportid());
+                    param.put("reportcontentids", reportcontentidList);
+                    if (response.getStatus()) {
+                        param.put("uploadstate",1);
+                        exceptionhandlerinfoMapper.updateByReportId(param);
+                        operateLogService.insertSelective("autouser","巡检异常记录上传成功，任务编号："+taskreportinfo.getTaskcode());
+                    } else {
+                        param.put("uploadstate",2);
+                        exceptionhandlerinfoMapper.updateByReportId(param);
+                        operateLogService.insertSelective("autouser","巡检异常记录上传失败，任务编号："+taskreportinfo.getTaskcode());
+                        //发送邮件
+                        //获取发件人邮箱和授权码
+                        List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
+                        List<String> emails = new ArrayList<>();
+                        if (sendemails != null && sendemails.size() > 0) {
+                            Sendemail sendemail = sendemails.get(0);
+                            emails.add(uploadtaskinfo.getEmail());
+                            String content = "上传巡检异常记录失败，请查看！";
+                            EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检异常记录上传", content);
+                        }
                     }
                 }
             }catch(Exception e){
+                System.out.println("---------调用接口失败："+e.getMessage());
                 e.printStackTrace();
             }
-
         }
-
     }
 
     public String getImgUrl(String urlAddress,String imgStr) throws Exception{
@@ -1152,9 +1156,9 @@ public class CommonServiceImpl implements CommonService {
         }
 
         String uploadFileMethod = "appupload/uploadfile";
-        List<String> imgList = JsonUtil.toObject(imgStr,String.class);
+        List<String> imgList = JsonUtil.toObject(imgStr,List.class);
         for (String str: imgList){
-            String filePath = Resources.ApplicationResources.getString("file.path")+imgStr;
+            String filePath = Resources.ApplicationResources.getString("file.path")+str;
             String url = urlAddress + uploadFileMethod;
 			String resultStr = HttpClientUtils.uploadFile(url,filePath);
             UploadFileResponse response = JsonUtil.toObject(resultStr, UploadFileResponse.class);
