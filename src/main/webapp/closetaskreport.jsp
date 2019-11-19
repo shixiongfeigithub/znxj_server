@@ -125,7 +125,7 @@
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
                             <h2>
-                                <i class="glyphicon glyphicon-globe"></i> 关闭巡检任务
+                                <i class="glyphicon glyphicon-globe"></i> 关闭巡检异常
                             </h2>
                         </div>
                         <div class="box-content">

@@ -441,18 +441,24 @@
     LEFT JOIN taskreportinfo t ON e.reportid = t.id
     LEFT JOIN admininfo a ON e.checkuserid = a.id
     WHERE e.reportid = #{reportid}
-    and e.uploadstate in
-    <foreach collection="states"  item="state" open="(" separator="," close=")" >
-      #{state}
-    </foreach>
+    <if test="states != null">
+      and e.uploadstate in
+      <foreach collection="states"  item="state" open="(" separator="," close=")" >
+        #{state}
+      </foreach>
+    </if>
+    <if test="exceptiontypeList != null">
     and e.exceptiontype in
     <foreach collection="exceptiontypeList"  item="exceptiontype" open="(" separator="," close=")" >
       #{exceptiontype}
     </foreach>
+    </if>
+    <if test="exceptionleverList != null">
     and e.exceptionlever in
     <foreach collection="exceptionleverList"  item="exceptionlever" open="(" separator="," close=")" >
       #{exceptionlever}
     </foreach>
+    </if>
   </select>
 
   <select id="selectInfoById" resultMap="BaseResultMap" parameterType="java.lang.Long">

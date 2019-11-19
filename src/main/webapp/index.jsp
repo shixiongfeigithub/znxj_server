@@ -60,9 +60,9 @@
                     </ul>
                 </li>
                 <li class="accordion" id="taskExceptionManager">
-                    <a href="#"><i class=" glyphicon glyphicon-certificate"></i><span> 异常问题管理</span></a>
+                    <a href="#"><i class=" glyphicon glyphicon-certificate"></i><span> 异常管理</span></a>
                     <ul class="nav nav-pills nav-stacked">
-                        <li><shiro:hasPermission name="item:exceptionreport"><a href="showexceptionreport?page=1" target="center">巡检异常</a></shiro:hasPermission></li>
+                        <li><shiro:hasPermission name="item:exceptionreport"><a href="showexceptionreport?page=1" target="center">巡检异常管理</a></shiro:hasPermission></li>
                         <li><shiro:hasPermission name="item:dangerhandler"><a href="showdanger?page=1"  target="center">隐患管理</a></shiro:hasPermission></li>
                     </ul>
                 </li>

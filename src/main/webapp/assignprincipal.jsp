@@ -46,7 +46,7 @@
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
                             <h2>
-                                <i class="glyphicon glyphicon-globe"></i> 异常巡检任务分配责任人
+                                <i class="glyphicon glyphicon-globe"></i> 分配巡检异常处理责任人
                             </h2>
                         </div>
                         <div class="box-content">
@@ -62,7 +62,7 @@
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="operatorid">问题处理责任人:</label>
+                                            <label class="control-label" for="operatorid">责任人:</label>
                                             <select name="operatorid" id="operatorid" class="form-control" required>
                                                 <c:forEach items="${operationuserList}" var="user">
                                                     <option value="${user.id}">${user.realname}</option>

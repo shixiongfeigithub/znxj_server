@@ -36,7 +36,7 @@
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
                             <h2>
-                                <i class="glyphicon glyphicon-globe"></i> 巡检异常处理详情
+                                <i class="glyphicon glyphicon-globe"></i> 巡检异常关闭详情
                             </h2>
                         </div>
                         <div class="box-content">

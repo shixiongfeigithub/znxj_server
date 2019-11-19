@@ -202,7 +202,7 @@
                             <div class="box-inner">
                                 <div class="box-header well" data-original-title="">
                                     <h2>
-                                        <i class="glyphicon glyphicon-globe"></i> 隐患任务报告 - 列表
+                                        <i class="glyphicon glyphicon-globe"></i> 隐患列表
                                     </h2>
                                 </div>
                                 <div class="box-content">
@@ -252,7 +252,7 @@
                                             <c:if test="${type==1}">
                                                 <th>报告类型</th>
                                                 <th>报告等级</th>
-                                                <th>文字异常</th>
+                                                <th>文字描述</th>
                                             </c:if>
                                             <c:if test="${type==0}">
                                                 <th>问题描述</th>
