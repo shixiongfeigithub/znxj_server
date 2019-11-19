@@ -25,6 +25,10 @@ public class Dangerhandlerinfo {
 
     private Integer dangerstate;
 
+    private String  reportcode;
+
+    private String username;
+
     public Long getId() {
         return id;
     }
@@ -35,6 +39,22 @@ public class Dangerhandlerinfo {
 
     public Long getReportid() {
         return reportid;
+    }
+
+    public String getReportcode() {
+        return reportcode;
+    }
+
+    public void setReportcode(String reportcode) {
+        this.reportcode = reportcode;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setReportid(Long reportid) {

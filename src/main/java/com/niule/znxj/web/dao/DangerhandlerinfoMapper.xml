@@ -13,6 +13,8 @@
     <result column="appointedtime" property="appointedtime" jdbcType="TIMESTAMP" />
     <result column="dangerclosetime" property="dangerclosetime" jdbcType="TIMESTAMP" />
     <result column="dangerstate" property="dangerstate" jdbcType="INTEGER" />
+    <result column="reportcode" property="reportcode" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -307,11 +309,11 @@
 
   <select id="selectInfoByReportId" resultMap="BaseResultMap" parameterType="java.lang.Long">
     SELECT
-     d.* ,r.checkname,a.username
+     d.* ,q.reportcode,a.username
     FROM
         dangerhandlerinfo d
     LEFT JOIN quickreport q ON d.reportid= q.id
-    LEFT JOIN admininfo a ON e.checkuserid = a.id
-    WHERE e.reportid = #{id}
+    LEFT JOIN admininfo a ON d.checkuserid = a.id
+    WHERE d.reportid = #{id}
   </select>
 </mapper>

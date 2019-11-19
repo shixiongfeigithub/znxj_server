@@ -90,7 +90,7 @@
                     <div>
                         <ul id="myTab" class="nav nav-tabs">
                             <li>
-                                <a href="showexceptionreport?page=1">异常任务列表</a>
+                                <a href="showexceptionreport?page=1">异常巡检项  - 列表</a>
                             </li>
                         </ul>
                     </div>

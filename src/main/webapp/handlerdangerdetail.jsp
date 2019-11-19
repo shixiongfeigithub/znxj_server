@@ -36,7 +36,7 @@
                     <div class="box-inner">
                         <div class="box-header well" data-original-title="">
                             <h2>
-                                <i class="glyphicon glyphicon-globe"></i> 巡检异常处理详情
+                                <i class="glyphicon glyphicon-globe"></i> 隐患关闭详情
                             </h2>
                         </div>
                         <div class="box-content">
@@ -44,80 +44,45 @@
                             <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline" colspan="2">
-                                            <label class="control-label" >巡检项名称:</label>
-                                            ${exceptionhandlerinfo.checkname}
+                                            <label class="control-label" >任务报告编号:</label>
+                                            ${dangerhandlerinfo.reportcode}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >复核员姓名:</label>
-                                            ${exceptionhandlerinfo.username}
+                                            ${dangerhandlerinfo.username}
                                         </td>
                                     </tr>
                                    <%-- <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >处理责任人:</label>
-                                            ${exceptionhandlerinfo.operatorname}
+                                            ${dangerhandlerinfo.operatorname}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >上报时间:</label>
-                                            <sdf:formatDate value="${exceptionhandlerinfo.reporttime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                            <sdf:formatDate value="${dangerhandlerinfo.reporttime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >指派时间:</label>
-                                            <sdf:formatDate value="${exceptionhandlerinfo.appointedtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                            <sdf:formatDate value="${dangerhandlerinfo.appointedtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
                                     </tr>--%>
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" >关闭时间:</label>
-                                            <sdf:formatDate value="${exceptionhandlerinfo.exceptionclosetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                            <sdf:formatDate value="${dangerhandlerinfo.dangerclosetime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
                                     </tr>
-                          <%--          <tr>
-                                        <td class="form-inline">
-                                            <label class="control-label" >处理状态:</label>
-                                            <c:if test="${exceptionhandlerinfo.exceptionstate == 0}">待处理</c:if>
-                                            <c:if test="${exceptionhandlerinfo.exceptionstate == 1}">已关闭</c:if>
-                                            <c:if test="${exceptionhandlerinfo.exceptionstate == 2}">处理中</c:if>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="form-inline">
-                                            <label class="control-label" >异常类型:</label>
-                                            ${exceptionhandlerinfo.exceptiontype}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="form-inline">
-                                            <label class="control-label" >异常等级:</label>
-                                            ${exceptionhandlerinfo.exceptionlever}
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="form-inline">
-                                            <label class="control-label" >异常上报状态:</label>
-                                            <c:if test="${exceptionhandlerinfo.uploadstate == 0}">未上报</c:if>
-                                            <c:if test="${exceptionhandlerinfo.uploadstate == 1}">上报成功</c:if>
-                                            <c:if test="${exceptionhandlerinfo.uploadstate == 2}">上报失败</c:if>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="form-inline">
-                                            <label class="control-label" >上报时间:</label>
-                                            <sdf:formatDate value="${exceptionhandlerinfo.uploadtime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                                        </td>
-                                    </tr>--%>
                                     <tr>
                                         <td class="form-inline" colspan="2">
                                             <span>描述:</span>
                                             <textarea class="form-control" rows="3"
-                                                      cols="150" readonly="readonly">${exceptionhandlerinfo.descontent}</textarea>
+                                                      cols="150" readonly="readonly">${dangerhandlerinfo.descontent}</textarea>
                                         </td>
                                     </tr>
                                     <tr>

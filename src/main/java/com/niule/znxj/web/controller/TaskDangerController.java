@@ -48,7 +48,7 @@ public class TaskDangerController {
      */
     @RequestMapping("/showdanger")
     public String showdanger(Model m, int page,Long siteid,Integer type,Integer dangerstate,
-                                 String operatorname, String updatetime,HttpServletRequest request) {
+                                 String operatorname, String reportcode,String uploadtime,HttpServletRequest request) {
 
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
         List<Siteareainfo> siteareainfos = null;
@@ -74,16 +74,18 @@ public class TaskDangerController {
         long totalpage = 0;
         int pagesize = 15;
 
-
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("page", (page - 1) * pagesize);
         map.put("pagesize", pagesize);
         map.put("siteids", siteids);//厂区
-        map.put("type",type);//隐患或即拍即传
+        map.put("type",type==null?1:type);//隐患或即拍即传
+        if(type!=null && type==0){
+            map.put("typedesc","HSE");//隐患或即拍即传
+        }
         map.put("dangerstate",dangerstate);//隐患处理状态
         map.put("operatorname",operatorname); //巡检责任人
-        map.put("time", updatetime);//上传时间
-
+        map.put("time", uploadtime);//上传时间
+        map.put("reportcode",reportcode==null||reportcode.isEmpty()?"":"%"+reportcode+"%");
         //判断用户角色
         if(admininfo.getRoleid()==3){ //操作员
             map.put("operatorid",admininfo.getId());
@@ -99,11 +101,11 @@ public class TaskDangerController {
         pageBean.setCurrentPage(page);
         m.addAttribute("pageBean", pageBean);
         m.addAttribute("siteid", siteid);
-        m.addAttribute("type", type);
+        m.addAttribute("type", type==null?1:type);
         m.addAttribute("dangerstate", dangerstate);
         m.addAttribute("operatorname",operatorname);
-        m.addAttribute("updatetime", updatetime);
-
+        m.addAttribute("reportcode", reportcode);
+        m.addAttribute("uploadtime", uploadtime);
         m.addAttribute("sites", siteareainfos);
         /*m.addAttribute("totalnum",rows);
         m.addAttribute("closenum",closenum);

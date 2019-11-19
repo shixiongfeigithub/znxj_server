@@ -333,6 +333,12 @@
     <if test="type!=null and type!=''">
       and q.type=#{type}
     </if>
+    <if test="typedesc!=null and typedesc!=''">
+      and q.type=0
+    </if>
+    <if test="reportcode!=null and reportcode!=''">
+      AND q.reportcode LIKE #{reportcode}
+    </if>
     <if test="time!=null and time!=''">
       and str_to_date(q.uploadtime,'%Y-%m-%d')=str_to_date(#{time},'%Y-%m-%d')
     </if>
@@ -365,6 +371,12 @@
     where 1=1
     <if test="type!=null and type!=''">
       and q.type=#{type}
+    </if>
+    <if test="typedesc!=null and typedesc!=''">
+      and q.type=0
+    </if>
+    <if test="reportcode!=null and reportcode!=''">
+      AND q.reportcode LIKE #{reportcode}
     </if>
     <if test="time!=null and time!=''">
       and str_to_date(q.uploadtime,'%Y-%m-%d')=str_to_date(#{time},'%Y-%m-%d')

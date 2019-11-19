@@ -44,7 +44,7 @@
                     success: function(data){
                         if(data>0){
                             alert("任务关闭成功");
-                            showexceptionreport();
+                            showdanger();
                         }else if(data==0){
                             alert("任务已关闭，不能重复关闭");
                             showdanger();
