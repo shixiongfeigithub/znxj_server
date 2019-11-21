@@ -18,4 +18,8 @@ public interface QuickReportService {
 
     List<Quickreport> showQuickreport2(HashMap<String, Object> map);
     int countByExample2(HashMap<String, Object> map);
+
+    int updateByPrimaryKeySelective(Quickreport record);
+
+    int countByCloseState(HashMap<String, Object> map);
 }

@@ -41,17 +41,23 @@
                 return false;
             }
 
-            var exceptiontype = $("#exceptiontype").val();
-            if(exceptiontype==null || exceptiontype == ""){
+            var chk_value =[]; 
+            $('input[name="exceptiontype"]:checked').each(function(){ //遍历，将所有选中的值放到数组中
+                chk_value.push($(this).val()); 
+            }); 
+            if(chk_value.length==0){
                 alert("请选择需要上传的异常类型！");
                 return false;
-            }
+            };
 
-            var exceptionlever = $("#exceptionlever").val();
-            if(exceptionlever==null || exceptionlever == ""){
+            var chk2_value =[];
+            $('input[name="exceptionlever"]:checked').each(function(){ //遍历，将所有选中的值放到数组中
+                chk2_value.push($(this).val());
+            });
+            if(chk2_value.length==0){
                 alert("请选择需要上传的异常等级！");
                 return false;
-            }
+            };
 
             var state = $("#uploadstate").val();
             if(state==null || state == ""){
@@ -110,22 +116,18 @@
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="exceptiontype">上传异常类型:</label>
-                                            <select name="exceptiontype" id="exceptiontype" class="form-control" multiple required>
-                                                <c:forEach items="${exceptiontypeList}" var="type">
-                                                    <option value="${type.name}">${type.name}</option>
-                                                </c:forEach>
-                                            </select>
+                                            <label class="control-label" >上传异常类型:</label>
+                                            <c:forEach items="${exceptiontypeList}" var="type">
+                                                <input class="form-control" id="chk1" name="exceptiontype" type="checkbox" value="${type.name}">${type.name}
+                                            </c:forEach>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="exceptionlever">上传异常等级:</label>
-                                            <select name="exceptionlever" id="exceptionlever" class="form-control" multiple required>
-                                                <c:forEach items="${levertype1List}" var="lever">
-                                                    <option value="${lever.name}" >${lever.name}</option>
-                                                </c:forEach>
-                                            </select>
+                                            <label class="control-label">上传异常等级:</label>
+                                            <c:forEach items="${levertype1List}" var="lever">
+                                                <input class="form-control" id="chk2" name="exceptionlever" type="checkbox" value="${lever.name}">${lever.name}
+                                            </c:forEach>
                                         </td>
                                     </tr>
                                     <tr>

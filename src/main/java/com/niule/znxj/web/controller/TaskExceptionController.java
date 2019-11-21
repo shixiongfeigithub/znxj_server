@@ -221,7 +221,7 @@ public class TaskExceptionController {
             int result=exceptionhandlerinfoService.updateByExample(info,example);
 
             //发送异常报告给负责人
-            commonService.sendReportEmail(info.getOperatorid(),info.getReportcontentid());
+            commonService.sendReportEmail(exceptionhandlerinfo.getOperatorid(),info.getReportcontentid());
             return result;
         }
         return 0;

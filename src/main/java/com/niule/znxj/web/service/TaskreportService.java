@@ -105,4 +105,6 @@ public interface TaskreportService {
     int countReportcontentByExceptionState(HashMap<String, Object> map);
 
     Reportcontent selectReportContentByPrimaryKey(Long id);
+
+    List<Taskreportinfo> getTaskCode(String taskCode) throws Exception;
 }

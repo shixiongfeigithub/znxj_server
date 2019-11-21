@@ -102,7 +102,7 @@
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showexceptionreport?page=1" method="post">
                                             <label class="control-label" for="siteid">厂区：</label>
-                                            <select id="siteid" class="form-control" name="siteid" onchange="sitechange()" style="width: 90px;">
+                                            <select id="siteid" class="form-control" name="siteid" onchange="sitechange()" style="width: 100px;">
                                                 <c:if test="${siteid==null}">
                                                     <option value="">所有厂区</option>
                                                 </c:if>
@@ -112,30 +112,30 @@
                                             </select>
 
                                             <label class="control-label" for="areainfo">区域：</label>
-                                            <select class="form-control" id="areainfo" name="areaid" onchange="areachange()" style="width: 90px;">
+                                            <select class="form-control" id="areainfo" name="areaid" onchange="areachange()" style="width: 100px;">
                                                 <option value="" selected>所有区域</option>
                                             </select>
 
                                             <label class="control-label" for="equipment">设备：</label>
-                                            <select class="form-control" id="equipment" name="equipmentid" style="width: 90px;">
+                                            <select class="form-control" id="equipment" name="equipmentid" style="width: 100px;">
                                                 <option value="" selected>所有设备</option>
                                             </select>
 
                                             <label class="control-label" for="exceptionstate">处理状态：</label>
-                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 80px;">
+                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 100px;">
                                                 <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
                                                 <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
                                             <label class="control-label" for="exceptiontype">异常分类：</label>
-                                            <select class="form-control" id="exceptiontype" name="exceptiontype" style="width: 90px;">
+                                            <select class="form-control" id="exceptiontype" name="exceptiontype" style="width: 100px;">
                                                 <option value="" >所有分类</option>
                                                 <c:forEach items="${exceptiontypeList}" var="type">
                                                     <option ${exceptiontype eq type.name ?'selected':''} value="${type.name}">${type.name}</option>
                                                 </c:forEach>
                                             </select>
                                             <label class="control-label" for="exceptionlever">异常分级：</label>
-                                            <select class="form-control" id="exceptionlever" name="exceptionlever" style="width: 90px;">
+                                            <select class="form-control" id="exceptionlever" name="exceptionlever" style="width: 100px;">
                                                 <option value="" >所有分级</option>
                                                 <c:forEach items="${levertype1List}" var="lever">
                                                     <option ${exceptionlever eq lever.name ?'selected':''} value="${lever.name}" >${lever.name}</option>
@@ -144,7 +144,7 @@
                                             <br>
                                             <label class="control-label" for="operatorname">负责人：</label>
                                             <input type="text" style="width: 120px;" id="operatorname" name="operatorname" value="${operatorname}">
-                                            <label class="control-label" style="margin-top: 10px">执行时间：</label>
+                                            <label class="control-label">执行时间：</label>
                                             <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px; width: 120px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px;width: 120px;" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
                                             <script language="JavaScript">
@@ -223,13 +223,9 @@
                                                     <c:if test="${item.enumitem != ''}">${reports.enumitem}</c:if>
                                                 </c:if>
                                                 <c:if test="${item.checktype == '记录项'}">
-                                                    <c:if test="${item.numvalue == ''}">-</c:if>
-                                                    <c:if test="${item.numvalue!=''}">
-                                                        <c:if test="${Double.parseDouble(item.numvalue) < Double.parseDouble(item.normalmin)}"><span style="color: red;">${item.numvalue}↓↓</span></c:if>
-                                                        <c:if test="${Double.parseDouble(item.numvalue) > Double.parseDouble(item.normalmax)}"><span style="color: red;">${item.numvalue}↑↑</span></c:if>
-                                                        <c:if test="${ Double.parseDouble(item.normalmin)<=Double.parseDouble(item.numvalue)}">
-                                                            <c:if test="${Double.parseDouble(item.numvalue) <= Double.parseDouble(item.normalmax)}"> <span>${item.numvalue}</span></c:if>
-                                                        </c:if>
+                                                    <c:if test="${item.checkvalue == ''}">-</c:if>
+                                                    <c:if test="${item.checkvalue!=''}">
+                                                        ${item.errcontent}
                                                     </c:if>
                                                 </c:if>
                                                 <c:if test="${item.checktype == '状态项'}">

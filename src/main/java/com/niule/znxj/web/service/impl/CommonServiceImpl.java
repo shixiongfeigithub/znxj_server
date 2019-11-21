@@ -927,11 +927,123 @@ public class CommonServiceImpl implements CommonService {
                     List<Reportcontent> reportcontents = reportcontentMapper.selectByExample(example);
                     for (Reportcontent reportcontent : reportcontents) {
                         reportcontent.setCheckvalue(reportcontent.getNumvalue());
+                        Reportcontent reportcontent1 = updateErrContent(reportcontent.getId());
                         reportcontentMapper.updateByPrimaryKeySelective(reportcontent);
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public Reportcontent updateErrContent(Integer reportcontentid){
+        Reportcontent reportcontent = reportcontentMapper.selectByPrimaryKey(reportcontentid);
+        Taskreportinfo taskreportinfo = taskreportinfoMapper.selectByPrimaryKey(reportcontent.getReportid());
+        try{
+            List<Reportcontent> reportcontentList = null;
+            //得到前一次报告
+            List<Taskreportinfo> taskreportinfos = this.getTaskCode(taskreportinfo.getTaskcode());
+            if (taskreportinfos.size() > 0) {
+                ReportcontentExample reportcontentExample = new ReportcontentExample();
+                reportcontentExample.createCriteria().andReportidEqualTo(taskreportinfos.get(0).getId());
+                reportcontentList = reportcontentMapper.selectByExample(reportcontentExample);
+            }
+            //得到波动值
+            SystemsettinginfoExample systemsettinginfoExample=new SystemsettinginfoExample();
+            List<Systemsettinginfo> systems = systemsettinginfoMapper.selectByExample(systemsettinginfoExample);
+            Double fluctudte = 0.0;
+            for (Systemsettinginfo info : systems) {
+                if (info.getKeyname().equals("FLUCTUATE"))
+                    fluctudte = Double.valueOf(info.getValue());
+            }
+            Reportcontent reportcontent1 = null;
+            for(Reportcontent reportcontent2 : reportcontentList){
+                if(reportcontent2.getAreaname().equals(reportcontent.getAreaname()) && reportcontent2.getEquipname().equals(reportcontent.getEquipname())
+                        && reportcontent2.getCheckname().equals(reportcontent.getCheckname())){
+                    reportcontent1 = reportcontent2;
+                }
+            }
+            String bodongzhi = "";
+            double maxfluctudte = 1 + fluctudte;
+            double minfluctudte = 1 - fluctudte;
+            if (reportcontent.getCheckvalue() != null && reportcontent1 != null && reportcontent1.getCheckvalue() != null) {
+                if (reportcontent.getCheckvalue() != null && !reportcontent.getCheckvalue().isEmpty() && reportcontent1.getCheckvalue() != null && !reportcontent1.getCheckvalue().isEmpty()) {
+                    if (Double.parseDouble(reportcontent.getCheckvalue()) / Double.parseDouble(reportcontent1.getCheckvalue()) > maxfluctudte) {
+                        bodongzhi = "<span style='color:blue;'>" + "&nbsp;&nbsp;&nbsp;" + "↑↑↑" + "</span>";
+                    }
+                    if (Double.parseDouble(reportcontent.getCheckvalue()) / Double.parseDouble(reportcontent1.getCheckvalue()) < minfluctudte) {
+                        bodongzhi = "<span style='color:blue;'>" + "&nbsp;&nbsp;&nbsp;" + "↓↓↓" + "</span>";
+                    }
+                }
+
+            } else if (!reportcontent.getNumvalue().isEmpty() && reportcontent1 != null && reportcontent1.getCheckvalue() != null && !reportcontent1.getCheckvalue().isEmpty()) {
+                if (Double.parseDouble(reportcontent.getNumvalue()) / Double.parseDouble(reportcontent1.getCheckvalue()) > maxfluctudte) {
+                    bodongzhi = "<span style='color:blue;'>" + "&nbsp;&nbsp;&nbsp;" + "↑↑↑" + "</span>";
+                }
+                if (Double.parseDouble(reportcontent.getNumvalue()) / Double.parseDouble(reportcontent1.getCheckvalue()) < minfluctudte) {
+                    bodongzhi = "<span style='color:blue;'>" + "&nbsp;&nbsp;&nbsp;" + "↓↓↓" + "</span>";
+                }
+            }
+            if (reportcontent.getCheckvalue() != null && !reportcontent.getCheckvalue().isEmpty()) {
+                //大于低值 小于高值
+                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
+                        Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getCheckvalue()) &&
+                        Double.parseDouble(reportcontent.getCheckvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
+                    reportcontent.setErrcontent("-");
+                }
+                //大于最低值  小于低值
+                else if (!reportcontent.getNormalmin().equals("-")
+                        && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
+                    reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↓" + bodongzhi + "</span>");
+                }//大于高值  小于最高值值
+                else if (!reportcontent.getNormalmax().equals("-")
+                        && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
+                    reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↑" + bodongzhi + "</span>");
+                } //大于最高上限值
+                else if (!reportcontent.getUpperwarning().equals("-") &&
+                        Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getUpperwarning())) {
+                    reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↑↑" + bodongzhi + "</span>");
+                }//小于最低上限值
+                else if (!reportcontent.getLowerwarning().equals("-") &&
+                        Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
+                    reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↓↓" + bodongzhi + "</span>");
+                } else {
+                    reportcontent.setErrcontent("-");
+                }
+            } else if (!reportcontent.getNumvalue().equals("")) {
+                //大于低值 小于高值
+                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
+                        Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getNumvalue()) &&
+                        Double.parseDouble(reportcontent.getNumvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
+                    reportcontent.setErrcontent("-");
+                }//大于最低值  小于低值
+                else if (!reportcontent.getNormalmin().equals("-")
+                        && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
+                    reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↓" + bodongzhi + "</span>");
+                }
+                //大于高值  小于最高值值
+                else if (!reportcontent.getNormalmax().equals("-")
+                        && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
+                    reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↑" + bodongzhi + "</span>");
+                }  //大于最高上限值
+                else if (!reportcontent.getUpperwarning().equals("-") &&
+                        Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getUpperwarning())) {
+                    reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↑↑" + bodongzhi + "</span>");
+                }
+                //小于最低上限值
+                else if (!reportcontent.getLowerwarning().equals("-") &&
+                        Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
+                    reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↓↓" + bodongzhi + "</span>");
+                } else {
+                    reportcontent.setErrcontent("-");
+                }
+            } else {
+                reportcontent.setErrcontent("-");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  reportcontent;
     }
 
     @Override
@@ -1080,10 +1192,10 @@ public class CommonServiceImpl implements CommonService {
                 String[] exceptiontypes = taskuploadconfigList.get(0).getExceptiontype().split(",");
                 String[] exceptionlevers = taskuploadconfigList.get(0).getExceptionlever().split(",");
                 HashMap<String,Object> paramMap = new HashMap<>();
-                List<Integer> states = new ArrayList<>();
+                /*List<Integer> states = new ArrayList<>();
                 states.add(0); //未上报
                 states.add(2);//上报失败
-                paramMap.put("states",states);
+                paramMap.put("states",states);*/
                 paramMap.put("reportid",taskreportinfo.getId());
                 paramMap.put("exceptionleverList",exceptionlevers);
                 paramMap.put("exceptiontypeList",exceptiontypes);

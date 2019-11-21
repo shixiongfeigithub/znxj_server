@@ -239,7 +239,7 @@
                                             <input type="text" class="form-control" style="width: 200px;"
                                                    onClick="WdatePicker()" id="time" name="uploadtime"
                                                    value="${uploadtime}">
-                                            <input type="submit" class="btn btn-primary" value="搜索">
+                                            <input type="submit" class="btn btn-primary" value="搜索"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
                                         </form>
                                     </div>
                                     <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">

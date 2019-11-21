@@ -280,7 +280,7 @@ public class WebTaskreportController {
         //得到报告明细
         Taskreportinfo taskreportinfo = taskreportService.selectByPrimaryKey(id);
         //得到前一次报告
-        List<Taskreportinfo> taskreportinfos = getTaskCode(taskreportinfo.getTaskcode());
+        List<Taskreportinfo> taskreportinfos = taskreportService.getTaskCode(taskreportinfo.getTaskcode());
         List<Reportcontent> reportcontentList = new ArrayList<>();
         if (taskreportinfos.size() > 0) {
             reportcontentList = getReportContentByReportId(taskreportinfos.get(0).getId());
@@ -454,7 +454,7 @@ public class WebTaskreportController {
         return "report3";
     }
 
-    public List<Taskreportinfo> getTaskCode(String taskCode) throws Exception {
+   /* public List<Taskreportinfo> getTaskCode(String taskCode) throws Exception {
         String code = taskCode.substring(0, taskCode.lastIndexOf("-"));
         //得到当前子任务是第几次执行
         Integer i = Integer.valueOf(taskCode.substring(taskCode.lastIndexOf("-") + 1));
@@ -505,7 +505,7 @@ public class WebTaskreportController {
             taskreportinfos = taskreportService.selectByExample(taskreportinfoExample);
         }
         return taskreportinfos;
-    }
+    }*/
 
     public List<Tasktempinfo> getTaskTemp(String taskCode) throws Exception {
         String code = taskCode.substring(0, taskCode.lastIndexOf("-"));
@@ -1424,7 +1424,7 @@ public class WebTaskreportController {
         List<Reportcontent> reportcontents = reportcontentMapper.selectByExample(reportcontentExample);
 
         //得到前一次报告
-        List<Taskreportinfo> taskreportinfos = getTaskCode(taskreportinfo.getTaskcode());
+        List<Taskreportinfo> taskreportinfos = taskreportService.getTaskCode(taskreportinfo.getTaskcode());
         List<Reportcontent> reportcontentList = new ArrayList<>();
         if (taskreportinfos.size() > 0) {
             reportcontentList = getReportContentByReportId(taskreportinfos.get(0).getId());

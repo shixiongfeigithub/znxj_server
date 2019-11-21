@@ -76,5 +76,7 @@ public interface CommonService {
     void uploadTaskReportInfo();
     //上传巡检异常记录
     void uploadExceptionReport();
+
+    Reportcontent updateErrContent(Integer reportcontentid);
 }
 

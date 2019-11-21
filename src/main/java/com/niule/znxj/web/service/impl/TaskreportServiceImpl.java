@@ -9,6 +9,8 @@ import com.niule.znxj.core.util.json.JsonUtil;
 import com.niule.znxj.web.dao.*;
 import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.model.response.*;
+import com.niule.znxj.web.service.CommonService;
+import com.niule.znxj.web.service.SystemService;
 import com.niule.znxj.web.service.TaskreportService;
 import net.sf.json.JSONArray;
 import org.apache.commons.collections.CollectionUtils;
@@ -37,7 +39,7 @@ public class TaskreportServiceImpl implements TaskreportService {
     @Resource
     private OperatelogMapper operatelogMapper;
     @Resource
-    private ExceptionhandlerinfoMapper exceptionhandlerinfoMapper;
+    private CommonService commonService;
 
     @Override
     public List<Tasktempinfo> dadiyreport(String date, Long taskidstr) {
@@ -537,6 +539,9 @@ public class TaskreportServiceImpl implements TaskreportService {
             Reportcontent reportcontent = new Reportcontent();
             reportcontent.setId(checkReport.getId());
             reportcontent.setCheckvalue(checkReport.getCheckvalue());
+            //更新异常描述
+            Reportcontent reportcontent1 = commonService.updateErrContent(checkReport.getId());
+            reportcontent.setErrcontent(reportcontent1.getErrcontent());
             updReportContent = reportcontentMapper.updateCheckValue(reportcontent);
         }
         if (updCheckTime > 0 && updReportContent > 0) {
@@ -545,6 +550,61 @@ public class TaskreportServiceImpl implements TaskreportService {
         } else
             return 0;
     }
+
+    @Override
+    public List<Taskreportinfo> getTaskCode(String taskCode) throws Exception {
+        String code = taskCode.substring(0, taskCode.lastIndexOf("-"));
+        //得到当前子任务是第几次执行
+        Integer i = Integer.valueOf(taskCode.substring(taskCode.lastIndexOf("-") + 1));
+        String oldTaskCode = "";
+        if (i != 1) {
+            oldTaskCode = code + "-" + (i - 1);
+        } else {
+            //如果当前子任务是第一次执行，获取到昨天当前任务最后一次执行的任务报告
+            int index = taskCode.indexOf("-");
+//            //根据第一个点的位置 获得第二个点的位置
+            index = taskCode.indexOf("-", index + 1);
+            int taskNameIndex = taskCode.indexOf("-");
+            String taskName = taskCode.substring(0, taskNameIndex);
+            String time = taskCode.substring(index + 1, taskCode.lastIndexOf("-"));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Date date = sdf.parse(time);
+            Calendar now = Calendar.getInstance();
+            now.setTime(date);
+            now.set(Calendar.DATE, now.get(Calendar.DATE) - 1);
+            String time2 = sdf.format(now.getTime());
+            TaskreportinfoExample example = new TaskreportinfoExample();
+            example.createCriteria().andTaskcode2Like(taskName + "%" + time2 + "%");
+            List<Taskreportinfo> taskreportinfos = taskreportinfoMapper.selectByExample(example);
+            Integer k = null;
+            String taskversion = "";
+            if (taskreportinfos.size() > 0) {
+                String newTaskCode = taskreportinfos.get(0).getTemp().getTaskcode();
+                int aa = newTaskCode.indexOf("-");
+                int bb = newTaskCode.indexOf("-", aa + 1);
+                taskversion = newTaskCode.substring(aa + 1, bb);//昨天的任务版本
+                List<Integer> counts = new ArrayList<>();
+                for (Taskreportinfo taskreportinfo : taskreportinfos) {
+                    String taskcode2 = taskreportinfo.getTemp().getTaskcode();
+                    Integer j = Integer.valueOf(taskcode2.substring(taskcode2.lastIndexOf("-") + 1));
+                    counts.add(j);
+                }
+                k = Collections.max(counts);
+            }
+            if (k == null)
+                oldTaskCode = null;
+            else
+                oldTaskCode = taskName + "-" + taskversion + "-" + time2 + "-" + k;//昨天最后一个子任务
+        }
+        List<Taskreportinfo> taskreportinfos = new ArrayList<>();
+        if (oldTaskCode != null) {
+            TaskreportinfoExample taskreportinfoExample = new TaskreportinfoExample();
+            taskreportinfoExample.createCriteria().andTaskcode2EqualTo(oldTaskCode);
+            taskreportinfos = taskreportinfoMapper.selectByExample(taskreportinfoExample);
+        }
+        return taskreportinfos;
+    }
+
 
     @Override
     public Reportcontent selectReportContentByPrimaryKey(Long id) {

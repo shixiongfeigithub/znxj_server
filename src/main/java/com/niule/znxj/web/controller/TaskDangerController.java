@@ -92,8 +92,8 @@ public class TaskDangerController {
         }
         List<Quickreport> quickreportList =quickReportService.showQuickreport2(map);
         int rows = quickReportService.countByExample2(map);
-       /* int closenum = taskreportService.countReportcontentByExceptionState(map);
-        int surplusnum = rows-closenum;*/
+        int closenum = quickReportService.countByCloseState(map);
+        int surplusnum = rows-closenum;
 
         totalpage = PageBean.counTotalPage(pagesize, rows);
         pageBean.setList(quickreportList);
@@ -107,9 +107,9 @@ public class TaskDangerController {
         m.addAttribute("reportcode", reportcode);
         m.addAttribute("uploadtime", uploadtime);
         m.addAttribute("sites", siteareainfos);
-        /*m.addAttribute("totalnum",rows);
+        m.addAttribute("totalnum",rows);
         m.addAttribute("closenum",closenum);
-        m.addAttribute("surplusnum",surplusnum);*/
+        m.addAttribute("surplusnum",surplusnum);
         m.addAttribute("ip", ip);
         return "showdanger";
     }
@@ -166,6 +166,10 @@ public class TaskDangerController {
                 break;
             }
         }
+        List<Warningtasktype> yinhuantypeList = commonService.getWarningTypeOrLevels(0); //隐患类型
+        List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(1); //隐患等级
+        m.addAttribute("levertype1List",levertype1List);
+        m.addAttribute("yinhuantypeList",yinhuantypeList);
         m.addAttribute("quickreport", quickreport);
         m.addAttribute("operationuserList",operationuserList);
         return "assigndanger";
@@ -191,8 +195,20 @@ public class TaskDangerController {
             info.setDangerstate(2); //已分配责任人
             int result=dangerhandlerinfoService.updateByExample(info,example);
 
+            //更新隐患类型和等级
+            Quickreport quickreport = quickReportService.selectByPrimaryKey(info.getReportid());
+            if(quickreport.getType()==1){
+                List<String> contents = JsonUtil.toObject(quickreport.getContent(),List.class);
+                if(contents!=null && contents.size()>=2){
+                    contents.subList(1,contents.size());
+                }
+                contents.add(0,dangerhandlerinfo.getYinhuantype());
+                contents.add(1,dangerhandlerinfo.getYinhuanlevel());
+                quickreport.setContent(JsonUtil.toJSON(contents));
+                quickReportService.updateByPrimaryKeySelective(quickreport);
+            }
             //发送隐患信息给负责人
-            commonService.sendDangerEmail(info.getOperatorid(),info.getReportid());
+            commonService.sendDangerEmail(dangerhandlerinfo.getOperatorid(),info.getReportid());
             return result;
         }
         return 0;

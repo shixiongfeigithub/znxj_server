@@ -47,7 +47,9 @@
             <th>设备</th>
             <th>异常项</th>
             <th>描述</th>
-            <th>异常记录链接</th>
+            <c:if test="reportcontent.checktype=='状态项'">
+                <th>异常记录链接</th>
+            </c:if>
         </tr>
 
             <tr>
@@ -58,11 +60,13 @@
                 <td>${reportcontent.equipname}</td>
                 <td>${reportcontent.checkname}</td>
                 <td>${reportcontent.errcontent}</td>
+                <c:if test="reportcontent.checktype=='状态项'">
                 <td>
                     <c:if test="${reportcontent.img != 'null' or reportcontent.audio != 'null' or reportcontent.video != 'null'}">
                         <a href='http://${ip}/toException?img=${reportcontent.img}&audio=${reportcontent.audio}&video=${reportcontent.video}'  target="_Blank">查看异常详情</a>
                     </c:if>
                 </td>
+                </c:if>
             </tr>
     </table>
 </div>

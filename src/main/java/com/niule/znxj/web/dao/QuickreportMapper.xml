@@ -355,7 +355,7 @@
       AND d.operatorid =#{operatorid}
     </if>
     <if test="dangerstate!=null and dangerstate!=''">
-      and d.dangerstate=#{exceptionstate}
+      and d.dangerstate=#{dangerstate}
     </if>
     order BY  q.id desc
     limit #{page},#{pagesize}
@@ -394,8 +394,44 @@
       AND d.operatorid =#{operatorid}
     </if>
     <if test="dangerstate!=null and dangerstate!=''">
-      and d.dangerstate=#{exceptionstate}
+      and d.dangerstate=#{dangerstate}
     </if>
+    order BY  q.id desc
+  </select>
+
+  <select id="countByCloseState" resultType="java.lang.Integer" parameterType="map" >
+    select count(*)
+    from quickreport q
+    left join dangerhandlerinfo d on d.reportid = q.id
+    left join userinfo u on u.id=q.userid
+    left join classinfo c on u.classid=c.id
+    left join siteareainfo s on c.siteareaid=s.id
+    where 1=1
+    <if test="type!=null and type!=''">
+      and q.type=#{type}
+    </if>
+    <if test="typedesc!=null and typedesc!=''">
+      and q.type=0
+    </if>
+    <if test="reportcode!=null and reportcode!=''">
+      AND q.reportcode LIKE #{reportcode}
+    </if>
+    <if test="time!=null and time!=''">
+      and str_to_date(q.uploadtime,'%Y-%m-%d')=str_to_date(#{time},'%Y-%m-%d')
+    </if>
+    <if test="siteids!=null and siteids!=''">
+      and s.id in
+      <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+        #{siteid}
+      </foreach>
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND d.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND d.operatorid =#{operatorid}
+    </if>
+      and d.dangerstate=1
     order BY  q.id desc
   </select>
 

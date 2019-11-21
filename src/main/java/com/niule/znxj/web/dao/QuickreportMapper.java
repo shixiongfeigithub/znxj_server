@@ -35,4 +35,6 @@ public interface QuickreportMapper {
     List<Quickreport> showQuickreport(HashMap<String, Object> map);
     List<Quickreport> showQuickreport2(HashMap<String, Object> map);
     int countByExample2(HashMap<String, Object> map);
+
+    int countByCloseState(HashMap<String, Object> map);
 }

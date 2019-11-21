@@ -56,4 +56,14 @@ public class QuickReportServiceImpl implements QuickReportService{
     public int countByExample2(HashMap<String,Object> map) {
         return quickreportMapper.countByExample2(map);
     }
+
+    @Override
+    public int countByCloseState(HashMap<String,Object> map) {
+        return quickreportMapper.countByCloseState(map);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(Quickreport record) {
+        return quickreportMapper.updateByPrimaryKeySelective(record);
+    }
 }

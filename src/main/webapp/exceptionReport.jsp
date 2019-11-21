@@ -60,8 +60,10 @@
                 <td>${content.checkname}</td>
                 <td>${content.errcontent}</td>
                 <td>
-                    <c:if test="${content.img != 'null' or content.audio != 'null' or content.video != 'null'}">
-                        <a href='http://${ip}/toException?img=${content.img}&audio=${content.audio}&video=${content.video}'  target="_Blank">查看异常详情</a>
+                    <c:if test="content.checktype=='状态项'">
+                        <c:if test="${content.img != 'null' or content.audio != 'null' or content.video != 'null'}">
+                            <a href='http://${ip}/toException?img=${content.img}&audio=${content.audio}&video=${content.video}'  target="_Blank">查看异常详情</a>
+                        </c:if>
                     </c:if>
                 </td>
             </tr>

@@ -654,6 +654,9 @@
     update reportcontent
     <set >
       checkvalue = #{checkvalue,jdbcType=VARCHAR},
+      <if test="errcontent != null" >
+        errcontent = #{errcontent,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>

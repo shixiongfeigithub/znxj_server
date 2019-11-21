@@ -29,6 +29,26 @@ public class Dangerhandlerinfo {
 
     private String username;
 
+    private String yinhuantype;
+
+    private String yinhuanlevel;
+
+    public String getYinhuantype() {
+        return yinhuantype;
+    }
+
+    public void setYinhuantype(String yinhuantype) {
+        this.yinhuantype = yinhuantype;
+    }
+
+    public String getYinhuanlevel() {
+        return yinhuanlevel;
+    }
+
+    public void setYinhuanlevel(String yinhuanlevel) {
+        this.yinhuanlevel = yinhuanlevel;
+    }
+
     public Long getId() {
         return id;
     }
