@@ -31,6 +31,7 @@
                 /dadiyreport=anon
                 /weekreport=anon
                 /exceptionReport=anon
+                /exceptionReportContent=anon
                 /exception.jsp = anon
                 /toException = anon
                 /admin/SystermLogin = anon

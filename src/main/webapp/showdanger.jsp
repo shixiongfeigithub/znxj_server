@@ -197,14 +197,16 @@
         <div id="content" class="col-lg-12 col-sm-12">
             <div class="row">
                 <div class="box col-md-12">
+                    <div>
+                        <ul id="myTab" class="nav nav-tabs">
+                            <li>
+                                <a href="#">隐患列表</a>
+                            </li>
+                        </ul>
+                    </div>
                     <div id="myTabContent" class="tab-content">
                         <div class="tab-pane fade in active" id="home">
                             <div class="box-inner">
-                                <div class="box-header well" data-original-title="">
-                                    <h2>
-                                        <i class="glyphicon glyphicon-globe"></i> 隐患列表
-                                    </h2>
-                                </div>
                                 <div class="box-content">
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showdanger?page=1" method="post">
@@ -233,12 +235,9 @@
 
                                             <br>
                                             <label class="control-label" for="reportcode">报告编号：</label>
-                                            <input type="text" class="form-control" style="width: 150px;" id="reportcode"
-                                                   name="reportcode" value="${reportcode}">
+                                            <input type="text" style="margin-top: 10px;width: 150px;" id="reportcode" name="reportcode" value="${reportcode}">
                                             <label class="control-label" for="time">时间：</label>
-                                            <input type="text" class="form-control" style="width: 200px;"
-                                                   onClick="WdatePicker()" id="time" name="uploadtime"
-                                                   value="${uploadtime}">
+                                            <input type="text" style="margin-top: 10px;width: 200px;" onClick="WdatePicker()" id="time" name="uploadtime" value="${uploadtime}">
                                             <input type="submit" class="btn btn-primary" value="搜索"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
                                         </form>
                                     </div>

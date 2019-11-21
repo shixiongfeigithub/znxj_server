@@ -122,7 +122,7 @@
                                             </select>
 
                                             <label class="control-label" for="exceptionstate">处理状态：</label>
-                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 100px;">
+                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 80px;">
                                                 <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
                                                 <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
@@ -135,7 +135,7 @@
                                                 </c:forEach>
                                             </select>
                                             <label class="control-label" for="exceptionlever">异常分级：</label>
-                                            <select class="form-control" id="exceptionlever" name="exceptionlever" style="width: 100px;">
+                                            <select class="form-control" id="exceptionlever" name="exceptionlever" style="width: 80px;">
                                                 <option value="" >所有分级</option>
                                                 <c:forEach items="${levertype1List}" var="lever">
                                                     <option ${exceptionlever eq lever.name ?'selected':''} value="${lever.name}" >${lever.name}</option>
