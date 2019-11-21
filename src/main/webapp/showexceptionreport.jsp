@@ -223,8 +223,18 @@
                                                     <c:if test="${item.enumitem != ''}">${reports.enumitem}</c:if>
                                                 </c:if>
                                                 <c:if test="${item.checktype == '记录项'}">
-                                                    <c:if test="${item.checkvalue == ''}">-</c:if>
-                                                    <c:if test="${item.checkvalue!=''}">
+                                                    <c:if test="${item.checkvalue == '' or item.checkvalue==null}">
+                                                        <c:if test="${item.numvalue!='' and item.numvalue !=null}">
+                                                            <c:if test="${item.normalmin !='-' and item.normalmax!='-' and item.lowerwarning !='-' and item.upperwarning!='-'}">
+                                                                <c:if test="${Double.parseDouble(item.numvalue) < Double.parseDouble(item.normalmin) and Double.parseDouble(item.numvalue) > Double.parseDouble(item.lowerwarning)}">${item.numvalue}<span style="color: red;">↓</span></c:if>
+                                                                <c:if test="${Double.parseDouble(item.numvalue) > Double.parseDouble(item.normalmax) and Double.parseDouble(item.numvalue) < Double.parseDouble(item.upperwarning)}">${item.numvalue}<span style="color: red;">↑</span></c:if>
+                                                                <c:if test="${ Double.parseDouble(item.normalmin)<=Double.parseDouble(item.numvalue) and Double.parseDouble(item.numvalue) <= Double.parseDouble(item.normalmax)}"><span>${item.numvalue}</span></c:if>
+                                                                <c:if test="${Double.parseDouble(item.numvalue) <= Double.parseDouble(item.lowerwarning)}">${item.numvalue}<span style="color: red;">↓↓</span></c:if>
+                                                                <c:if test="${Double.parseDouble(item.numvalue) >= Double.parseDouble(item.upperwarning)}">${item.numvalue}<span style="color: red;">↑↑</span></c:if>
+                                                            </c:if>
+                                                        </c:if>
+                                                    </c:if>
+                                                    <c:if test="${item.checkvalue!='' and item.checkvalue !=null}">
                                                         ${item.errcontent}
                                                     </c:if>
                                                 </c:if>

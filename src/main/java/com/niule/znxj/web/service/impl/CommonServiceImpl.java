@@ -928,6 +928,7 @@ public class CommonServiceImpl implements CommonService {
                     for (Reportcontent reportcontent : reportcontents) {
                         reportcontent.setCheckvalue(reportcontent.getNumvalue());
                         Reportcontent reportcontent1 = updateErrContent(reportcontent.getId());
+                        reportcontent.setErrcontent(reportcontent1.getErrcontent());
                         reportcontentMapper.updateByPrimaryKeySelective(reportcontent);
                     }
                 }
@@ -957,10 +958,12 @@ public class CommonServiceImpl implements CommonService {
                     fluctudte = Double.valueOf(info.getValue());
             }
             Reportcontent reportcontent1 = null;
-            for(Reportcontent reportcontent2 : reportcontentList){
-                if(reportcontent2.getAreaname().equals(reportcontent.getAreaname()) && reportcontent2.getEquipname().equals(reportcontent.getEquipname())
-                        && reportcontent2.getCheckname().equals(reportcontent.getCheckname())){
-                    reportcontent1 = reportcontent2;
+            if(reportcontentList!=null && reportcontentList.size()>0){
+                for(Reportcontent reportcontent2 : reportcontentList){
+                    if(reportcontent2.getAreaname().equals(reportcontent.getAreaname()) && reportcontent2.getEquipname().equals(reportcontent.getEquipname())
+                            && reportcontent2.getCheckname().equals(reportcontent.getCheckname())){
+                        reportcontent1 = reportcontent2;
+                    }
                 }
             }
             String bodongzhi = "";
@@ -989,15 +992,17 @@ public class CommonServiceImpl implements CommonService {
                 if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
                         Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getCheckvalue()) &&
                         Double.parseDouble(reportcontent.getCheckvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
-                    reportcontent.setErrcontent("-");
+                    reportcontent.setErrcontent("");
                 }
                 //大于最低值  小于低值
                 else if (!reportcontent.getNormalmin().equals("-")
-                        && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
+                        && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getNormalmin())
+                        && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getLowerwarning())) {
                     reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↓" + bodongzhi + "</span>");
                 }//大于高值  小于最高值值
                 else if (!reportcontent.getNormalmax().equals("-")
-                        && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
+                        && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getNormalmax())
+                        && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getUpperwarning())) {
                     reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↑" + bodongzhi + "</span>");
                 } //大于最高上限值
                 else if (!reportcontent.getUpperwarning().equals("-") &&
@@ -1008,22 +1013,24 @@ public class CommonServiceImpl implements CommonService {
                         Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
                     reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↓↓" + bodongzhi + "</span>");
                 } else {
-                    reportcontent.setErrcontent("-");
+                    reportcontent.setErrcontent("");
                 }
             } else if (!reportcontent.getNumvalue().equals("")) {
                 //大于低值 小于高值
                 if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
                         Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getNumvalue()) &&
                         Double.parseDouble(reportcontent.getNumvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
-                    reportcontent.setErrcontent("-");
+                    reportcontent.setErrcontent("");
                 }//大于最低值  小于低值
                 else if (!reportcontent.getNormalmin().equals("-")
-                        && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getNormalmin())) {
+                        && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getNormalmin())
+                        && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getLowerwarning())) {
                     reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↓" + bodongzhi + "</span>");
                 }
                 //大于高值  小于最高值值
                 else if (!reportcontent.getNormalmax().equals("-")
-                        && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getNormalmax())) {
+                        && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getNormalmax())
+                        && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getUpperwarning())) {
                     reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↑" + bodongzhi + "</span>");
                 }  //大于最高上限值
                 else if (!reportcontent.getUpperwarning().equals("-") &&
@@ -1035,10 +1042,10 @@ public class CommonServiceImpl implements CommonService {
                         Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getLowerwarning())) {
                     reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↓↓" + bodongzhi + "</span>");
                 } else {
-                    reportcontent.setErrcontent("-");
+                    reportcontent.setErrcontent("");
                 }
             } else {
-                reportcontent.setErrcontent("-");
+                reportcontent.setErrcontent("");
             }
         }catch (Exception e){
             e.printStackTrace();
