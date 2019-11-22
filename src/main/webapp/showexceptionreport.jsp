@@ -87,22 +87,20 @@
             <div class="row">
                 <div class="box col-md-12">
                     <input type="hidden" value="${roleid}" id="roleid">
-                    <div>
-                        <ul id="myTab" class="nav nav-tabs">
-                            <li>
-                                <a href="showexceptionreport?page=1">巡检异常列表</a>
-                            </li>
-                        </ul>
-                    </div>
-
                     <div id="myTabContent" class="tab-content">
                         <div class="tab-pane fade in active" id="report">
                             <div class="box-inner">
+                                <div class="box-header well" data-original-title="">
+                                    <h2>
+                                        <i class="glyphicon glyphicon-globe"></i>
+                                        巡检异常 - 列表
+                                    </h2>
+                                </div>
                                 <div class="box-content">
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showexceptionreport?page=1" method="post">
                                             <label class="control-label" for="siteid">厂区：</label>
-                                            <select id="siteid" class="form-control" name="siteid" onchange="sitechange()" style="width: 100px;">
+                                            <select id="siteid" class="form-control" name="siteid" onchange="sitechange()">
                                                 <c:if test="${siteid==null}">
                                                     <option value="">所有厂区</option>
                                                 </c:if>
@@ -112,41 +110,41 @@
                                             </select>
 
                                             <label class="control-label" for="areainfo">区域：</label>
-                                            <select class="form-control" id="areainfo" name="areaid" onchange="areachange()" style="width: 100px;">
+                                            <select class="form-control" id="areainfo" name="areaid" onchange="areachange()" >
                                                 <option value="" selected>所有区域</option>
                                             </select>
 
                                             <label class="control-label" for="equipment">设备：</label>
-                                            <select class="form-control" id="equipment" name="equipmentid" style="width: 100px;">
+                                            <select class="form-control" id="equipment" name="equipmentid">
                                                 <option value="" selected>所有设备</option>
                                             </select>
-
-                                            <label class="control-label" for="exceptionstate">处理状态：</label>
-                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 80px;">
-                                                <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
-                                                <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
-                                                <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
-                                            </select>
                                             <label class="control-label" for="exceptiontype">异常分类：</label>
-                                            <select class="form-control" id="exceptiontype" name="exceptiontype" style="width: 100px;">
+                                            <select class="form-control" id="exceptiontype" name="exceptiontype">
                                                 <option value="" >所有分类</option>
                                                 <c:forEach items="${exceptiontypeList}" var="type">
                                                     <option ${exceptiontype eq type.name ?'selected':''} value="${type.name}">${type.name}</option>
                                                 </c:forEach>
                                             </select>
                                             <label class="control-label" for="exceptionlever">异常分级：</label>
-                                            <select class="form-control" id="exceptionlever" name="exceptionlever" style="width: 80px;">
+                                            <select class="form-control" id="exceptionlever" name="exceptionlever">
                                                 <option value="" >所有分级</option>
                                                 <c:forEach items="${levertype1List}" var="lever">
                                                     <option ${exceptionlever eq lever.name ?'selected':''} value="${lever.name}" >${lever.name}</option>
                                                 </c:forEach>
                                             </select>
                                             <br>
+                                            <div style="line-height: 10px;">&nbsp;</div>
+                                            <label class="control-label" for="exceptionstate">处理状态：</label>
+                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 80px;">
+                                                <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
+                                                <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
+                                                <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
+                                            </select>
                                             <label class="control-label" for="operatorname">负责人：</label>
-                                            <input type="text" style="width: 120px;" id="operatorname" name="operatorname" value="${operatorname}">
+                                            <input type="text" style="width: 80px;" id="operatorname" name="operatorname" value="${operatorname}">
                                             <label class="control-label">执行时间：</label>
-                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px; width: 120px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px;width: 120px;" id="time2">
-                                            <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
+                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px; width: 90px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px;width: 90px;" id="time2">
+                                            <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 20px;margin-top: 10px"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭：${closenum}</span><span style="margin: 10px;">剩余：${surplusnum}</span>
                                             <script language="JavaScript">
                                                 Date.prototype.format = function (format) {
                                                     var args = {

@@ -67,13 +67,12 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <c:if test="quickreport.type==1">
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="yinhuantype">隐患类型:</label>
                                             <select name="yinhuantype" id="yinhuantype" class="form-control" required>
                                                 <c:forEach items="${yinhuantypeList}" var="type">
-                                                    <option value="${type.name}">${type.name}</option>
+                                                    <option ${yinhuantype eq type.name ?'selected':''} value="${type.name}">${type.name}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
@@ -83,12 +82,11 @@
                                             <label class="control-label" for="yinhuanlevel">隐患等级:</label>
                                             <select name="yinhuanlevel" id="yinhuanlevel" class="form-control" required>
                                                 <c:forEach items="${levertype1List}" var="lever">
-                                                    <option value="${lever.name}">${lever.name}</option>
+                                                    <option ${levertype eq lever.name ?'selected':''} value="${lever.name}">${lever.name}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
                                     </tr>
-                                    </c:if>
                                     <tr>
                                         <td colspan="2"><input id="save" type="button" class="btn btn-primary" value="保存" onclick="formSubmit()">
                                             <input type="reset" class="btn btn-primary white" value="取消" onclick="javascript:history.go(-1);"></td>

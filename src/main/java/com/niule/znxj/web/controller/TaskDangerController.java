@@ -47,8 +47,8 @@ public class TaskDangerController {
      * 分页显示所有隐患列表
      */
     @RequestMapping("/showdanger")
-    public String showdanger(Model m, int page,Long siteid,Integer type,Integer dangerstate,
-                                 String operatorname, String reportcode,String uploadtime,HttpServletRequest request) {
+    public String showdanger(Model m, int page,Long siteid,Integer dangerstate,
+                                 String operatorname, String reportcode,String time1,String time2,HttpServletRequest request) {
 
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
         List<Siteareainfo> siteareainfos = null;
@@ -78,13 +78,10 @@ public class TaskDangerController {
         map.put("page", (page - 1) * pagesize);
         map.put("pagesize", pagesize);
         map.put("siteids", siteids);//厂区
-        map.put("type",type==null?1:type);//隐患或即拍即传
-        if(type!=null && type==0){
-            map.put("typedesc","HSE");//隐患或即拍即传
-        }
         map.put("dangerstate",dangerstate);//隐患处理状态
         map.put("operatorname",operatorname); //巡检责任人
-        map.put("time", uploadtime);//上传时间
+        map.put("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);//开始时间
+        map.put("time2", time2==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time2);//结束时间
         map.put("reportcode",reportcode==null||reportcode.isEmpty()?"":"%"+reportcode+"%");
         //判断用户角色
         if(admininfo.getRoleid()==3){ //操作员
@@ -101,11 +98,11 @@ public class TaskDangerController {
         pageBean.setCurrentPage(page);
         m.addAttribute("pageBean", pageBean);
         m.addAttribute("siteid", siteid);
-        m.addAttribute("type", type==null?1:type);
         m.addAttribute("dangerstate", dangerstate);
         m.addAttribute("operatorname",operatorname);
         m.addAttribute("reportcode", reportcode);
-        m.addAttribute("uploadtime", uploadtime);
+        m.addAttribute("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);
+        m.addAttribute("time2", time2==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time2);
         m.addAttribute("sites", siteareainfos);
         m.addAttribute("totalnum",rows);
         m.addAttribute("closenum",closenum);
@@ -164,6 +161,13 @@ public class TaskDangerController {
             if (user.getId()==admininfo.getId()){
                 operationuserList.remove(user);
                 break;
+            }
+        }
+        if(quickreport.getContent()!=null){
+            List<String> contentList = JsonUtil.toObject(quickreport.getContent(),List.class);
+            if(contentList!=null && contentList.size()>=2){
+                m.addAttribute("yinhuantype",contentList.get(0));
+                m.addAttribute("levertype",contentList.get(1));
             }
         }
         List<Warningtasktype> yinhuantypeList = commonService.getWarningTypeOrLevels(0); //隐患类型

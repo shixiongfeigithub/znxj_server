@@ -89,7 +89,7 @@
                                         <td class="form-inline" colspan="2">
                                             <span>图片:</span>
                                             <c:forEach items="${imgList}" var="imgurl" varStatus="status">
-                                                <img src='/report${imgurl}' width="300" height="400">
+                                                <img src='/report${imgurl}'>
                                             </c:forEach>
                                         </td>
                                     </tr>

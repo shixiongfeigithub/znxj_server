@@ -197,16 +197,15 @@
         <div id="content" class="col-lg-12 col-sm-12">
             <div class="row">
                 <div class="box col-md-12">
-                    <div>
-                        <ul id="myTab" class="nav nav-tabs">
-                            <li>
-                                <a href="#">隐患列表</a>
-                            </li>
-                        </ul>
-                    </div>
                     <div id="myTabContent" class="tab-content">
                         <div class="tab-pane fade in active" id="home">
                             <div class="box-inner">
+                                <div class="box-header well" data-original-title="">
+                                    <h2>
+                                        <i class="glyphicon glyphicon-globe"></i>
+                                        隐患 - 列表
+                                    </h2>
+                                </div>
                                 <div class="box-content">
                                     <div class="form-inline" style="margin-bottom: 20px;">
                                         <form action="showdanger?page=1" method="post">
@@ -219,26 +218,26 @@
                                                     <option  value="${site.id}" ${siteid eq site.id ?'selected':''}>${site.customid}</option>
                                                 </c:forEach>
                                             </select>
-                                            <label class="control-label" for="dangerstate">类型：</label>
+                                            <%--<label class="control-label" for="dangerstate">类型：</label>
                                             <select class="form-control" id="type" name="type">
                                                 <option ${type eq '1' ? 'selected' : ''} value="1">HSE隐患</option>
                                                 <option ${type eq '0' ? 'selected' : ''} value="0">即拍即传</option>
-                                            </select>
+                                            </select>--%>
                                             <label class="control-label" for="dangerstate">处理状态：</label>
-                                            <select class="form-control" id="dangerstate" name="dangerstate" style="width: 80px;">
+                                            <select class="form-control" id="dangerstate" name="dangerstate">
                                                 <option ${dangerstate eq '' ? 'selected' : ''} value="">所有</option>
                                                 <option ${dangerstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${dangerstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
-                                            <label class="control-label" for="operatorname">负责人：</label>
-                                            <input type="text" style="width: 120px;" id="operatorname" name="operatorname" value="${operatorname}">
-
-                                            <br>
+                                            <label class="control-label" for="operatorname">责任人：</label>
+                                            <input type="text" style="width: 150px;" id="operatorname" name="operatorname" value="${operatorname}">
                                             <label class="control-label" for="reportcode">报告编号：</label>
-                                            <input type="text" style="margin-top: 10px;width: 150px;" id="reportcode" name="reportcode" value="${reportcode}">
-                                            <label class="control-label" for="time">时间：</label>
-                                            <input type="text" style="margin-top: 10px;width: 200px;" onClick="WdatePicker()" id="time" name="uploadtime" value="${uploadtime}">
-                                            <input type="submit" class="btn btn-primary" value="搜索"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
+                                            <input type="text" style="margin-top: 10px;width: 180px;" id="reportcode" name="reportcode" value="${reportcode}">
+                                            <br>
+                                            <div style="line-height: 10px;">&nbsp;</div>
+                                            <label class="control-label" for="time1">上传时间：</label>
+                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${time1}"style="margin-top: 10px; width: 150px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${time2}"style="margin-top: 10px;width: 150px;" id="time2">
+                                            <input type="submit" class="btn btn-primary" value="搜索"> <span style="margin: 20px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
                                         </form>
                                     </div>
                                     <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
@@ -248,14 +247,9 @@
                                             <th>任务报告编号</th>
                                             <th>上传人</th>
                                             <th>班组</th>
-                                            <c:if test="${type==1}">
-                                                <th>报告类型</th>
-                                                <th>报告等级</th>
-                                                <th>文字描述</th>
-                                            </c:if>
-                                            <c:if test="${type==0}">
-                                                <th>问题描述</th>
-                                            </c:if>
+                                            <th>报告类型</th>
+                                            <th>报告等级</th>
+                                            <th>文字描述</th>
                                             <th>上传时间</th>
                                             <th>处理状态</th>
                                             <th>责任人</th>
@@ -280,14 +274,9 @@
                                                 <td><a href="javascript:void(0)" onclick="querywarningdetail(${report.id})">${report.reportcode}</a></td>
                                                 <td>${report.u.realname}</td>
                                                 <td>${report.group.customid}</td>
-                                                <c:if test="${type==1}">
-                                                    <td id="type${status.index}"></td>
-                                                    <td id="level${status.index}"></td>
-                                                    <td id="content${status.index}"></td>
-                                                </c:if>
-                                                <c:if test="${type==0}">
-                                                    <td>${report.content}</td>
-                                                </c:if>
+                                                <td id="type${status.index}"></td>
+                                                <td id="level${status.index}"></td>
+                                                <td id="content${status.index}"></td>
                                                 <td><sdf:formatDate value="${report.uploadtime}" pattern="yyyy-MM-dd"></sdf:formatDate></td>
                                                 <td>
                                                     <c:if test="${report.dangerstate == 0}">待处理</c:if>
