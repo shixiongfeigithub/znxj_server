@@ -20,12 +20,8 @@
 	</script>
 </head>
 <body>
-<%--<%@ include file="/WEB-INF/pages/common/navigation.jsp"%>--%>
-<!-- topbar ends -->
 <div class="ch-container">
     <div class="row">
-
-        <%--<%@ include file="/WEB-INF/pages/common/menu.jsp"%>--%>
         <div id="content" class="col-lg-12 col-sm-12">
             <div class="row">
                 <div class="box col-md-12">

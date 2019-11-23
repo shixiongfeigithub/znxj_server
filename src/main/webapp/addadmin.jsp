@@ -25,7 +25,6 @@
             }
         })
     }
-    
     function validateForm(){
         var pwd=$("#pwd").val();
         //固定电话

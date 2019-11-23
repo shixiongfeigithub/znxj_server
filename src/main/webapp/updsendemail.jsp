@@ -46,7 +46,7 @@
                                                 <option ${editsendemail.type eq 0?"selected":""} value="0">日报</option>
                                                 <option ${editsendemail.type eq 1?"selected":""} value="1">周报</option>
                                                 <option ${editsendemail.type eq 2?"selected":""} value="2">月报</option>
-                                                <option ${editsendemail.type eq 3?"selected":""} value="3">>巡检异常</option>
+                                                <option ${editsendemail.type eq 3?"selected":""} value="3">巡检异常</option>
                                             </select>
                                         </td>
                                     </tr>
