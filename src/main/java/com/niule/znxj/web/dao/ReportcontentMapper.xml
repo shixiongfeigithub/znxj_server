@@ -191,6 +191,12 @@
     <if test="exceptionstate!=null and exceptionstate!=''">
       and e.exceptionstate=#{exceptionstate}
     </if>
+    <if test="exceptiontype!=null and exceptiontype!=''">
+      and e.exceptiontype=#{exceptiontype}
+    </if>
+    <if test="exceptionlever!=null and exceptionlever!=''">
+      and e.exceptionlever=#{exceptionlever}
+    </if>
     <if test="time1!=null and time1!=''">
       and date_format(r.operationtime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
@@ -221,8 +227,11 @@
     <if test="operatorid != null and operatorid !=''" >
       AND e.operatorid =#{operatorid}
     </if>
-    <if test="exceptionstate!=null and exceptionstate!=''">
-      and e.exceptionstate=#{exceptionstate}
+    <if test="exceptiontype!=null and exceptiontype!=''">
+      and e.exceptiontype=#{exceptiontype}
+    </if>
+    <if test="exceptionlever!=null and exceptionlever!=''">
+      and e.exceptionlever=#{exceptionlever}
     </if>
     <if test="time1!=null and time1!=''">
       and date_format(r.operationtime, '%Y-%m-%d'
