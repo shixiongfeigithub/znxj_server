@@ -20,6 +20,7 @@ import com.niule.znxj.web.model.taskcontent.TaskContent;
 import com.niule.znxj.web.model.taskcontent.TaskEquipment;
 import com.niule.znxj.web.model.taskresponse.TaskTempRes;
 import com.niule.znxj.web.service.CommonService;
+import com.niule.znxj.web.service.InterfaceService;
 import com.niule.znxj.web.service.OperateLogService;
 import com.niule.znxj.web.service.SendEmailService;
 import jdk.nashorn.internal.ir.annotations.Reference;
@@ -1128,6 +1129,9 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public void uploadTaskReportInfo() {
+        //得到上传接口调用失败是否需要发邮件
+        Systemsettinginfo systemconfig = systemsettinginfoMapper.selectByKeyName("INTERFACE_UPLOAD");
+        List<Integer> uploadflagList = JsonUtil.toObject(systemconfig.getValue(),List.class);
         //1、查询需要发送的任务报告
         UploadtaskinfoExample example = new UploadtaskinfoExample();
         List<Integer> states = new ArrayList<>();
@@ -1136,6 +1140,8 @@ public class CommonServiceImpl implements CommonService {
         example.createCriteria().andStateIn(states).andEnginetypeEqualTo("1");//苏州公司接口
         List<Uploadtaskinfo> uploadtaskinfoList = uploadtaskinfoMapper.selectByExample(example);
         String uploadMethod = "system/hotsync/xjjl";
+        //获取发件人邮箱和授权码
+        List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
         if(uploadtaskinfoList!=null && uploadtaskinfoList.size()>0){
             for(Uploadtaskinfo uploadtaskinfo : uploadtaskinfoList) {
                 Taskreportinfo taskreportinfo = taskreportinfoMapper.selectTaskReportInfo(uploadtaskinfo.getReportid());
@@ -1158,24 +1164,46 @@ public class CommonServiceImpl implements CommonService {
                         if (response.getStatus()) {
                             uploadtaskinfo.setState(1);
                             uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
+                            //更新接口异常上传状态为1（异常需要发邮件）
+                            List<Integer> newFlagList = new ArrayList<>();
+                            if(uploadflagList.get(0)==0){
+                                for (int i =0 ;i<uploadflagList.size();i++){
+                                    if(i==0){
+                                        newFlagList.add(1);
+                                    }else{
+                                        newFlagList.add(uploadflagList.get(i));
+                                    }
+                                }
+                                systemconfig.setValue(JsonUtil.toJSON(newFlagList));
+                                systemsettinginfoMapper.updateByPrimaryKey(systemconfig);
+                            }
                             operateLogService.insertSelective("autouser", "巡检记录上传成功，任务编号：" + taskreportinfo.getTaskcode());
                         } else {
                             uploadtaskinfo.setState(2);
                             uploadtaskinfoMapper.updateByPrimaryKey(uploadtaskinfo);
                             operateLogService.insertSelective("autouser", "巡检记录上传失败，任务编号：" + taskreportinfo.getTaskcode());
                             //发送邮件
-                            //获取发件人邮箱和授权码
-                            List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
-                            List<String> emails = new ArrayList<>();
-                            if (sendemails != null && sendemails.size() > 0) {
-                                Sendemail sendemail = sendemails.get(0);
-                                emails.add(uploadtaskinfo.getEmail());
-                                String content = "巡检记录上传失败，任务编号：" + taskreportinfo.getTaskcode();
-                                EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检记录上传", content);
-                            }
+                            String content = "巡检记录上传失败，任务编号：" + taskreportinfo.getTaskcode();
+                            sengUplaodExceptionEmail(sendemails,uploadtaskinfo.getEmail(),content,"巡检记录上传");
                         }
                     }catch(Exception e){
-                        System.out.println("---------调用接口失败："+e.getMessage());
+                        if(uploadflagList.get(0)==1){ //需要发送邮件
+                            String title = "服务器接口失败";
+                            String content = "调用接口异常，接口地址:"+uploadtaskinfo.getAddress();
+                            sengUplaodExceptionEmail(sendemails,uploadtaskinfo.getEmail(),content,title);
+                            //更新接口异常上传状态为0（不需要发邮件）
+                            List<Integer> newFlagList = new ArrayList<>();
+                            for (int i =0 ;i<uploadflagList.size();i++){
+                                if(i==0){
+                                    newFlagList.add(0);
+                                }else{
+                                    newFlagList.add(uploadflagList.get(i));
+                                }
+                            }
+                            systemconfig.setValue(JsonUtil.toJSON(newFlagList));
+                            systemsettinginfoMapper.updateByPrimaryKey(systemconfig);
+                        }
+                        System.out.println("---------调用巡检记录上传接口失败："+e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -1183,8 +1211,22 @@ public class CommonServiceImpl implements CommonService {
         }
     }
 
+    public void sengUplaodExceptionEmail( List<Sendemail> sendemails,String email,String content,String title){
+        List<String> emails = new ArrayList<>();
+        if (sendemails != null && sendemails.size() > 0) {
+            Sendemail sendemail = sendemails.get(0);
+            emails.add(email);
+            EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), title, content);
+        }
+    }
+
     @Override
     public void uploadExceptionReport() {
+        //得到上传接口调用失败是否需要发邮件
+        Systemsettinginfo systemconfig = systemsettinginfoMapper.selectByKeyName("INTERFACE_UPLOAD");
+        List<Integer> uploadflagList = JsonUtil.toObject(systemconfig.getValue(),List.class);
+        //获取发件人邮箱和授权码
+        List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
         //1、查询已经上传成功的巡检任务报告
         UploadtaskinfoExample example = new UploadtaskinfoExample();
         example.createCriteria().andUploadtimeBetween(DateUtils.getWholePointDate(7),new Date()).andStateEqualTo(1).andEnginetypeEqualTo("1");//苏州公司接口
@@ -1242,52 +1284,79 @@ public class CommonServiceImpl implements CommonService {
                         if (response.getStatus()) {
                             param.put("uploadstate",1);
                             exceptionhandlerinfoMapper.updateByReportId(param);
-                            operateLogService.insertSelective("autouser","巡检异常记录上传成功，任务编号："+taskreportinfo.getTaskcode());
+                            //更新接口异常上传状态为1（异常需要发邮件）
+                            List<Integer> newFlagList = new ArrayList<>();
+                            if(uploadflagList.get(1)==0){
+                                for (int i =0 ;i<uploadflagList.size();i++){
+                                    if(i==1){
+                                        newFlagList.add(1);
+                                    }else{
+                                        newFlagList.add(uploadflagList.get(i));
+                                    }
+                                }
+                                systemconfig.setValue(JsonUtil.toJSON(newFlagList));
+                                systemsettinginfoMapper.updateByPrimaryKey(systemconfig);
+                            }
+                            operateLogService.insertSelective("autouser","异常巡检记录上传成功，任务编号："+taskreportinfo.getTaskcode());
                         } else {
                             param.put("uploadstate",2);
                             exceptionhandlerinfoMapper.updateByReportId(param);
-                            operateLogService.insertSelective("autouser","巡检异常记录上传失败，任务编号："+taskreportinfo.getTaskcode());
+                            operateLogService.insertSelective("autouser","异常巡检记录上传失败，任务编号："+taskreportinfo.getTaskcode());
                             //发送邮件
-                            //获取发件人邮箱和授权码
-                            List<Sendemail> sendemails = querySendEmailByType(0); //按照日报的获取
-                            List<String> emails = new ArrayList<>();
-                            if (sendemails != null && sendemails.size() > 0) {
-                                Sendemail sendemail = sendemails.get(0);
-                                emails.add(uploadtaskinfo.getEmail());
-                                String content = "上传巡检异常记录失败，请查看！";
-                                EmailUtils.sendEmails(sendemail.getEmail(), sendemail.getPwd(), sendemail.getSmtpAddress(), sendemail.getSmtpPort(), (String[]) emails.toArray(new String[emails.size()]), "巡检异常记录上传", content);
-                            }
+                            String content = "异常巡检记录上传失败，请查看！";
+                            sengUplaodExceptionEmail(sendemails,uploadtaskinfo.getEmail(),content,"巡检异常记录上传");
                         }
                     }
                 }catch(Exception e){
-                    System.out.println("---------调用接口失败："+e.getMessage());
+                    if(uploadflagList.get(1)==1){ //需要发送邮件
+                        String title = "服务器接口失败";
+                        String content = "调用接口异常，接口地址:"+uploadtaskinfo.getAddress();
+                        sengUplaodExceptionEmail(sendemails,uploadtaskinfo.getEmail(),content,title);
+                        //更新发送邮件状态为0
+                        List<Integer> newFlagList = new ArrayList<>();
+                        for (int i =0 ;i<uploadflagList.size();i++){
+                            if(i==1){
+                                newFlagList.add(0);
+                            }else{
+                                newFlagList.add(uploadflagList.get(i));
+                            }
+                        }
+                        systemconfig.setValue(JsonUtil.toJSON(newFlagList));
+                        systemsettinginfoMapper.updateByPrimaryKey(systemconfig);
+                    }
+                    System.out.println("---------调用异常巡检记录上传接口失败："+e.getMessage());
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    public String getImgUrl(String urlAddress,String imgStr) throws Exception{
-
+    public String getImgUrl(String urlAddress,String imgStr){
         String imgurl = "";
         if (imgStr==null || "[]".equals(imgStr) || "[\"\"]".equals(imgStr) || "null".equals(imgStr) || "".equals(imgStr)){
             return imgurl;
         }
-
-        String uploadFileMethod = "appupload/uploadfile";
-        List<String> imgList = JsonUtil.toObject(imgStr,List.class);
-        for (String str: imgList){
-            String filePath = Resources.ApplicationResources.getString("file.path")+str;
-            String url = urlAddress + uploadFileMethod;
-			String resultStr = HttpClientUtils.uploadFile(url,filePath);
-            UploadFileResponse response = JsonUtil.toObject(resultStr, UploadFileResponse.class);
-            if (response.getError()==0) {
-                imgurl+=response.getUrl()+",";
-            } else {
-                System.out.println("===========img:"+str+" upload error!");
+        try {
+            String uploadFileMethod = "appupload/uploadfile";
+            List<String> imgList = JsonUtil.toObject(imgStr,List.class);
+            for (String str: imgList){
+                String filePath = Resources.ApplicationResources.getString("file.path")+str;
+                String url = urlAddress + uploadFileMethod;
+                String resultStr = HttpClientUtils.uploadFile(url,filePath);
+                UploadFileResponse response = JsonUtil.toObject(resultStr, UploadFileResponse.class);
+                if (response.getError()==0) {
+                    imgurl+=response.getUrl()+",";
+                } else {
+                    System.out.println("===========img:"+str+" upload error!");
+                }
             }
+            imgurl = imgurl.substring(0,imgurl.length()-1);
+
+        }catch (Exception e){
+            System.out.println("---------调用文件上传接口失败："+e.getMessage());
+            e.printStackTrace();
+            return "";
         }
-        imgurl = imgurl.substring(0,imgurl.length()-1);
         return imgurl;
     }
 }

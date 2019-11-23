@@ -23,6 +23,8 @@ public interface SystemsettinginfoMapper extends GenericDao<Systemsettinginfo,Lo
 
     Systemsettinginfo selectByPrimaryKey(Integer id);
 
+    Systemsettinginfo selectByKeyName(String keyname);
+
     int updateByExampleSelective(@Param("record") Systemsettinginfo record, @Param("example") SystemsettinginfoExample example);
 
     int updateByExample(@Param("record") Systemsettinginfo record, @Param("example") SystemsettinginfoExample example);
