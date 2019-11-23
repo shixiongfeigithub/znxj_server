@@ -170,6 +170,7 @@ public class TaskExceptionController {
             info.setCheckuserid(admininfo.getId());
             info.setExceptionclosetime(new Date());
             info.setExceptionstate(1); //已关闭
+            info.setUploadstate(0); //设置上传状态为未上传
             int result=exceptionhandlerinfoService.updateByExample(info,example);
             return result;
         }
@@ -218,6 +219,7 @@ public class TaskExceptionController {
             info.setExceptionstate(2); //已分配责任人
             info.setExceptiontype(exceptionhandlerinfo.getExceptiontype());
             info.setExceptionlever(exceptionhandlerinfo.getExceptionlever());
+            info.setUploadstate(0); //设置上传状态为未上传
             int result=exceptionhandlerinfoService.updateByExample(info,example);
 
             //发送异常报告给负责人

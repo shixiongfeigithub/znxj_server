@@ -1199,10 +1199,10 @@ public class CommonServiceImpl implements CommonService {
                 String[] exceptiontypes = taskuploadconfigList.get(0).getExceptiontype().split(",");
                 String[] exceptionlevers = taskuploadconfigList.get(0).getExceptionlever().split(",");
                 HashMap<String,Object> paramMap = new HashMap<>();
-                /*List<Integer> states = new ArrayList<>();
+                List<Integer> states = new ArrayList<>();
                 states.add(0); //未上报
                 states.add(2);//上报失败
-                paramMap.put("states",states);*/
+                paramMap.put("states",states);
                 paramMap.put("reportid",taskreportinfo.getId());
                 paramMap.put("exceptionleverList",exceptionlevers);
                 paramMap.put("exceptiontypeList",exceptiontypes);
@@ -1217,17 +1217,18 @@ public class CommonServiceImpl implements CommonService {
                         yhjl.setCheckcontent(info.getCheckname());
                         yhjl.setDangerstatus(info.getExceptionstate()+"");
                         yhjl.setFindperson(info.getWorker());
-                        yhjl.setCreatetime(info.getDonetime()!=null?DateUtils.parseDateToStr(info.getDonetime(),"yyyy-MM-dd hh:mm:ss"):null);
+                        yhjl.setCreatetime(info.getDonetime()!=null?DateUtils.parseDateToStr(info.getDonetime(),
+                                "yyyy-MM-dd hh:mm:ss"):DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd hh:mm:ss"));
                         yhjl.setHandletime(info.getAppointedtime()!=null?DateUtils.parseDateToStr(info.getAppointedtime(),
-                                "yyyy-MM-dd hh:mm:ss"):"");
+                                "yyyy-MM-dd hh:mm:ss"):DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd hh:mm:ss"));
                         yhjl.setHandlepersons(info.getUsername());
                         yhjl.setDangerdesc("");//隐患备注
                         yhjl.setDangerfj(getImgUrl(uploadtaskinfo.getAddress(),info.getReportimg())); //隐患附件
-                        yhjl.setReformperson(info.getOperatorname());
+                        yhjl.setReformperson(info.getOperatorname()!=null?info.getOperatorname():"未指定");
                         yhjl.setReformdesc(""); //整改备注
                         yhjl.setReformfj(getImgUrl(uploadtaskinfo.getAddress(),info.getAttachment())); //整改附件
                         yhjl.setReformtime(info.getExceptionclosetime()!=null?DateUtils.parseDateToStr(info.getExceptionclosetime(),
-                                "yyyy-MM-dd hh:mm:ss"):null);
+                                "yyyy-MM-dd hh:mm:ss"):DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd hh:mm:ss"));
                         yhjlList.add(yhjl);
                         reportcontentidList.add(info.getReportcontentid());
                     }
