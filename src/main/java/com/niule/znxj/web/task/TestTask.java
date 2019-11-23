@@ -46,13 +46,13 @@ public class TestTask {
         commonService.automaticExamine();
     }
 
-    //上传巡检记录（一小时执行一次）
+    //上传巡检记录（30分钟执行一次）
     @Scheduled(cron = "0 */30 * * * ?")
     public void uploadTaskReportInfo() {
         commonService.uploadTaskReportInfo();
     }
 
-    //上传巡检异常记录（每个小时的第15分执行）
+    //上传巡检异常记录（每个小时的第15，45分执行）
     @Scheduled(cron = "0 15,45 * * * ?")
     public void uploadExceptionReport() {
         commonService.uploadExceptionReport();
