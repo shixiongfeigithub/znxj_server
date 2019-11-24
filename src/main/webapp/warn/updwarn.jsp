@@ -32,8 +32,8 @@
                                                 <option ${warntype.type eq "0"?"selected":""} value="0">隐患类型</option>
                                                 <option ${warntype.type eq "1"?"selected":""} value="1">隐患等级</option>
                                                 <option ${warntype.type eq "2"?"selected":""} value="2">终止原因</option>
-                                                <option ${warntype.type eq "3"?"selected":""} value="2">异常类型</option>
-                                                <option ${warntype.type eq "4"?"selected":""} value="2">异常等级</option>
+                                                <option ${warntype.type eq "3"?"selected":""} value="3">异常类型</option>
+                                                <option ${warntype.type eq "4"?"selected":""} value="4">异常等级</option>
                                             </select>
                                         </td>
                                     </tr>
