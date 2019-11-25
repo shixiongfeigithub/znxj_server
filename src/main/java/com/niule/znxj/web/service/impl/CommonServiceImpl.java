@@ -1340,7 +1340,7 @@ public class CommonServiceImpl implements CommonService {
             String uploadFileMethod = "appupload/uploadfile";
             List<String> imgList = JsonUtil.toObject(imgStr,List.class);
             for (String str: imgList){
-                String filePath = Resources.ApplicationResources.getString("file.path")+str;
+                String filePath = Resources.ApplicationResources.getString("newfile.path")+str;
                 String url = urlAddress + uploadFileMethod;
                 String resultStr = HttpClientUtils.uploadFile(url,filePath);
                 UploadFileResponse response = JsonUtil.toObject(resultStr, UploadFileResponse.class);
