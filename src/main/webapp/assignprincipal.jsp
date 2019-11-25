@@ -22,7 +22,6 @@
             type:"post",
             data:$("#form").serialize(),
             success: function(data){
-                debugger;
                 if(data>0){
                     alert("任务指定责任人成功");
                     showexceptionreport();
