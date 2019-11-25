@@ -38,7 +38,7 @@
                         var ff = oldErrorContent.substring(oldErrorContent.indexOf("/")+1,oldErrorContent.length);
                         $("#error"+i).append("<span style='color: red;'>"+ss+"</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: blue;'>"+ff+"</span>");
                     }else {
-                        $("#error"+i).append("<a href='javascript:void(0);' onclick=showimg('"+imgContent+"','"+audioContent+"','"+videoContent+"')>"+oldErrorContent+"</a>");
+                        $("#error"+i).append("<a href='javascript:void(0);' onclick=showVisualInfos('"+imgContent+"','"+audioContent+"','"+videoContent+"')>"+oldErrorContent+"</a>");
                     }
 
                 }
@@ -72,7 +72,7 @@
             });
         })
 
-        function showimg(img,audio,video){
+        function showVisualInfos(img,audio,video){
             var imgs=new Array();
             var audios=new Array();
             var videos=new Array();

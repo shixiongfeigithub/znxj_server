@@ -724,7 +724,7 @@ public class WebTaskreportController {
                                         childList.add("-");
                                     } else {
                                         childList.add("<span style='background:red;color:white;display:inline-block;padding:5 10;'>" + "异常" + "</span>");
-                                        childList.add("<a href='javascript:void(0);' onclick=showimg(" + childitem.getImg() + "," + childitem.getAudio() + "," + childitem.getVideo() + ")>" + childitem.getErrcontent() + "</a>");
+                                        childList.add("<a href='javascript:void(0);' onclick=showVisualInfos(" + childitem.getImg() + "," + childitem.getAudio() + "," + childitem.getVideo() + ")>" + childitem.getErrcontent() + "</a>");
                                         System.out.print("aaaaaaaaaaaaaaaa" + childitem.getImg());
                                     }
                                     break;

@@ -80,7 +80,7 @@
                 return true;
             }
         }
-        function showimg(img,audio,video){
+        function showVisualInfos(img,audio,video){
 //            debugger;
             var imgs=new Array();
             var audios=new Array();
