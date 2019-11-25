@@ -203,7 +203,7 @@
                                                 <option ${operationstate eq '5' ? 'selected' : ''} value="5">主动终止</option>
                                             </select><br>
                                             <label class="control-label" style="margin-top: 10px">报告完成时间：</label>
-                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px" id="time2">
+                                            <input type="text" name="time1" onClick="WdatePicker()" value="${param.time1}"style="margin-top: 10px" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" value="${param.time2}"style="margin-top: 10px" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;margin-top: 10px">
                                             <%--<button  onclick="testrefurbish()" class="btn btn-primary" style="margin-left: 50px;margin-top: 10px">刷新</button>--%>
                                                 <script language="JavaScript">

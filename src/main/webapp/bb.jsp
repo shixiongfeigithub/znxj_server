@@ -233,7 +233,7 @@
                                         <input type="hidden" value="${type}" id="type" name="type">
                                         <input type="hidden" value="${taskname}" id="taskname" name="taskname">
                                         <span style="font-size: 15px;margin-top: 20px;margin-bottom: 20px">报告完成时间：</span>
-                                        <input type="text" name="donetime" id="donetime" readonly onClick="WdatePicker()" value="${donetime}" style="margin-top: 20px;margin-bottom: 20px">
+                                        <input type="text" name="donetime" id="donetime" onClick="WdatePicker()" value="${donetime}" style="margin-top: 20px;margin-bottom: 20px">
                                         <input type="submit" value="搜索" class="btn btn-primary">
                                         <input type="button" class="btn btn-primary" value="导出Excel" style="margin-left: 30px;" onclick="exportexcel()">
                                         <input type="button" class="btn btn-primary" value="返回" style="margin-left: 30px;" onclick="javascript:history.go(-1);">

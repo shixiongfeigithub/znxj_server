@@ -185,7 +185,7 @@
                           <tr>
                               <td class="form-inline">
                                   <label class="control-label" for="date">启用时间:</label>
-                                  <input type="text" class="form-control" style="width: 200px;" id="date" name="enabletime" onClick="WdatePicker()" readonly="readonly">
+                                  <input type="text" class="form-control" style="width: 200px;" id="date" name="enabletime" onClick="WdatePicker()">
                               </td>
                              <td class="form-inline">
                                   <label class="control-label" for="status">状态:</label>

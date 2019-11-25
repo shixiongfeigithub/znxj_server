@@ -72,7 +72,7 @@
                                             <label class="control-label" for="date1">启用时间:</label>
                                             <input type="text" class="form-control" style="width: 300px;"
                                                    value="<sdf:formatDate value='${terminalinfo.enabletime}' pattern='yyyy-MM-dd'></sdf:formatDate>"
-                                                   required="required" id="date1" name="enabletime" onClick="WdatePicker()" readonly="readonly">
+                                                   required="required" id="date1" name="enabletime" onClick="WdatePicker()">
                                         </td>
                                         <td class="form-inline">
                                             <label class="control-label" for="date2">到期时间:</label>

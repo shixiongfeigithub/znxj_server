@@ -143,7 +143,7 @@
                                             <label class="control-label" for="operatorname">负责人：</label>
                                             <input type="text" style="width: 80px;" id="operatorname" name="operatorname" value="${operatorname}">
                                             <label class="control-label">执行时间：</label>
-                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}"style="margin-top: 10px; width: 90px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}"style="margin-top: 10px;width: 90px;" id="time2">
+                                            <input type="text" name="time1" onClick="WdatePicker()" value="${param.time1}"style="margin-top: 10px; width: 90px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" value="${param.time2}"style="margin-top: 10px;width: 90px;" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 20px;margin-top: 10px"> <span style="margin: 10px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭：${closenum}</span><span style="margin: 10px;">剩余：${surplusnum}</span>
                                             <script language="JavaScript">
                                                 Date.prototype.format = function (format) {

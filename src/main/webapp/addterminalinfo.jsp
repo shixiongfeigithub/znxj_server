@@ -81,11 +81,11 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="date1">启用时间:</label>
-                                            <input type="text" class="form-control" style="width: 300px;" required="required" id="date1" name="enabletime" onClick="WdatePicker()" readonly="readonly">
+                                            <input type="text" class="form-control" style="width: 300px;" required="required" id="date1" name="enabletime" onClick="WdatePicker()">
                                         </td>
                                         <td class="form-inline">
                                             <label class="control-label" for="date2">到期时间:</label>
-                                            <input type="text" class="form-control" style="width: 300px;" required id="date2" name="unenabletime" onClick="WdatePicker()" readonly="readonly" placeholder="该项为必填项">
+                                            <input type="text" class="form-control" style="width: 300px;" required id="date2" name="unenabletime" onClick="WdatePicker()" placeholder="该项为必填项">
                                         </td>
                                     </tr>
                                     <tr>

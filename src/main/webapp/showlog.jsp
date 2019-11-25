@@ -53,7 +53,7 @@
                                     <label class="control-label" for="name2">操作人：</label>
                                     <input type="text" style="width: 200px;" id="name2" name="username" value="${param.username}">
                                     <label class="control-label" >操作时间：</label>
-                                    <input type="text" name="time" onClick="WdatePicker()" readonly value="${param.time}">
+                                    <input type="text" name="time" onClick="WdatePicker()" value="${param.time}">
                                     <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;">
                                 </form>
                             </div>

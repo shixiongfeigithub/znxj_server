@@ -39,7 +39,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="date">有效期:</label>
-                                            <input type="text" onClick="WdatePicker()" readonly="readonly" class="form-control" style="width: 300px;" id="date" name="expirydate" value="<sdf:formatDate value='${adm.expirydate}' pattern='yyyy-MM-dd'></sdf:formatDate>">
+                                            <input type="text" onClick="WdatePicker()" class="form-control" style="width: 300px;" id="date" name="expirydate" value="<sdf:formatDate value='${adm.expirydate}' pattern='yyyy-MM-dd'></sdf:formatDate>">
                                         </td>
                                     </tr>
                                     <tr>

@@ -70,7 +70,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="date">启用时间:</label>
-                                            <input type="text" class="form-control" style="width: 300px;" placeholder="该项必须填写" required="required" id="date" name="enabletime" onClick="WdatePicker()" readonly="readonly">
+                                            <input type="text" class="form-control" style="width: 300px;" placeholder="该项必须填写" required="required" id="date" name="enabletime" onClick="WdatePicker()">
                                         </td>
                                     </tr>
                                     <tr>

@@ -67,13 +67,13 @@
                                         <label class="control-label" for="date1">启用时间:</label>
                                         <input type="text" class="form-control" style="width: 300px;"
                                                value="<sdf:formatDate value='${terminalinfo.enabletime}' pattern='yyyy-MM-dd'></sdf:formatDate>"
-                                               id="date1" name="enabletime" onClick="WdatePicker()" readonly="readonly">
+                                               id="date1" name="enabletime" onClick="WdatePicker()" >
                                     </td>
                                     <td class="form-inline">
                                         <label class="control-label" for="date2">到期时间:</label>
                                         <input type="text" class="form-control" style="width: 300px;"
                                                id="date2" name="unenabletime" onClick="WdatePicker()"
-                                               readonly="readonly" value="<sdf:formatDate value='${terminalinfo.unenabletime}' pattern='yyyy-MM-dd'></sdf:formatDate>">
+                                               value="<sdf:formatDate value='${terminalinfo.unenabletime}' pattern='yyyy-MM-dd'></sdf:formatDate>">
                                     </td>
                                 </tr>
                                 <tr>

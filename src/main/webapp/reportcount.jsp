@@ -163,7 +163,7 @@
                                     <form action="" method="post">
                                         <input type="hidden" id="taskidd" name="taskid" value="${taskid}">
                                         <span style="font-size: 15px;margin-top: 20px;margin-bottom: 20px">报告完成时间：</span>
-                                        <input type="text" name="operationtime" id="donetime" readonly onClick="WdatePicker()" value="${donetime}">
+                                        <input type="text" name="operationtime" id="donetime" onClick="WdatePicker()" value="${donetime}">
                                         <span style="font-size:15px;margin-top: 20px;margin-bottom: 20px">操作状态:</span>
                                         <select id = "reportstate" name="reportstate">
                                             <option id="option1" ${param.reportstate eq ''?'selected':''} value="">所有</option>

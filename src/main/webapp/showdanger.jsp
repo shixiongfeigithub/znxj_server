@@ -236,7 +236,7 @@
                                             <br>
                                             <div style="line-height: 10px;">&nbsp;</div>
                                             <label class="control-label" for="time1">上传时间：</label>
-                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${time1}"style="margin-top: 10px; width: 150px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${time2}"style="margin-top: 10px;width: 150px;" id="time2">
+                                            <input type="text" name="time1" onClick="WdatePicker()" value="${time1}"style="margin-top: 10px; width: 150px;" id="time1">--<input type="text" name="time2" onClick="WdatePicker()" value="${time2}"style="margin-top: 10px;width: 150px;" id="time2">
                                             <input type="submit" class="btn btn-primary" value="搜索"> <span style="margin: 20px;">总数：${totalnum}</span><span style="margin: 10px;">已关闭数：${closenum}</span><span style="margin: 10px;">剩余数：${surplusnum}</span>
                                         </form>
                                     </div>

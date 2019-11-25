@@ -47,7 +47,7 @@
                                                 <option ${param.reportstate eq 2 ? 'selected' : ''} value="2">异常</option>
                                             </select>
                                             <label class="control-label" >日期：</label>
-                                            <input type="text" name="time1" onClick="WdatePicker()" readonly value="${param.time1}">--<input type="text" name="time2" onClick="WdatePicker()" readonly value="${param.time2}">
+                                            <input type="text" name="time1" onClick="WdatePicker()" value="${param.time1}">--<input type="text" name="time2" onClick="WdatePicker()" value="${param.time2}">
                                             <input type="submit" class="btn btn-primary" value="搜索" style="margin-left: 30px;">
 
                                         </form>

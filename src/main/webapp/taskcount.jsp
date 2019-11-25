@@ -161,7 +161,7 @@
 
                                         <input type="hidden" id="taskidd" name="taskid" value="${taskid}">
                                         <span style="font-size: 15px;margin-top: 20px;margin-bottom: 20px">报告完成时间：</span>
-                                        <input type="text" name="donetime" id="donetime" readonly onClick="WdatePicker()" value="${donetime}"style="margin-top: 20px;margin-bottom: 20px">
+                                        <input type="text" name="donetime" id="donetime" onClick="WdatePicker()" value="${donetime}"style="margin-top: 20px;margin-bottom: 20px">
                                         <input type="submit" value="搜索" class="btn btn-primary" onclick="showdata()">
                                         <span style="font-size:15px;margin-top: 20px;margin-bottom: 20px">操作状态:</span>
                                         <select id = "reportstate" name="reportstate" onchange="datechange(this)" style="margin-top: 20px;margin-bottom: 20px">

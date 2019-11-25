@@ -314,8 +314,8 @@
                                        <option ${monthstr eq 11?'selected':''}>11</option><option ${monthstr eq 12?'selected':''}>12</option>
                                    </select>--%>
 
-                                    <input type="text"  class="jeinput" id="startTime" onClick="WdatePicker()" style="width:200px;height: 35px;" placeholder="年/月/日" name="startTime" value="${param.startTime}">&nbsp;&nbsp;至&nbsp;&nbsp;
-                                    <input type="text"  class="jeinput" id="endTime" onClick="WdatePicker()" style="width:200px;height: 35px;" placeholder="年/月/日" name="endTime" value="${param.endTime}">
+                                    <input type="text"  class="jeinput" id="startTime" onClick="WdatePicker()" style="width:200px;height: 35px;" placeholder="年-月-日" name="startTime" value="${param.startTime}">&nbsp;&nbsp;至&nbsp;&nbsp;
+                                    <input type="text"  class="jeinput" id="endTime" onClick="WdatePicker()" style="width:200px;height: 35px;" placeholder="年-月-日" name="endTime" value="${param.endTime}">
 
                                     <input type="button" id="btn" class="btn btn-primary" value="搜索" style="margin-left: 50px;" onclick="getreport()">
                                 </form>

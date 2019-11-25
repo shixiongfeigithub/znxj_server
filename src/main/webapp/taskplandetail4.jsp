@@ -535,7 +535,7 @@
                                             </td>
                                             <td class="form-inline">
                                                 <label class="control-label" for="pwd3">创建时间:</label>
-                                                <input type="text"  id="pwd3" name="createtime" readonly class="form-control" onClick="WdatePicker()"
+                                                <input type="text"  id="pwd3" name="createtime" class="form-control" onClick="WdatePicker()"
                                                        value="<sdf:formatDate value='${taskplaninfo.createtime}' pattern='yyyy-MM-dd'></sdf:formatDate>">
                                             </td>
                                         </tr>
@@ -547,7 +547,7 @@
                                             </td>
                                             <td class="form-inline">
                                                 <label class="control-label" for="pwd7">审核时间:</label>
-                                                <input type="text" class="form-control" id="pwd7"  onClick="WdatePicker()" name="reviewedtime" readonly
+                                                <input type="text" class="form-control" id="pwd7"  onClick="WdatePicker()" name="reviewedtime"
                                                        value="<sdf:formatDate value='${taskplaninfo.reviewedtime}' pattern='yyyy-MM-dd'></sdf:formatDate>">
                                             </td>
                                         </tr>
@@ -558,7 +558,7 @@
                                             </td>
                                             <td class="form-inline">
                                                 <label class="control-label" for="pwd6">批准时间:</label>
-                                                <input type="text" class="form-control" id="pwd6"  onClick="WdatePicker()" name="approvetime" readonly
+                                                <input type="text" class="form-control" id="pwd6"  onClick="WdatePicker()" name="approvetime"
                                                        value="<sdf:formatDate value='${taskplaninfo.approvetime}' pattern='yyyy-MM-dd'></sdf:formatDate>">
                                             </td>
                                         </tr>
