@@ -74,7 +74,7 @@
                                             <label class="control-label" for="exceptiontype">异常类型:</label>
                                             <select name="exceptiontype" id="exceptiontype" class="form-control" required>
                                                 <c:forEach items="${exceptiontypeList}" var="type">
-                                                    <option value="${type.name}">${type.name}</option>
+                                                    <option ${exceptionhandlerinfo.exceptiontype eq type.name?'selected':''} value="${type.name}">${type.name}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>
@@ -84,7 +84,7 @@
                                             <label class="control-label" for="exceptionlever">异常等级:</label>
                                             <select name="exceptionlever" id="exceptionlever" class="form-control" required>
                                                 <c:forEach items="${levertype1List}" var="lever">
-                                                    <option value="${lever.name}">${lever.name}</option>
+                                                    <option ${exceptionhandlerinfo.exceptionlever eq lever.name ?'selected':''} value="${lever.name}">${lever.name}</option>
                                                 </c:forEach>
                                             </select>
                                         </td>

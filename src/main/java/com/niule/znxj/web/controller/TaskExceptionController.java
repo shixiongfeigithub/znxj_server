@@ -143,7 +143,18 @@ public class TaskExceptionController {
     @RequiresPermissions("item:closereport")
     public String toclosetaskreport(Model m, Long id,HttpServletRequest request) {
         Reportcontent reportcontent = taskreportService.selectReportContentByPrimaryKey(id);
-        m.addAttribute("reportcontent",reportcontent);
+        List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
+        List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
+
+        ExceptionhandlerinfoExample example = new ExceptionhandlerinfoExample();
+        example.createCriteria().andReportcontentidEqualTo(id);
+        List<Exceptionhandlerinfo> infoList = exceptionhandlerinfoService.selectByExample(example);
+        if(infoList!=null && infoList.size()>0){
+            m.addAttribute("exceptionhandlerinfo", infoList.get(0));
+        }
+        m.addAttribute("reportcontent", reportcontent);
+        m.addAttribute("levertype1List",levertype1List);
+        m.addAttribute("exceptiontypeList",exceptiontypeList);
         return "closetaskreport";
     }
 
@@ -171,6 +182,17 @@ public class TaskExceptionController {
             info.setExceptionclosetime(new Date());
             info.setExceptionstate(1); //已关闭
             info.setUploadstate(0); //设置上传状态为未上传
+            if(info.getExceptiontype()==null){
+                info.setExceptiontype(exceptionhandlerinfo.getExceptiontype());
+            }
+            if(info.getExceptionlever()==null){
+                info.setExceptionlever(exceptionhandlerinfo.getExceptionlever());
+            }
+            if (info.getOperatorid()==null){
+                info.setOperatorid(admininfo.getId());
+                info.setOperatorname(admininfo.getUsername());
+            }
+
             int result=exceptionhandlerinfoService.updateByExample(info,example);
             return result;
         }
@@ -192,6 +214,12 @@ public class TaskExceptionController {
         }
         List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
         List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
+        ExceptionhandlerinfoExample example = new ExceptionhandlerinfoExample();
+        example.createCriteria().andReportcontentidEqualTo(id);
+        List<Exceptionhandlerinfo> infoList = exceptionhandlerinfoService.selectByExample(example);
+        if(infoList!=null && infoList.size()>0){
+            m.addAttribute("exceptionhandlerinfo", infoList.get(0));
+        }
         m.addAttribute("reportcontent", reportcontent);
         m.addAttribute("operationuserList",operationuserList);
         m.addAttribute("levertype1List",levertype1List);

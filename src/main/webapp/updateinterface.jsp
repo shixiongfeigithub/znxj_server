@@ -85,11 +85,8 @@
 
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="state">状态:</label>
-                                            <select  id="state" name="state">
-                                                <option ${engine.state eq '1'?'selected':''} value="1">有效</option>
-                                                <option ${engine.state eq '0'?'selected':''}value="0">失效</option>
-                                            </select>
+                                            <label class="control-label" for="email">邮箱:</label>
+                                            <input type="email" class="form-control" style="width: 300px;" id="email" name="email" value="${engine.email}" required>
                                         </td>
                                     </tr>
                                     <tr>

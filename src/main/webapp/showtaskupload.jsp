@@ -137,16 +137,16 @@
                                 </c:forEach>
                             </table>
                         <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                            <a href="showallcreatettime?page=1&siteid=${siteid}&taskid=${taskid}">第一页</a>
+                            <a href="showalltaskupload?page=1&siteid=${siteid}&taskid=${taskid}">第一页</a>
                             <c:if test="${pageBean.currentPage>1}">
-                                <a href="showallcreatettime?page=${pageBean.currentPage-1}&siteid=${siteid}&taskid=${taskid}">上一页</a>
+                                <a href="showalltaskupload?page=${pageBean.currentPage-1}&siteid=${siteid}&taskid=${taskid}">上一页</a>
                             </c:if>
 
                             <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                <a href="showallcreatettime?page=${pageBean.currentPage+1}&siteid=${siteid}&taskid=${taskid}">下一页</a>
+                                <a href="showalltaskupload?page=${pageBean.currentPage+1}&siteid=${siteid}&taskid=${taskid}">下一页</a>
                             </c:if>
 
-                            <a href="showallcreatettime?page=${pageBean.totalPage}&siteid=${siteid}&taskid=${taskid}">最后一页</a>
+                            <a href="showalltaskupload?page=${pageBean.totalPage}&siteid=${siteid}&taskid=${taskid}">最后一页</a>
 
                             第${pageBean.currentPage}页/共${pageBean.totalPage}页
                         </div>

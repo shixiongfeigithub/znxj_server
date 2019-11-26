@@ -20,7 +20,31 @@ public class Interfaceengine {
 
     private Integer state;
 
+    private String email;
+
+    private Integer sendemailstate;
+
     private Date updatetime;
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getSendemailstate() {
+        return sendemailstate;
+    }
+
+    public void setSendemailstate(Integer sendemailstate) {
+        this.sendemailstate = sendemailstate;
+    }
 
     public String getSitename() {
         return sitename;

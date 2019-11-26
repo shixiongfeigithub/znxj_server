@@ -60,7 +60,7 @@
                                     <th>ip</th>
                                     <th>端口号</th>
                                     <th>接口类型</th>
-                                    <th>状态</th>
+                                    <th>邮箱</th>
                                     <th>创建时间</th>
                                 </tr>
                                 <c:forEach items="${pageBean.list}" var="engine">
@@ -79,25 +79,22 @@
                                         <td>
                                             <c:if test="${engine.enginetype==1}">苏州接口公司</c:if>
                                         </td>
-                                        <td>
-                                            <c:if test="${engine.state==0}">无效</c:if>
-                                            <c:if test="${engine.state==1}">有效</c:if>
-                                        </td>
+                                        <td>${engine.email}</td>
                                         <td><sdf:formatDate value="${engine.createtime}" pattern="yyyy-MM-dd HH:mm:ss"></sdf:formatDate></td>
                                     </tr>
                                 </c:forEach>
                             </table>
                         <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                            <a href="showallcreatettime?page=1&name=${name}">第一页</a>
+                            <a href="showallinterface?page=1&name=${name}">第一页</a>
                             <c:if test="${pageBean.currentPage>1}">
-                                <a href="showallcreatettime?page=${pageBean.currentPage-1}">上一页</a>
+                                <a href="showallinterface?page=${pageBean.currentPage-1}">上一页</a>
                             </c:if>
 
                             <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                <a href="showallcreatettime?page=${pageBean.currentPage+1}">下一页</a>
+                                <a href="showallinterface?page=${pageBean.currentPage+1}">下一页</a>
                             </c:if>
 
-                            <a href="showallcreatettime?page=${pageBean.totalPage}">最后一页</a>
+                            <a href="showallinterface?page=${pageBean.totalPage}">最后一页</a>
 
                             第${pageBean.currentPage}页/共${pageBean.totalPage}页
                         </div>

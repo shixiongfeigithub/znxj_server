@@ -119,6 +119,8 @@ public class WebInterfaceController {
             return "addinterface";
         }
         engine.setCreatettime(new Date());
+        engine.setSendemailstate(1);
+        engine.setState(1);
         int addresult=interfaceService.insert(engine);
         //获取登录用户的信息
         String info="新增了接口配置："+engine.getIp()+" "+engine.getPort();
@@ -143,7 +145,7 @@ public class WebInterfaceController {
     @RequiresPermissions("del:interface")
     @ResponseBody
     public int delinterface(Long id,HttpServletRequest request,HttpSession session){
-        int delinterface=interfaceService.deleteByPrimaryKey1(id);
+        int delinterface=interfaceService.deleteByPrimaryKey(id);
         //获取登录用户的信息
         String info="删除了接口配置";
         Admininfo logadmininfo=(Admininfo)session.getAttribute("userInfo");
@@ -170,6 +172,8 @@ public class WebInterfaceController {
     public String updinterface(Interfaceengine engine, Model model,HttpSession session,int page){
         Long id=engine.getId();
         engine.setUpdatetime(new Date());
+        engine.setSendemailstate(1);
+        engine.setState(1);
         int updresult =interfaceService.updateByPrimaryKeySelective(engine);
         //获取登录用户的信息
         String info="修改了接口配置"+engine.getIp()+" "+engine.getPort();

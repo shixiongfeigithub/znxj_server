@@ -113,6 +113,7 @@
             $("#file").append("<li class='list-group-item' onclick='selectfile(this)' num='"+backpic+"'>"+getFileName(file.name)+"</li>");
             return false;
         }
+
     </script>
 </head>
 <body>
@@ -138,6 +139,26 @@
                                         <td class="form-inline">
                                             <label class="control-label" >巡检项名称:</label>
                                             ${reportcontent.checkname}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="exceptiontype">异常类型:</label>
+                                            <select name="exceptiontype" id="exceptiontype" class="form-control" required>
+                                                <c:forEach items="${exceptiontypeList}" var="type">
+                                                    <option ${exceptionhandlerinfo.exceptiontype eq type.name?'selected':''} value="${type.name}">${type.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="exceptionlever">异常等级:</label>
+                                            <select name="exceptionlever" id="exceptionlever" class="form-control" required>
+                                                <c:forEach items="${levertype1List}" var="lever">
+                                                    <option ${exceptionhandlerinfo.exceptionlever eq lever.name ?'selected':''} value="${lever.name}">${lever.name}</option>
+                                                </c:forEach>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
