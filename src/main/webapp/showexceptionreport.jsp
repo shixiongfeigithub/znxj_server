@@ -186,6 +186,7 @@
                                             <th class="fontcenter">巡检项</th>
                                             <th class="fontcenter">异常描述</th>
                                             <th class="fontcenter">问题上报时间</th>
+                                            <th class="fontcenter">工人</th>
                                             <th class="fontcenter">处理状态</th>
                                             <th class="fontcenter">责任人</th>
                                             <th class="fontcenter">关闭时间</th>
@@ -254,6 +255,7 @@
                                                 </c:if>
                                             </td>
                                             <td class="fontcenter">${item.operationtime}</td>
+                                            <td class="fontcenter">${item.report.worker}</td>
                                             <td class="fontcenter">
                                                 <c:if test="${item.exceptionstate == 0}">待处理</c:if>
                                                 <c:if test="${item.exceptionstate == 1}"><a href="javascript:;" onclick="handlerdetail('${item.id==null?'':item.id}')">已关闭</a></c:if>
@@ -273,16 +275,16 @@
                                         </c:forEach>
                                     </table>
                                     <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                                        <a href="showexceptionreport?page=1&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">第一页</a>
+                                        <a href="showexceptionreport?page=1&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">第一页</a>
                                         <c:if test="${pageBean.currentPage>1}">
-                                            <a href="showexceptionreport?page=${pageBean.currentPage-1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">上一页</a>
+                                            <a href="showexceptionreport?page=${pageBean.currentPage-1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">上一页</a>
                                         </c:if>
 
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                            <a href="showexceptionreport?page=${pageBean.currentPage+1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">下一页</a>
+                                            <a href="showexceptionreport?page=${pageBean.currentPage+1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">下一页</a>
                                         </c:if>
 
-                                        <a href="showexceptionreport?page=${pageBean.totalPage}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&operationstate=${operationstate}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">最后一页</a>
+                                        <a href="showexceptionreport?page=${pageBean.totalPage}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">最后一页</a>
 
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
                                     </div>

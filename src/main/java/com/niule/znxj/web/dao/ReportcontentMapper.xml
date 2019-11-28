@@ -122,7 +122,7 @@
     </if>
   </select>
   <select id="selectByExample2" resultMap="BaseResultMap" parameterType="map" >
-    SELECT r.*,t.taskcode,p.customid taskname,s.customid sitename,e.operatorname,
+    SELECT r.*,t.taskcode,t.worker,p.customid taskname,s.customid sitename,e.operatorname,
     e.exceptionstate,e.reporttime,e.appointedtime,e.exceptionclosetime,e.exceptiontype,e.exceptionlever,
     e.uploadtime,e.uploadstate
     FROM

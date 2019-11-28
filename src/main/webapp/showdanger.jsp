@@ -290,16 +290,16 @@
                                         <input type="hidden" id="errorlen" value="${pageBean.list.size()}">
                                     </table>
                                     <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                                        <a href="showdanger?page=1&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time=${updatetime}">第一页</a>
+                                        <a href="showdanger?page=1&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">第一页</a>
                                         <c:if test="${pageBean.currentPage>1}">
-                                            <a href="showdanger?page=${pageBean.currentPage-1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time=${updatetime}">上一页</a>
+                                            <a href="showdanger?page=${pageBean.currentPage-1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">上一页</a>
                                         </c:if>
 
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                            <a href="showdanger?page=${pageBean.currentPage+1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time=${updatetime}">下一页</a>
+                                            <a href="showdanger?page=${pageBean.currentPage+1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">下一页</a>
                                         </c:if>
 
-                                        <a href="showdanger?page=${pageBean.totalPage}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time=${updatetime}">最后一页</a>
+                                        <a href="showdanger?page=${pageBean.totalPage}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">最后一页</a>
 
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
 
