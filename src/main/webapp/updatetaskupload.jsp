@@ -5,45 +5,7 @@
     <title>智能巡检系统</title>
     <%@ include file="/WEB-INF/pages/common/header.jsp"%>
     <script type="text/javascript">
-        $(function () {
-            tasknum();
-        })
-
-        function tasknum(){
-            var siteid = $("#name2 option:selected")[0].value;
-            var taskId='${taskid}';
-            var type="";
-            if(siteid ==null || siteid==''){
-                $("#taskid").append("<option  value='' selected>--请选择--</option>");
-            }else {
-                $("#taskid").empty();
-                $.ajax({
-                    type: "GET",
-                    url: "taskbysiteandtype?searchtype=" + type + "&siteid=" + siteid,
-                    success: function (task) {
-                        for (var i = 0; i < task.length; i++) {
-                            if (task[i].id == taskId) {
-                                $("#taskid").append("<option  value='" + task[i].id + "' selected>" + task[i].customid + "</option>");
-                            } else {
-                                $("#taskid").append("<option  value='" + task[i].id + "' >" + task[i].customid + "</option>");
-                            }
-                        }
-                    }
-                })
-            }
-        }
         function validateForm() {
-            var siteid = $("#name2").val();
-            if (siteid == null || siteid == undefined || siteid == '') {
-                alert("您还没有选择厂区哟！！！");
-                return false;
-            }
-
-            var taskid = $("#taskid").val();
-            if (taskid == null || taskid == undefined || taskid == '') {
-                alert("您还没有选择任务哟！！！");
-                return false;
-            }
             var chk_value =[];
             $('input[name="exceptiontype"]:checked').each(function(){ //遍历，将所有选中的值放到数组中
                 chk_value.push($(this).val());
@@ -114,24 +76,14 @@
                                 <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="name2">厂区:</label>
-                                            <select class="form-control" name="siteid" id="name2" required="required" readonly="true">
-                                                <c:forEach items="${siteareainfos}" var="site">
-                                                    <option ${taskuploadconfig.siteid eq site.id ?'selected':''} value="${site.id}">${site.customid}</option>
-                                                </c:forEach>
-                                            </select>
+                                            <label class="control-label">厂区:</label>
+                                            ${taskuploadconfig.sitename }
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
-                                            <label class="control-label" for="taskid">任务:</label>
-                                            <select class="form-control" id="taskid" name="taskid" readonly="true">
-                                                <c:choose>
-                                                    <c:when test="${taskid==null and taskid==''}">
-                                                        <option value="" selected>所有任务</option>
-                                                    </c:when>
-                                                </c:choose>
-                                            </select>
+                                            <label class="control-label" >任务:</label>
+                                            ${taskuploadconfig.taskname }
                                         </td>
                                     </tr>
                                     <tr>

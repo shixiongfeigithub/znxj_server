@@ -91,10 +91,11 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from taskuploadconfig
-    where id = #{id,jdbcType=BIGINT}
+    select t.*,s.customid sitename,p.customid taskname
+    from taskuploadconfig t
+    LEFT JOIN siteareainfo s ON t.siteid = s.id
+    LEFT JOIN taskplaninfo p ON t.taskid = p.id
+    where t.id = #{id,jdbcType=BIGINT}
   </select>
 
   <select id="selectByPageParam" resultMap="BaseResultMap" parameterType="map" >
