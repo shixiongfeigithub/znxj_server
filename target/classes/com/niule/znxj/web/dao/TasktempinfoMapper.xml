@@ -256,9 +256,7 @@
       <if test="state != null" >
         state = #{state,jdbcType=INTEGER},
       </if>
-      <if test="userid != null" >
         userid = #{userid,jdbcType=BIGINT},
-      </if>
       <if test="taskcode != null" >
         taskcode = #{taskcode,jdbcType=VARCHAR},
       </if>

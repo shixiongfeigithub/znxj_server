@@ -18,12 +18,6 @@
     <result column="equipmentskipdesc" property="equipmentskipdesc" jdbcType="VARCHAR" />
     <result column="operationtime" property="operationtime" jdbcType="VARCHAR" />
     <result column="reportid" property="reportid" jdbcType="BIGINT" />
-    <result column="taskcode" property="report.taskcode"/>
-    <result column="sitename" property="report.task.site.customid" jdbcType="VARCHAR" />
-    <result column="worker" property="report.worker"/>
-    <result column="tasktype" property="report.tasktype"/>
-    <result column="starttime" property="report.starttime" jdbcType="TIMESTAMP" />
-    <result column="endtime" property="report.endtime" jdbcType="TIMESTAMP" />
     <result column="lowerwarning" property="lowerwarning" jdbcType="VARCHAR" />
     <result column="normalmax" property="normalmax" jdbcType="VARCHAR" />
     <result column="normalmin" property="normalmin" jdbcType="VARCHAR" />
@@ -31,6 +25,26 @@
     <result column="video" property="video" jdbcType="VARCHAR" />
     <result column="audio" property="audio" jdbcType="VARCHAR" />
     <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="checkvalue" property="checkvalue" jdbcType="VARCHAR" />
+    <result column="enumitem" property="enumitem" jdbcType="VARCHAR" />
+    <result column="equipinouttime" property="equipinouttime" jdbcType="VARCHAR" />
+    <result column="areainouttime" property="areainouttime" jdbcType="VARCHAR" />
+    <result column="taskcode" property="taskcode" jdbcType="VARCHAR"/>
+    <result column="taskname" property="taskname" jdbcType="VARCHAR"/>
+    <result column="sitename" property="sitename" jdbcType="VARCHAR" />
+    <result column="worker" property="report.worker"/>
+    <result column="tasktype" property="report.tasktype"/>
+    <result column="starttime" property="report.starttime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="report.endtime" jdbcType="TIMESTAMP" />
+    <result column="operatorname" property="operatorname" jdbcType="VARCHAR"/>
+    <result column="exceptionstate" property="exceptionstate" jdbcType="INTEGER"/>
+    <result column="reporttime" jdbcType="TIMESTAMP" property="reporttime" />
+    <result column="appointedtime" jdbcType="TIMESTAMP" property="appointedtime" />
+    <result column="exceptionclosetime" jdbcType="TIMESTAMP" property="exceptionclosetime" />
+    <result column="exceptiontype" jdbcType="VARCHAR" property="exceptiontype" />
+    <result column="exceptionlever" jdbcType="VARCHAR" property="exceptionlever" />
+    <result column="uploadstate" property="uploadstate" jdbcType="INTEGER"/>
+    <result column="uploadtime" jdbcType="TIMESTAMP" property="uploadtime" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -91,12 +105,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, areaname, equipname, checkname, checktype, numvalue, recordname, unitname, reportstate, 
-    errcontent, areaskip, equipmentskip, areaskipdesc, equipmentskipdesc, operationtime, 
-    reportid, lowerwarning, normalmax, normalmin, upperwarning, video, audio, img
+    id, areaname, equipname, checkname, checktype, numvalue, recordname, unitname, reportstate,
+    errcontent, areaskip, equipmentskip, areaskipdesc, equipmentskipdesc, operationtime,
+    reportid, lowerwarning, normalmax, normalmin, upperwarning, video, audio, img, checkvalue,
+    enumitem
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.ReportcontentExample" >
-    select c.*,r.taskcode,r.worker,r.tasktype,r.starttime,r.endtime from reportcontent c left join taskreportinfo r on r.id=c.reportid
+    select c.*,r.taskcode,r.worker,r.tasktype,r.starttime,r.endtime
+    from reportcontent c
+    left join taskreportinfo r on r.id=c.reportid
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -104,8 +121,126 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByExample2" resultMap="BaseResultMap" parameterType="map" >
+    SELECT r.*,t.taskcode,t.worker,p.customid taskname,s.customid sitename,e.operatorname,
+    e.exceptionstate,e.reporttime,e.appointedtime,e.exceptionclosetime,e.exceptiontype,e.exceptionlever,
+    e.uploadtime,e.uploadstate
+    FROM
+    reportcontent r
+    LEFT JOIN taskreportinfo t ON r.reportid = t.id
+    LEFT JOIN taskplaninfo p ON t.taskid = p.id
+    LEFT JOIN siteareainfo s ON p.siteid = s.id
+    LEFT JOIN exceptionhandlerinfo e ON r.id = e.reportcontentid
+    WHERE  r.reportstate =1
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="areaname != null and areaname !=''" >
+      and r.areaname =#{areaname}
+    </if>
+    <if test="equipname != null and equipname !=''" >
+      and r.equipname =#{equipname}
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND e.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND e.operatorid =#{operatorid}
+    </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and e.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="exceptiontype!=null and exceptiontype!=''">
+      and e.exceptiontype=#{exceptiontype}
+    </if>
+    <if test="exceptionlever!=null and exceptionlever!=''">
+      and e.exceptionlever=#{exceptionlever}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(r.operationtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by r.id DESC
+    limit #{page},#{pagesize}
+  </select>
+  <select id="countByExample2" resultType="java.lang.Integer" parameterType="map" >
+    SELECT count(r.id) FROM
+    reportcontent r
+    LEFT JOIN taskreportinfo t ON r.reportid = t.id
+    LEFT JOIN taskplaninfo p ON t.taskid = p.id
+    LEFT JOIN siteareainfo s ON p.siteid = s.id
+    LEFT JOIN exceptionhandlerinfo e ON r.id = e.reportcontentid
+    WHERE  r.reportstate =1
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="areaname != null and areaname !=''" >
+      and r.areaname =#{areaname}
+    </if>
+    <if test="equipname != null and equipname !=''" >
+      and r.equipname =#{equipname}
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND e.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND e.operatorid =#{operatorid}
+    </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and e.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="exceptiontype!=null and exceptiontype!=''">
+      and e.exceptiontype=#{exceptiontype}
+    </if>
+    <if test="exceptionlever!=null and exceptionlever!=''">
+      and e.exceptionlever=#{exceptionlever}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(r.operationtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by r.id DESC
+  </select>
+  <select id="countByExample3" resultType="java.lang.Integer" parameterType="map" >
+    SELECT count(r.id) FROM
+    reportcontent r
+    LEFT JOIN taskreportinfo t ON r.reportid = t.id
+    LEFT JOIN taskplaninfo p ON t.taskid = p.id
+    LEFT JOIN siteareainfo s ON p.siteid = s.id
+    LEFT JOIN exceptionhandlerinfo e ON r.id = e.reportcontentid
+    WHERE  r.reportstate =1 and e.exceptionstate=1
+    and s.id in
+    <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+      #{siteid}
+    </foreach>
+    <if test="areaname != null and areaname !=''" >
+      and r.areaname =#{areaname}
+    </if>
+    <if test="equipname != null and equipname !=''" >
+      and r.equipname =#{equipname}
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND e.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND e.operatorid =#{operatorid}
+    </if>
+    <if test="exceptiontype!=null and exceptiontype!=''">
+      and e.exceptiontype=#{exceptiontype}
+    </if>
+    <if test="exceptionlever!=null and exceptionlever!=''">
+      and e.exceptionlever=#{exceptionlever}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(r.operationtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order by r.id DESC
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from reportcontent
     where id = #{id,jdbcType=INTEGER}
@@ -128,7 +263,8 @@
       areaskipdesc, equipmentskipdesc, operationtime, 
       reportid, lowerwarning, normalmax, 
       normalmin, upperwarning, video, 
-      audio, img)
+      audio, img, checkvalue, 
+      enumitem)
     values (#{id,jdbcType=INTEGER}, #{areaname,jdbcType=VARCHAR}, #{equipname,jdbcType=VARCHAR}, 
       #{checkname,jdbcType=VARCHAR}, #{checktype,jdbcType=VARCHAR}, #{numvalue,jdbcType=VARCHAR}, 
       #{recordname,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR}, #{reportstate,jdbcType=VARCHAR}, 
@@ -136,7 +272,8 @@
       #{areaskipdesc,jdbcType=VARCHAR}, #{equipmentskipdesc,jdbcType=VARCHAR}, #{operationtime,jdbcType=VARCHAR}, 
       #{reportid,jdbcType=BIGINT}, #{lowerwarning,jdbcType=VARCHAR}, #{normalmax,jdbcType=VARCHAR}, 
       #{normalmin,jdbcType=VARCHAR}, #{upperwarning,jdbcType=VARCHAR}, #{video,jdbcType=VARCHAR}, 
-      #{audio,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR})
+      #{audio,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, #{checkvalue,jdbcType=VARCHAR}, 
+      #{enumitem,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.niule.znxj.web.model.Reportcontent" >
     insert into reportcontent
@@ -210,6 +347,12 @@
       <if test="img != null" >
         img,
       </if>
+      <if test="checkvalue != null" >
+        checkvalue,
+      </if>
+      <if test="enumitem != null" >
+        enumitem,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -280,6 +423,12 @@
       </if>
       <if test="img != null" >
         #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="checkvalue != null" >
+        #{checkvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="enumitem != null" >
+        #{enumitem,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -361,6 +510,12 @@
       <if test="record.img != null" >
         img = #{record.img,jdbcType=VARCHAR},
       </if>
+      <if test="record.checkvalue != null" >
+        checkvalue = #{record.checkvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enumitem != null" >
+        enumitem = #{record.enumitem,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -369,28 +524,30 @@
   <update id="updateByExample" parameterType="map" >
     update reportcontent
     set id = #{record.id,jdbcType=INTEGER},
-      areaname = #{record.areaname,jdbcType=VARCHAR},
-      equipname = #{record.equipname,jdbcType=VARCHAR},
-      checkname = #{record.checkname,jdbcType=VARCHAR},
-      checktype = #{record.checktype,jdbcType=VARCHAR},
-      numvalue = #{record.numvalue,jdbcType=VARCHAR},
-      recordname = #{record.recordname,jdbcType=VARCHAR},
-      unitname = #{record.unitname,jdbcType=VARCHAR},
-      reportstate = #{record.reportstate,jdbcType=VARCHAR},
-      errcontent = #{record.errcontent,jdbcType=VARCHAR},
-      areaskip = #{record.areaskip,jdbcType=INTEGER},
-      equipmentskip = #{record.equipmentskip,jdbcType=INTEGER},
-      areaskipdesc = #{record.areaskipdesc,jdbcType=VARCHAR},
-      equipmentskipdesc = #{record.equipmentskipdesc,jdbcType=VARCHAR},
-      operationtime = #{record.operationtime,jdbcType=VARCHAR},
-      reportid = #{record.reportid,jdbcType=BIGINT},
-      lowerwarning = #{record.lowerwarning,jdbcType=VARCHAR},
-      normalmax = #{record.normalmax,jdbcType=VARCHAR},
-      normalmin = #{record.normalmin,jdbcType=VARCHAR},
-      upperwarning = #{record.upperwarning,jdbcType=VARCHAR},
-      video = #{record.video,jdbcType=VARCHAR},
-      audio = #{record.audio,jdbcType=VARCHAR},
-      img = #{record.img,jdbcType=VARCHAR}
+    areaname = #{record.areaname,jdbcType=VARCHAR},
+    equipname = #{record.equipname,jdbcType=VARCHAR},
+    checkname = #{record.checkname,jdbcType=VARCHAR},
+    checktype = #{record.checktype,jdbcType=VARCHAR},
+    numvalue = #{record.numvalue,jdbcType=VARCHAR},
+    recordname = #{record.recordname,jdbcType=VARCHAR},
+    unitname = #{record.unitname,jdbcType=VARCHAR},
+    reportstate = #{record.reportstate,jdbcType=VARCHAR},
+    errcontent = #{record.errcontent,jdbcType=VARCHAR},
+    areaskip = #{record.areaskip,jdbcType=INTEGER},
+    equipmentskip = #{record.equipmentskip,jdbcType=INTEGER},
+    areaskipdesc = #{record.areaskipdesc,jdbcType=VARCHAR},
+    equipmentskipdesc = #{record.equipmentskipdesc,jdbcType=VARCHAR},
+    operationtime = #{record.operationtime,jdbcType=VARCHAR},
+    reportid = #{record.reportid,jdbcType=BIGINT},
+    lowerwarning = #{record.lowerwarning,jdbcType=VARCHAR},
+    normalmax = #{record.normalmax,jdbcType=VARCHAR},
+    normalmin = #{record.normalmin,jdbcType=VARCHAR},
+    upperwarning = #{record.upperwarning,jdbcType=VARCHAR},
+    video = #{record.video,jdbcType=VARCHAR},
+    audio = #{record.audio,jdbcType=VARCHAR},
+    img = #{record.img,jdbcType=VARCHAR},
+    checkvalue = #{record.checkvalue,jdbcType=VARCHAR},
+    enumitem = #{record.enumitem,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -464,6 +621,12 @@
       <if test="img != null" >
         img = #{img,jdbcType=VARCHAR},
       </if>
+      <if test="checkvalue != null" >
+        checkvalue = #{checkvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="enumitem != null" >
+        enumitem = #{enumitem,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -490,8 +653,20 @@
       upperwarning = #{upperwarning,jdbcType=VARCHAR},
       video = #{video,jdbcType=VARCHAR},
       audio = #{audio,jdbcType=VARCHAR},
-      img = #{img,jdbcType=VARCHAR}
+      img = #{img,jdbcType=VARCHAR},
+      checkvalue = #{checkvalue,jdbcType=VARCHAR},
+      enumitem = #{enumitem,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <update id="updateCheckValue" parameterType="com.niule.znxj.web.model.Reportcontent" >
+    update reportcontent
+    <set >
+      checkvalue = #{checkvalue,jdbcType=VARCHAR},
+      <if test="errcontent != null" >
+        errcontent = #{errcontent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

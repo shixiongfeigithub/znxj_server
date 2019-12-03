@@ -13,8 +13,10 @@
     <result column="lowerwarning" property="lowerwarning" jdbcType="DOUBLE" />
 
     <result column="recordid" property="recordid" jdbcType="BIGINT" />
-    <result column="name" property="daterecord.name" jdbcType="BIGINT" />
-    <result column="unitname" property="daterecord.unitname" jdbcType="BIGINT" />
+    <result column="name" property="daterecord.name" jdbcType="VARCHAR" />
+    <result column="unitname" property="daterecord.unitname" jdbcType="VARCHAR" />
+    <result column="recordType" property="daterecord.recordtype" jdbcType="INTEGER" />
+    <result column="state" property="daterecord.state" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -79,7 +81,7 @@
     recordid
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.CheckiteminfoExample" >
-    select c.*,d.name,d.unitname from checkiteminfo c left join daterecordinfo d on c.recordid=d.id
+    select c.*,d.name,d.unitname,d.recordType,d.state from checkiteminfo c left join daterecordinfo d on c.recordid=d.id
   </select>
   <select id="selectByRecordid" resultMap="BaseResultMap" parameterType="com.niule.znxj.web.model.CheckiteminfoExample" >
     select
@@ -100,7 +102,7 @@
     <include refid="Base_Column_List" />
     from checkiteminfo
     where id = #{id,jdbcType=BIGINT}-->
-    select c.*,d.name,d.unitname from checkiteminfo c left join daterecordinfo d on c.recordid=d.id where c.id = #{id,jdbcType=BIGINT}
+    select c.*,d.name,d.unitname,d.state from checkiteminfo c left join daterecordinfo d on c.recordid=d.id where c.id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from checkiteminfo
@@ -296,10 +298,11 @@
 
   <select id="findByPageCheck" resultMap="BaseResultMap" parameterType="int">
     select
-    c.id,c.customid,c.itemname,c.keyword,c.recordid,c.type,d.name
+    c.id,c.customid,c.itemname,c.keyword,c.recordid,c.type,d.name,d.state,d.unitname
     from checkiteminfo c
     left join daterecordinfo d
     on d.id=c.recordid
+    order by c.id desc
     limit #{0},#{1}
   </select>
   <select id="countCheck" resultType="int">
@@ -307,13 +310,14 @@
   </select>
   <select id="findByPageCheck2" resultMap="BaseResultMap" parameterType="map">
     select
-    c.id,c.customid,c.itemname,c.keyword,c.recordid,c.type,d.name
+    c.id,c.customid,c.itemname,c.keyword,c.recordid,c.type,d.name,d.state,d.unitname
     from checkiteminfo c
     left join daterecordinfo d
     on d.id=c.recordid
     <if test="itemname!=''">
       and itemname like #{itemname}
     </if>
+    order by c.id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countCheck2" resultType="int">
@@ -332,4 +336,5 @@
       #{checkid}
     </foreach>
   </select>
+
 </mapper>

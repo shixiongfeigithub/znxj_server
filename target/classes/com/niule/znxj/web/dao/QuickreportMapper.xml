@@ -16,6 +16,10 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="state" property="state" jdbcType="INTEGER" />
     <result column="upLoad" property="upload" jdbcType="VARCHAR" />
+    <result column="operatorname" property="operatorname" jdbcType="VARCHAR" />
+    <result column="reporttime" property="reporttime" jdbcType="TIMESTAMP" />
+    <result column="dangerclosetime" property="dangerclosetime" jdbcType="TIMESTAMP" />
+    <result column="dangerstate" property="dangerstate" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -84,18 +88,6 @@
     left join classinfo c on u.classid=c.id
     left join siteareainfo s on c.siteareaid=s.id
     where q.type=#{0} limit #{1},#{2}
-    <!--select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from quickreport
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>-->
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -316,9 +308,10 @@
       left join userinfo u on u.id=q.userid
       left join classinfo c on u.classid=c.id
       left join siteareainfo s on c.siteareaid=s.id
-      where q.type=0
+      where 1=1
       <if test="reportcode!=null and reportcode!=''">
-          and q.reportcode like #{reportcode}
+        AND( u.realname LIKE #{reportcode} OR c.customid LIKE #{reportcode} OR s.customid LIKE #{reportcode}
+        OR content LIKE #{reportcode} OR q.reportcode LIKE #{reportcode})
       </if>
       <if test="time!=null and time!=''">
           and str_to_date(q.uploadtime,'%Y-%m-%d')=str_to_date(#{time},'%Y-%m-%d')
@@ -326,13 +319,105 @@
       <if test="siteid!=null and siteid!=''">
         and s.id =#{siteid}
       </if>
+        and q.type=0 order BY  id desc
   </select>
-  <!--<select id="showQuickreport2" resultMap="BaseResultMap"  parameterType="int" >-->
-      <!--select q.*,u.realname,c.customid classname,s.customid sitename  from quickreport q-->
-      <!--left join userinfo u on u.id=q.userid-->
-      <!--left join classinfo c on u.classid=c.id-->
-      <!--left join siteareainfo s on c.siteareaid=s.id-->
-      <!--where q.type=0-->
-  <!--</select>-->
+
+  <select id="showQuickreport2" resultMap="BaseResultMap"  parameterType="map" >
+    select q.*,d.operatorname,d.reporttime,d.dangerclosetime,d.dangerstate,u.realname,c.customid classname,s.customid sitename
+    from quickreport q
+    left join dangerhandlerinfo d on d.reportid = q.id
+    left join userinfo u on u.id=q.userid
+    left join classinfo c on u.classid=c.id
+    left join siteareainfo s on c.siteareaid=s.id
+    where q.type=1
+    <if test="reportcode!=null and reportcode!=''">
+      AND q.reportcode LIKE #{reportcode}
+    </if>
+    <if test="siteids!=null and siteids!=''">
+      and s.id in
+      <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+        #{siteid}
+      </foreach>
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND d.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND d.operatorid =#{operatorid}
+    </if>
+    <if test="dangerstate!=null and dangerstate!=''">
+      and d.dangerstate=#{dangerstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(q.uploadtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order BY  q.id desc
+    limit #{page},#{pagesize}
+  </select>
+
+  <select id="countByExample2" resultType="java.lang.Integer" parameterType="map" >
+    select count(*)
+    from quickreport q
+    left join dangerhandlerinfo d on d.reportid = q.id
+    left join userinfo u on u.id=q.userid
+    left join classinfo c on u.classid=c.id
+    left join siteareainfo s on c.siteareaid=s.id
+    where q.type=1
+    <if test="reportcode!=null and reportcode!=''">
+      AND q.reportcode LIKE #{reportcode}
+    </if>
+    <if test="siteids!=null and siteids!=''">
+      and s.id in
+      <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+        #{siteid}
+      </foreach>
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND d.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND d.operatorid =#{operatorid}
+    </if>
+    <if test="dangerstate!=null and dangerstate!=''">
+      and d.dangerstate=#{dangerstate}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(q.uploadtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+    order BY  q.id desc
+  </select>
+
+  <select id="countByCloseState" resultType="java.lang.Integer" parameterType="map" >
+    select count(*)
+    from quickreport q
+    left join dangerhandlerinfo d on d.reportid = q.id
+    left join userinfo u on u.id=q.userid
+    left join classinfo c on u.classid=c.id
+    left join siteareainfo s on c.siteareaid=s.id
+    where q.type=1
+    <if test="reportcode!=null and reportcode!=''">
+      AND q.reportcode LIKE #{reportcode}
+    </if>
+    <if test="siteids!=null and siteids!=''">
+      and s.id in
+      <foreach collection="siteids"  item="siteid" open="(" separator="," close=")" >
+        #{siteid}
+      </foreach>
+    </if>
+    <if test="operatorname != null and operatorname !=''" >
+      AND d.operatorname =#{operatorname}
+    </if>
+    <if test="operatorid != null and operatorid !=''" >
+      AND d.operatorid =#{operatorid}
+    </if>
+    <if test="time1!=null and time1!=''">
+      and date_format(q.uploadtime, '%Y-%m-%d'
+      ) between #{time1,jdbcType=VARCHAR}  </if>
+    <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
+      and d.dangerstate=1
+    order BY  q.id desc
+  </select>
 
 </mapper>

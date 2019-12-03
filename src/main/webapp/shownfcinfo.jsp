@@ -61,7 +61,17 @@
                                 <form action="showallnfc?page=1" method="post">
                                     <label class="control-label" for="name2">名称：</label>
                                     <input type="text" class="form-control" style="width: 300px;" id="name2" name="customid" value="${param.customid}">
+                                <c:if test="${ad.siteid eq null}">
+                                    <label class="control-label" for="site">厂区:</label>
+                                    <select id="site" name="siteid" class="form-control">
+                                        <option ${siteid eq null?'selected':''} value="">所有厂区</option>
+                                        <c:forEach items="${siteareainfos}" var="site">
+                                            <option ${siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                        </c:forEach>
+                                    </select>
+                                </c:if>
                                     <input type="submit" class="btn btn-primary" value="搜索">
+
                                     <shiro:hasPermission name="add:nfc">
                                         <a href="addnfcinfo.jsp" id="button" class="btn btn-primary" style="margin-left:250px;">添加NFC标签</a>
                                     </shiro:hasPermission>
@@ -109,16 +119,16 @@
                             </c:forEach>
                         </table>
                         <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                            <a href="showallnfc?page=1&customid=${customid}">第一页</a>
+                            <a href="showallnfc?page=1&customid=${customid}&siteid=${siteid}">第一页</a>
                             <c:if test="${pageBean.pageNum>1}">
-                                <a href="showallnfc?page=${pageBean.pageNum-1}&customid=${customid}">上一页</a>
+                                <a href="showallnfc?page=${pageBean.pageNum-1}&customid=${customid}&siteid=${siteid}">上一页</a>
                             </c:if>
 
                             <c:if test="${pageBean.pageNum<pageBean.pages}">
-                                <a href="showallnfc?page=${pageBean.pageNum+1}&customid=${customid}">下一页</a>
+                                <a href="showallnfc?page=${pageBean.pageNum+1}&customid=${customid}&siteid=${siteid}">下一页</a>
                             </c:if>
 
-                            <a href="showallnfc?page=${pageBean.pages}&customid=${customid}">最后一页</a>
+                            <a href="showallnfc?page=${pageBean.pages}&customid=${customid}&siteid=${siteid}">最后一页</a>
 
                             第${pageBean.pageNum}页/共${pageBean.pages}页
                         </div>

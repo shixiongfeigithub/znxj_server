@@ -2,12 +2,10 @@ package com.niule.znxj.web.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.niule.znxj.core.util.PageBean;
-import com.niule.znxj.web.model.Admininfo;
-import com.niule.znxj.web.model.Areainfo;
-import com.niule.znxj.web.model.Nfcinfo;
-import com.niule.znxj.web.model.Operatelog;
+import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.NfcService;
 import com.niule.znxj.web.service.OperateLogService;
+import com.niule.znxj.web.service.SiteService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +28,9 @@ public class WebNfcController {
     private NfcService nfcService;
     @Resource
     private OperateLogService operateLogService;
+    @Resource
+    private SiteService siteService;
+
     protected PageBean pageBean = new PageBean();
 
     public PageBean getPageBean() {
@@ -41,7 +42,7 @@ public class WebNfcController {
     }
     @RequestMapping("showallnfc")
     @RequiresPermissions("item:nfc")
-    public String showallnfc(int page, Model m,String customid,HttpServletRequest request){
+    public String showallnfc(int page, Model m,String customid,String siteid,HttpServletRequest request){
         if(page<=0){
             page=1;
         }
@@ -51,13 +52,23 @@ public class WebNfcController {
         map.put("pagesize",pagesieze);
         map.put("customid",customid==null?"":"%"+customid+"%");
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
-        map.put("siteid",admininfo.getSiteid());
+        //单个工厂登录者所属工厂 或者 多个工厂登陆者下拉框所选工厂
+        if(siteid != null) {
+            map.put("siteid", siteid);
+            m.addAttribute("siteid",siteid);
+        }else{
+            map.put("siteid", admininfo.getSiteid());
+            m.addAttribute("siteid",admininfo.getSiteid());
+        }
         page = PageBean.countCurrentPage(page);
         List<Nfcinfo> nfcinfos=null ;
         nfcinfos = nfcService.findByPageNfc2(map);
         pageBean.setCurrentPage(page);
         m.addAttribute("pageBean",new PageInfo<Nfcinfo>(nfcinfos));
         m.addAttribute("customid",customid);
+        m.addAttribute("ad",admininfo);
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos", siteareainfos);
         return "shownfcinfo";
     }
     @RequestMapping("addnfc")

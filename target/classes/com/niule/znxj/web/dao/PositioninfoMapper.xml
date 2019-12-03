@@ -90,7 +90,7 @@
   <select id="findByPagePos" resultMap="BaseResultMap" parameterType="int">
     select
     <include refid="Base_Column_List" />
-    from positioninfo where 1=1 limit #{0},#{1}
+    from positioninfo where 1=1 order by id desc limit #{0},#{1}
   </select>
   <select id="countPos" resultType="int">
     select count(id) from positioninfo

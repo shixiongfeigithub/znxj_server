@@ -243,7 +243,9 @@
   <select id="findByPageCon" resultMap="BaseResultMap" parameterType="int">
     select
     <include refid="Base_Column_List" />
-    from contactinfo limit #{0},#{1}
+    from contactinfo
+    order by id desc
+    limit #{0},#{1}
   </select>
   <select id="countCon" resultType="int">
     select count(id) from contactinfo
@@ -258,6 +260,7 @@
     <if test="roletype!=''">
       and roletype=#{roletype}
     </if>
+    order by id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countCon2" resultType="int">
