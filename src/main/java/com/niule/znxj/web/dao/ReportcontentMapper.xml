@@ -151,6 +151,9 @@
     <if test="exceptionstate!=null and exceptionstate!=''">
       and e.exceptionstate=#{exceptionstate}
     </if>
+    <if test="showexceptiontype!=null and showexceptiontype!=''">
+      and e.exceptionstate=0
+    </if>
     <if test="exceptiontype!=null and exceptiontype!=''">
       and e.exceptiontype=#{exceptiontype}
     </if>
@@ -193,6 +196,9 @@
     </if>
     <if test="exceptiontype!=null and exceptiontype!=''">
       and e.exceptiontype=#{exceptiontype}
+    </if>
+    <if test="showexceptiontype!=null and showexceptiontype!=''">
+      and e.exceptionstate=0
     </if>
     <if test="exceptionlever!=null and exceptionlever!=''">
       and e.exceptionlever=#{exceptionlever}

@@ -94,6 +94,8 @@ public class TaskExceptionController {
         map.put("areaname", areainfo!=null?areainfo.getCustomid():null);
         map.put("equipname",equipmentinfo!=null?equipmentinfo.getName():null);
         map.put("exceptionstate",exceptionstate);//异常处理状态
+        if (exceptionstate!=null && exceptionstate==0)
+            map.put("showexceptiontype","1");
         map.put("operatorname",operatorname); //巡检责任人
         map.put("exceptionlever",exceptionlever); //异常分级
         map.put("exceptiontype",exceptiontype); //异常分类

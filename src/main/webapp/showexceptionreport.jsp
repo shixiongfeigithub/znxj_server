@@ -135,8 +135,9 @@
                                             <br>
                                             <div style="line-height: 10px;">&nbsp;</div>
                                             <label class="control-label" for="exceptionstate">处理状态：</label>
-                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 80px;">
+                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 90px;">
                                                 <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
+                                                <option ${exceptionstate eq '0' ? 'selected' : ''} value="0">待处理</option>
                                                 <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
