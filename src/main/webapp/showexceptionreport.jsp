@@ -280,13 +280,10 @@
                                         <c:if test="${pageBean.currentPage>1}">
                                             <a href="showexceptionreport?page=${pageBean.currentPage-1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">上一页</a>
                                         </c:if>
-
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
                                             <a href="showexceptionreport?page=${pageBean.currentPage+1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">下一页</a>
                                         </c:if>
-
                                         <a href="showexceptionreport?page=${pageBean.totalPage}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">最后一页</a>
-
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
                                     </div>
                                 </div>

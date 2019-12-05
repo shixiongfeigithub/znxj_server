@@ -86,7 +86,6 @@ public class TaskExceptionController {
             areainfo = areaService.selectByPrimaryKey(areaid);
         if (equipmentid !=null)
             equipmentinfo = equipmentService.selectByPrimaryKey(equipmentid);
-
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("page", (page - 1) * pagesize);
         map.put("pagesize", pagesize);
