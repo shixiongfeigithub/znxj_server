@@ -54,7 +54,7 @@ public class WebNfcController {
         map.put("customid",customid==null?"":"%"+customid+"%");
         Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
         //单个工厂登录者所属工厂 或者 多个工厂登陆者下拉框所选工厂
-        if(siteid != null) {
+        if(siteid != null && siteid != "") {
             map.put("siteid", siteid);
             m.addAttribute("siteid",siteid);
         }else{

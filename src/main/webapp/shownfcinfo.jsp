@@ -57,7 +57,7 @@
 
                         </div>
                         <div class="box-content">
-                            <div class="form-inline" style="margin-bottom: 20px;">
+                            <div class="form-inline">
                                 <form action="showallnfc?page=1" method="post">
                                     <label class="control-label" for="name2">名称：</label>
                                     <input type="text" class="form-control" style="width: 300px;" id="name2" name="customid" value="${param.customid}">
@@ -73,7 +73,7 @@
                                     <input type="submit" class="btn btn-primary" value="搜索">
                                     <div style="float: right;">
                                         <shiro:hasPermission name="add:nfc">
-                                            <a href="toaddnfc" id="btnadd" class="btn btn-primary" style="margin-top: -6px;">添加NFC标签</a>
+                                            <a href="toaddnfc" id="btnadd" class="btn btn-primary">添加NFC标签</a>
                                         </shiro:hasPermission>
                                     </div>
                                 </form>
