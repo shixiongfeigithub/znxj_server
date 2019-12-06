@@ -636,7 +636,7 @@
                     <input id="sel_1" onchange="selectAll()" type="checkbox" value="1"/>全选/全不选<br>
                     任务名称<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;" value="任务名称">
                     任务编号<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;" value="任务编号">
-                    工人<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;" value="工人">
+                    上报人<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;" value="上报人">
                     <c:if test="${areaname==1}">
                         区域<input type="checkbox" name="exportcontent" style="width: 17px;height: 17px;"value="区域">
                     </c:if>

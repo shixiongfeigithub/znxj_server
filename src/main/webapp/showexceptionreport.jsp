@@ -186,7 +186,7 @@
                                             <th class="fontcenter">巡检项</th>
                                             <th class="fontcenter">异常描述</th>
                                             <th class="fontcenter">问题上报时间</th>
-                                            <th class="fontcenter">工人</th>
+                                            <th class="fontcenter">上报人</th>
                                             <th class="fontcenter">处理状态</th>
                                             <th class="fontcenter">责任人</th>
                                             <th class="fontcenter">关闭时间</th>

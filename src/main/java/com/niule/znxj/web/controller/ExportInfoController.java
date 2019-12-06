@@ -742,7 +742,7 @@ public class ExportInfoController {
                 }
                 values.clear();
                 keys.clear();
-                rowTemp.createCell(cell).setCellValue(checkItem.getWorker()); //在excel记录行尾加上工人名字
+                rowTemp.createCell(cell).setCellValue(checkItem.getWorker()); //在excel记录行尾加上上报人名字
             }
             //新的报告id
             tempReporId = reportId;
@@ -962,7 +962,7 @@ public class ExportInfoController {
         for (int i = 0; i < exportReport3ContentList.size(); i++) {
             rowTemp.createCell(cell++).setCellValue("-");
         }
-        rowTemp.createCell(cell).setCellValue("漏检"); //在excel记录行尾加上工人名字
+        rowTemp.createCell(cell).setCellValue("漏检"); //在excel记录行尾加上上报人名字
 
     }
 
@@ -1053,7 +1053,7 @@ public class ExportInfoController {
                 rowTemp.createCell(cell++).setCellValue("-");
             }
         }
-        rowTemp.createCell(cell++).setCellValue(worker); //在excel记录行尾加上工人名字
+        rowTemp.createCell(cell++).setCellValue(worker); //在excel记录行尾加上上报人名字
     }
 
 
@@ -1134,7 +1134,7 @@ public class ExportInfoController {
                 }
             }
         }
-        rowTemp.createCell(cell++).setCellValue(worker); //在excel记录行尾加上工人名字
+        rowTemp.createCell(cell++).setCellValue(worker); //在excel记录行尾加上上报人名字
     }
 
 
