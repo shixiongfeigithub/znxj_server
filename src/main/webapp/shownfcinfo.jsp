@@ -71,10 +71,11 @@
                                     </select>
                                 </c:if>
                                     <input type="submit" class="btn btn-primary" value="搜索">
-
-                                    <shiro:hasPermission name="add:nfc">
-                                        <a href="addnfcinfo.jsp" id="button" class="btn btn-primary" style="margin-left:250px;">添加NFC标签</a>
-                                    </shiro:hasPermission>
+                                    <div style="float: right;">
+                                        <shiro:hasPermission name="add:nfc">
+                                            <a href="toaddnfc" id="btnadd" class="btn btn-primary" style="margin-top: -6px;">添加NFC标签</a>
+                                        </shiro:hasPermission>
+                                    </div>
                                 </form>
                             </div>
                         </div>

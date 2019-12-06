@@ -6,6 +6,7 @@ import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.NfcService;
 import com.niule.znxj.web.service.OperateLogService;
 import com.niule.znxj.web.service.SiteService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,6 +72,15 @@ public class WebNfcController {
         m.addAttribute("siteareainfos", siteareainfos);
         return "shownfcinfo";
     }
+    @RequestMapping("toaddnfc")
+    @RequiresPermissions("add:nfc")
+    public String toaddnfc(Model m,HttpServletRequest request) {
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos",siteareainfos);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        m.addAttribute("ad",admininfo);
+        return "addnfcinfo";
+    }
     @RequestMapping("addnfc")
     @RequiresPermissions("add:nfc")
     public String addnfc(Nfcinfo nfcinfo, HttpSession session){
@@ -102,12 +112,19 @@ public class WebNfcController {
     }
     @RequestMapping("querybynfcid")
     @RequiresPermissions("upd:nfc")
-    public String querybynfcid(Long id,Model m,int page){
+    public String querybynfcid(Long id,Model m,int page,HttpServletRequest request){
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos",siteareainfos);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        m.addAttribute("ad",admininfo);
         Nfcinfo nfcinfo=nfcService.selectByPrimaryKey(id);
         m.addAttribute("nfcinfo",nfcinfo);
         m.addAttribute("page",page);
         return "updatenfcinfo";
     }
+
+
+
     @RequestMapping("updatenfc")
     public String updatenfc(Nfcinfo nfcinfo,HttpSession session,int page){
         int updresult=nfcService.updateByPrimaryKeySelective(nfcinfo);
@@ -125,6 +142,12 @@ public class WebNfcController {
     public String querynfcdetail(Long id,Model m){
         Nfcinfo nfcinfo=nfcService.selectByPrimaryKey(id);
         m.addAttribute("nfcinfo",nfcinfo);
+        Siteareainfo siteareainfo =  siteService.selectByPrimaryKey(nfcinfo.getSiteid());
+        if (siteareainfo != null ) {
+            m.addAttribute("sitenm", siteareainfo.getCustomid());
+        }else{
+            m.addAttribute("sitenm", "");
+        }
         return "shownfcinfodetail";
     }
 }

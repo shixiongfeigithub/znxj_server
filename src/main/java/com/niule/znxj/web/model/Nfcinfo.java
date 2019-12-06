@@ -27,6 +27,8 @@ public class Nfcinfo {
 
     private Long equipmentid;
 
+    private Long siteid;
+
     public Long getId() {
         return id;
     }
@@ -113,5 +115,13 @@ public class Nfcinfo {
 
     public void setEquipmentid(Long equipmentid) {
         this.equipmentid = equipmentid;
+    }
+
+    public Long getSiteid() {
+        return siteid;
+    }
+
+    public void setSiteid(Long siteid) {
+        this.siteid = siteid;
     }
 }
