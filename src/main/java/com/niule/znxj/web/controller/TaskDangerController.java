@@ -79,6 +79,8 @@ public class TaskDangerController {
         map.put("pagesize", pagesize);
         map.put("siteids", siteids);//厂区
         map.put("dangerstate",dangerstate);//隐患处理状态
+        if (dangerstate!=null && dangerstate==0)
+            map.put("showdangerstate","1");
         map.put("operatorname",operatorname); //巡检责任人
         map.put("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);//开始时间
         map.put("time2", time2==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time2);//结束时间
@@ -115,9 +117,16 @@ public class TaskDangerController {
     /*跳转到关闭隐患页面*/
     @RequestMapping("/toclosedanger")
     @RequiresPermissions("item:closedanger")
-    public String toclosedanger(Model m, Long id,HttpServletRequest request) {
+    public String toclosedanger(Model m, Long id,Long siteid,Integer dangerstate,
+                                String operatorname, String reportcode,String time1,String time2) {
         Quickreport quickreport = quickReportService.selectByPrimaryKey(id);
         m.addAttribute("quickreport",quickreport);
+        m.addAttribute("siteid", siteid);
+        m.addAttribute("dangerstate", dangerstate);
+        m.addAttribute("operatorname",operatorname);
+        m.addAttribute("reportcode", reportcode);
+        m.addAttribute("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);
+        m.addAttribute("time2", time2==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time2);
         return "closedanger";
     }
 
@@ -153,7 +162,8 @@ public class TaskDangerController {
     /*异常巡检任务指定责任人页面*/
     @RequestMapping("/toassigndanger")
     @RequiresPermissions("item:assigndanger")
-    public String toassigndanger(Model m, Long id, HttpServletRequest request) {
+    public String toassigndanger(Model m, Long id,Long siteid,Integer dangerstate,
+                                 String operatorname, String reportcode,String time1,String time2, HttpServletRequest request) {
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
         List<Admininfo> operationuserList = admininfoService.selectByRoleId(3); //查询所有角色为操作员的用户
         Quickreport quickreport = quickReportService.selectByPrimaryKey(id);
@@ -176,6 +186,12 @@ public class TaskDangerController {
         m.addAttribute("yinhuantypeList",yinhuantypeList);
         m.addAttribute("quickreport", quickreport);
         m.addAttribute("operationuserList",operationuserList);
+        m.addAttribute("siteid", siteid);
+        m.addAttribute("dangerstate", dangerstate);
+        m.addAttribute("operatorname",operatorname);
+        m.addAttribute("reportcode", reportcode);
+        m.addAttribute("time1", time1==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time1);
+        m.addAttribute("time2", time2==null?DateUtils.parseDateToStr(new Date(),"yyyy-MM-dd") :time2);
         return "assigndanger";
     }
 
