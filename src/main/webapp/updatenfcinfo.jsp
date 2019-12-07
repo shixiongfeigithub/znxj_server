@@ -36,6 +36,26 @@
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
+                                            <label class="control-label" for="site">厂区:</label>
+                                            <select name="siteid" id="site" class="form-control" >
+                                                <c:if test="${ad.siteid eq null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <option ${nfcinfo.siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${ad.siteid != null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <c:if test="${nfcinfo.siteid eq site.id}">
+                                                            <option selected value="${site.id}">${site.customid}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
                                             <label class="control-label" for="nfc">NFC串码:</label>
                                             <input type="text" class="form-control" style="width: 300px;" id="nfc" name="unitcode" value="${nfcinfo.unitcode}" required>
                                         </td>
@@ -68,7 +88,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="status">状态:</label>
-                                            <select id="status" name="state">
+                                            <select id="status" name="state" class="form-control">
                                                 <option ${nfcinfo.state eq 0 ? 'selected' : ''} value="0">失效</option>
                                                 <option ${nfcinfo.state eq 1 ? 'selected' : ''}  value="1">正常</option>
                                                 <option ${nfcinfo.state eq 2 ? 'selected' : ''}  value="2">遗失</option>

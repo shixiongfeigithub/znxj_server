@@ -42,6 +42,27 @@
                                             <input type="text" class="form-control" style="width: 300px;" id="username" name="customid" required>
                                         </td>
                                     </tr>
+
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="site">厂区:</label>
+                                            <select name="siteid" id="site" class="form-control" >
+                                                <c:if test="${ad.siteid eq null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <option ${ad.siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${ad.siteid != null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <c:if test="${ad.siteid eq site.id}">
+                                                            <option selected value="${site.id}">${site.customid}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+
+                                            </select>
+                                        </td>
+                                    </tr>
                                     <tr>
                                             <td class="form-inline">
                                             <label class="control-label" for="nfc">NFC串码:</label>
@@ -76,7 +97,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="status">状态:</label>
-                                            <select id="status" name="state" required="required">
+                                            <select id="status" name="state" required="required"  class="form-control">
                                                 <option value="0">失效</option>
                                                 <option value="1">正常</option>
                                                 <option value="2">遗失</option>

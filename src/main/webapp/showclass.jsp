@@ -68,14 +68,30 @@
                                     <i class="glyphicon glyphicon-globe"></i> 班组管理--列表
                                 </h2>
                             </div>
-                            <div style="float: right;">
-                                <shiro:hasPermission name="add:class">
-                                    <a href="toaddclass" id="button" class="btn btn-primary" style="margin-top: -6px;">添加班组</a>
-                                </shiro:hasPermission>
-                            </div>
                             <div class="clearfix"></div>
                         </div>
                         <div class="box-content">
+                            <div class="form-inline" style="margin-bottom: 45px;">
+                                <form action="showallclass?page=1" method="post">
+                                    <div style="float: left;">
+                                        <c:if test="${ad.siteid eq null}">
+                                            <label class="control-label" for="site">厂区:</label>
+                                            <select id="site" name="siteid" class="form-control">
+                                                <option ${siteid eq null?'selected':''} value="">所有厂区</option>
+                                                <c:forEach items="${siteareainfos}" var="site">
+                                                    <option ${siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <input type="submit" class="btn btn-primary" value="搜索">
+                                        </c:if>
+                                    </div>
+                                    <div style="float: right;">
+                                        <shiro:hasPermission name="add:class">
+                                            <a href="toaddclass" id="button" class="btn btn-primary" >添加班组</a>
+                                        </shiro:hasPermission>
+                                    </div>
+                                </form>
+                            </div>
                             <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                 <tr style="text-align: center">
                                     <th>操作</th>

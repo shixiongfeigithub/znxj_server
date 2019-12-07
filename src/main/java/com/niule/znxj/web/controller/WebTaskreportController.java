@@ -1528,7 +1528,7 @@ public class WebTaskreportController {
                     case "任务编号":
                         row.createCell(i).setCellValue(taskreportinfo.getTaskcode());
                         break;
-                    case "工人":
+                    case "上报人":
                         row.createCell(i).setCellValue(taskreportinfo.getWorker());
                         break;
                     case "任务类型":

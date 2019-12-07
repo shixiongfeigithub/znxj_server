@@ -33,6 +33,12 @@
                                 </tr>
                                 <tr>
                                     <td class="form-inline">
+                                        <label class="control-label" for="site">厂区:</label>
+                                        <input type="text" class="form-control" style="width: 300px;" id="site" name="sitenm" value="${sitenm}" readonly="readonly">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="form-inline">
                                         <label class="control-label" for="nfc">NFC串码:</label>
                                         <input type="text" class="form-control" style="width: 300px;" id="nfc" name="unitcode" value="${nfcinfo.unitcode}" readonly="readonly">
                                     </td>
