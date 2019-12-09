@@ -234,6 +234,12 @@
     <if test="operatorid != null and operatorid !=''" >
       AND e.operatorid =#{operatorid}
     </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and e.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="showexceptiontype!=null and showexceptiontype!=''">
+      and e.exceptionstate=0
+    </if>
     <if test="exceptiontype!=null and exceptiontype!=''">
       and e.exceptiontype=#{exceptiontype}
     </if>
