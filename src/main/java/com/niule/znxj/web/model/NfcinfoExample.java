@@ -824,6 +824,66 @@ public class NfcinfoExample {
             addCriterion("equipmentid not between", value1, value2, "equipmentid");
             return (Criteria) this;
         }
+
+        public Criteria andSiteidIsNull() {
+            addCriterion("siteid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidIsNotNull() {
+            addCriterion("siteid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidEqualTo(Long value) {
+            addCriterion("siteid =", value, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidNotEqualTo(Long value) {
+            addCriterion("siteid <>", value, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidGreaterThan(Long value) {
+            addCriterion("siteid >", value, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidGreaterThanOrEqualTo(Long value) {
+            addCriterion("siteid >=", value, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidLessThan(Long value) {
+            addCriterion("siteid <", value, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidLessThanOrEqualTo(Long value) {
+            addCriterion("siteid <=", value, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidIn(List<Long> values) {
+            addCriterion("siteid in", values, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidNotIn(List<Long> values) {
+            addCriterion("siteid not in", values, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidBetween(Long value1, Long value2) {
+            addCriterion("siteid between", value1, value2, "siteid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteidNotBetween(Long value1, Long value2) {
+            addCriterion("siteid not between", value1, value2, "siteid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

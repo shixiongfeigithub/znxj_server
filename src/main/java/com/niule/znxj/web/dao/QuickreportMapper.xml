@@ -348,6 +348,9 @@
     <if test="dangerstate!=null and dangerstate!=''">
       and d.dangerstate=#{dangerstate}
     </if>
+    <if test="showdangerstate!=null and showdangerstate!=''">
+      and d.dangerstate=0
+    </if>
     <if test="time1!=null and time1!=''">
       and date_format(q.uploadtime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
@@ -381,6 +384,9 @@
     </if>
     <if test="dangerstate!=null and dangerstate!=''">
       and d.dangerstate=#{dangerstate}
+    </if>
+    <if test="showdangerstate!=null and showdangerstate!=''">
+      and d.dangerstate=0
     </if>
     <if test="time1!=null and time1!=''">
       and date_format(q.uploadtime, '%Y-%m-%d'

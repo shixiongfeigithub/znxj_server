@@ -47,31 +47,27 @@ public class WebClassinfoController {
 
     @RequestMapping("/showallclass")
     @RequiresPermissions("item:class")
-    public String showallclass(Model m, int page, HttpServletRequest request) {
+    public String showallclass(Model m, int page,String siteid, HttpServletRequest request) {
         if (page <= 0) {
             page = 1;
         }
         int pagesieze = 15;
-
-        Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
-
-        List ids = new ArrayList();
-        if (admininfo.getSiteid() == null) {
-            List<Siteareainfo> sites = siteService.queryAllSite();
-            if (sites.size() > 0) {
-                for (Siteareainfo siteareainfo : sites) {
-                    ids.add(siteareainfo.getId());
-                }
-            } else
-                ids = null;
-
-        } else {
-            ids.add(admininfo.getSiteid());
-        }
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("page", (page - 1) * pagesieze);
+        Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
+        m.addAttribute("ad",admininfo);
+        //单个工厂登录者所属工厂 或者 多个工厂登陆者下拉框所选工厂
+        if(siteid != null && siteid != "") {
+            m.addAttribute("siteid",siteid);
+            map.put("siteid", siteid);
+        }else{
+            m.addAttribute("siteid",admininfo.getSiteid());
+            map.put("siteid", admininfo.getSiteid());
+        }
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos", siteareainfos);
+
+         map.put("page", (page - 1) * pagesieze);
         map.put("size", pagesieze);
-        map.put("ids", ids);
 
         page = PageBean.countCurrentPage(page);
         List<Classinfo> classinfos = classinfoService.findByPageClass(map);

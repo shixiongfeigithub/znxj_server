@@ -135,8 +135,9 @@
                                             <br>
                                             <div style="line-height: 10px;">&nbsp;</div>
                                             <label class="control-label" for="exceptionstate">处理状态：</label>
-                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 80px;">
+                                            <select class="form-control" id="exceptionstate" name="exceptionstate" style="width: 90px;">
                                                 <option ${exceptionstate eq '' ? 'selected' : ''} value="">所有</option>
+                                                <option ${exceptionstate eq '0' ? 'selected' : ''} value="0">待处理</option>
                                                 <option ${exceptionstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${exceptionstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
@@ -186,7 +187,7 @@
                                             <th class="fontcenter">巡检项</th>
                                             <th class="fontcenter">异常描述</th>
                                             <th class="fontcenter">问题上报时间</th>
-                                            <th class="fontcenter">工人</th>
+                                            <th class="fontcenter">上报人</th>
                                             <th class="fontcenter">处理状态</th>
                                             <th class="fontcenter">责任人</th>
                                             <th class="fontcenter">关闭时间</th>
@@ -279,13 +280,10 @@
                                         <c:if test="${pageBean.currentPage>1}">
                                             <a href="showexceptionreport?page=${pageBean.currentPage-1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">上一页</a>
                                         </c:if>
-
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
                                             <a href="showexceptionreport?page=${pageBean.currentPage+1}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">下一页</a>
                                         </c:if>
-
                                         <a href="showexceptionreport?page=${pageBean.totalPage}&siteid=${siteid}&areaid=${areaid}&equipmentid=${equipmentid}&exceptionstate=${exceptionstate}&exceptiontype=${exceptiontype}&exceptionlever=${exceptionlever}&operatorname=${operatorname}&time1=${time1}&time2=${time2}">最后一页</a>
-
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
                                     </div>
                                 </div>
