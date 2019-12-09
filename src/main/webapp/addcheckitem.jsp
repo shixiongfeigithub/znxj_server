@@ -116,6 +116,26 @@
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
+                                            <label class="control-label" for="site">厂区:</label>
+                                            <select name="siteareaid" id="site" class="form-control" >
+                                                <c:if test="${ad.siteid eq null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <option ${ad.siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${ad.siteid != null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <c:if test="${ad.siteid eq site.id}">
+                                                            <option selected value="${site.id}">${site.customid}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
                                             <label class="control-label" for="username">名称:</label>
                                             <input type="text" class="form-control" style="width: 300px;" id="username" name="itemname" required>
                                         </td>
@@ -129,7 +149,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="pwd2">类型:</label>
-                                           <select id="pwd2" name="type" onchange="change()">
+                                           <select id="pwd2" name="type"   class="form-control" onchange="change()">
                                                <option value="1">状态项</option>
                                                <option value="2">记录项</option>
                                                <option value="3">枚举项</option>
@@ -139,7 +159,7 @@
                                     <tr>
                                         <td class="form-inline" id="type2">
                                             <label class="control-label" for="jilutype">记录类型:</label>
-                                            <select id="jilutype" name="recordid">
+                                            <select id="jilutype" name="recordid" class="form-control">
                                                 <option value="" selected>请选择</option>
                                                 <c:forEach items="${daterecordinfos}" var="daterecord">
                                                     <%--<c:if test="${daterecord.unitname != null}">--%>

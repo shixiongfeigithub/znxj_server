@@ -45,7 +45,7 @@ public class WebContactController {
 
     @RequestMapping("/showallcont")
     @RequiresPermissions("item:contact")
-    public String showallcont(Model m, int page,String name,String roletype,String siteid,HttpServletRequest request){
+    public String showallcont(Model m, int page,String name,String roletype,Long siteid,HttpServletRequest request){
         if(page<=0){
             page=1;
         }

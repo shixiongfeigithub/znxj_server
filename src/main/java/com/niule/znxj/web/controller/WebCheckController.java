@@ -6,6 +6,7 @@ import com.niule.znxj.web.model.*;
 import com.niule.znxj.web.service.CheckInfoService;
 import com.niule.znxj.web.service.DateRecordService;
 import com.niule.znxj.web.service.OperateLogService;
+import com.niule.znxj.web.service.SiteService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,8 @@ public class WebCheckController {
     private OperateLogService operateLogService;
     @Resource
     private CheckitemTaskMapper checkitemTaskMapper;
+    @Resource
+    private SiteService siteService;
 
     protected PageBean pageBean = new PageBean();
 
@@ -45,39 +48,53 @@ public class WebCheckController {
 
     @RequestMapping("showallcheck")
     @RequiresPermissions("item:check")
-    public String showallcheck(int page, String itemname, Model m){
+    public String showallcheck(int page, String itemname,String siteid, Model m,HttpServletRequest request){
         if(page<=0){
             page=1;
         }
         int pagesieze=15;
         page = PageBean.countCurrentPage(page);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        HashMap<String,Object> map=new HashMap<String,Object>();
+        //单个工厂登录者所属工厂 或者 多个工厂登陆者下拉框所选工厂
+        if(siteid ==null || "".equals(siteid) ) {
+            map.put("siteid", admininfo.getSiteid());
+            m.addAttribute("siteid",admininfo.getSiteid());
+        }else{
+            map.put("siteid", siteid);
+            m.addAttribute("siteid",siteid);
+        }
         List<Checkiteminfo> checkiteminfos=null;
         long totalpage=0;
-        if(itemname==null||"".equals(itemname) ){
-            checkiteminfos = checkInfoService.findByPageCheck(page,pagesieze);
-            int rows1 = checkInfoService.countCheck();
-            totalpage = PageBean.counTotalPage(pagesieze, rows1);
+        map.put("page",(page-1)*pagesieze);
+        map.put("pagesize",pagesieze);
+        if(itemname ==null || "".equals(itemname) ) {
+            map.put("itemname", "");
         }else{
-            HashMap<String,Object> map=new HashMap<String,Object>();
-            map.put("page",(page-1)*pagesieze);
-            map.put("pagesize",pagesieze);
             map.put("itemname","%"+itemname+"%");
-            checkiteminfos = checkInfoService.findByPageCheck2(map);
-            int rows2 = checkInfoService.countCheck2(map);
-            totalpage = PageBean.counTotalPage(pagesieze, rows2);
         }
+        checkiteminfos = checkInfoService.findByPageCheck2(map);
+        int rows2 = checkInfoService.countCheck2(map);
+        totalpage = PageBean.counTotalPage(pagesieze, rows2);
+        m.addAttribute("ad",admininfo);
         pageBean.setList(checkiteminfos);
         pageBean.setTotalPage((int) totalpage);
         pageBean.setCurrentPage(page);
         m.addAttribute("pageBean",pageBean);
         m.addAttribute("itemname",itemname);
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos", siteareainfos);
         return "showcheckiteminfo";
     }
     @RequestMapping("toaddcheck")
     @RequiresPermissions("add:check")
-    public String toaddcheck(Model m,Integer recodeType){
+    public String toaddcheck(Model m,Integer recodeType,HttpServletRequest request){
         List<Daterecordinfo> daterecordinfos=dateRecordService.selectByExample(recodeType);
         m.addAttribute("daterecordinfos",daterecordinfos);
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos",siteareainfos);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        m.addAttribute("ad",admininfo);
         return "addcheckitem";
     }
     @RequestMapping("addcheck")
@@ -120,7 +137,7 @@ public class WebCheckController {
     }
     @RequestMapping("querybycheckid")
     @RequiresPermissions("upd:check")
-    public String querybycheckid(Long id,Model m,int page,Integer type){
+    public String querybycheckid(Long id,Model m,int page,Integer type,HttpServletRequest request){
         Checkiteminfo checkiteminfo=checkInfoService.selectByPrimaryKey(id);
         List<Daterecordinfo> daterecordinfos = null;
         if(type == 3){
@@ -128,7 +145,10 @@ public class WebCheckController {
         }else if (type == 2){
             daterecordinfos=dateRecordService.selectByExample(1);
         }
-
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos",siteareainfos);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        m.addAttribute("ad",admininfo);
 
         m.addAttribute("checkiteminfo",checkiteminfo);
         m.addAttribute("daterecordinfos",daterecordinfos);

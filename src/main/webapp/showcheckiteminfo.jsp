@@ -72,16 +72,27 @@
                             <%--<div class="clearfix"></div>--%>
                         </div>
                         <div class="box-content">
-                            <div class="form-inline" style="margin-bottom: 20px;">
+                            <div class="form-inline">
                                 <form action="showallcheck?page=1" method="post">
                                     <label class="control-label" for="name2">名称：</label>
                                     <input type="text" class="form-control" style="width: 300px;" id="name2"
                                            name="itemname" value="${param.itemname}">
+                                    <c:if test="${ad.siteid eq null}">
+                                        <label class="control-label" for="site">厂区:</label>
+                                        <select id="site" name="siteid" class="form-control">
+                                            <option ${siteid eq null?'selected':''} value="">所有厂区</option>
+                                            <c:forEach items="${siteareainfos}" var="site">
+                                                <option ${siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </c:if>
                                     <input type="submit" class="btn btn-primary" value="搜索">
-                                    <shiro:hasPermission name="add:check">
-                                        <a href="toaddcheck" id="button" class="btn btn-primary"
-                                           style="margin-left:250px;">添加巡检项</a>
-                                    </shiro:hasPermission>
+                                    <div style="float: right;">
+                                        <shiro:hasPermission name="add:check">
+                                            <a href="toaddcheck" id="button" class="btn btn-primary"
+                                               style="margin-left:250px;">添加巡检项</a>
+                                        </shiro:hasPermission>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -138,16 +149,16 @@
                             </c:forEach>
                         </table>
                         <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                            <a href="showallcheck?page=1&itemname=${itemname}">第一页</a>
+                            <a href="showallcheck?page=1&itemname=${itemname}&siteid=${siteid}">第一页</a>
                             <c:if test="${pageBean.currentPage>1}">
-                                <a href="showallcheck?page=${pageBean.currentPage-1}&itemname=${itemname}">上一页</a>
+                                <a href="showallcheck?page=${pageBean.currentPage-1}&itemname=${itemname}&siteid=${siteid}">上一页</a>
                             </c:if>
 
                             <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                <a href="showallcheck?page=${pageBean.currentPage+1}&itemname=${itemname}">下一页</a>
+                                <a href="showallcheck?page=${pageBean.currentPage+1}&itemname=${itemname}&siteid=${siteid}">下一页</a>
                             </c:if>
 
-                            <a href="showallcheck?page=${pageBean.totalPage}&itemname=${itemname}">最后一页</a>
+                            <a href="showallcheck?page=${pageBean.totalPage}&itemname=${itemname}&siteid=${siteid}">最后一页</a>
 
                             第${pageBean.currentPage}页/共${pageBean.totalPage}页
                         </div>

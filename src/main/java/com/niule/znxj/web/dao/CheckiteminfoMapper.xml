@@ -322,16 +322,23 @@
     from checkiteminfo c
     left join daterecordinfo d
     on d.id=c.recordid
-    <if test="itemname!=''">
-      and itemname like #{itemname}
+   where 1 = 1
+    <if test="itemname!=null and itemname!=''">
+      and c.itemname like #{itemname}
+    </if>
+    <if test="siteid!=null and siteid!=''">
+      and c.siteareaid = #{siteid}
     </if>
     order by c.id desc
     limit #{page},#{pagesize}
   </select>
   <select id="countCheck2" resultType="int">
     select count(id) from checkiteminfo where 1=1
-    <if test="itemname!=''">
-      and itemname like #{name}
+    <if test="itemname!=null and itemname!=''">
+      and itemname like #{itemname}
+    </if>
+    <if test="siteid!=null and siteid!=''">
+      and siteareaid = #{siteid}
     </if>
   </select>
   <select id="queryByRecord" parameterType="int" resultMap="BaseResultMap">

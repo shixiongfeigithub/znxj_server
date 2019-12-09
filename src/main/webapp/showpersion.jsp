@@ -75,7 +75,7 @@
                                         <c:forEach items="${siteareainfos}" var="site">
                                             <option ${siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
                                         </c:forEach>
-                                        <option ${siteid = '9999'?'selected':''} value="9999">其他</option>
+                                        <option ${'9999' eq siteid?'selected':''} value="9999">其他</option>
                                     </select>
                                     <input type="submit" class="btn btn-primary" value="搜索">
                                     <div style="float: right;">
@@ -127,16 +127,16 @@
                                 </c:forEach>
                             </table>
                             <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                                <a href="showallcont?page=1&roletype=${roletype}&name=${name}">第一页</a>
+                                <a href="showallcont?page=1&roletype=${roletype}&name=${name}&siteid=${siteid}">第一页</a>
                                 <c:if test="${pageBean.currentPage>1}">
-                                    <a href="showallcont?page=${pageBean.currentPage-1}&roletype=${roletype}&name=${name}">上一页</a>
+                                    <a href="showallcont?page=${pageBean.currentPage-1}&roletype=${roletype}&name=${name}&siteid=${siteid}">上一页</a>
                                 </c:if>
 
                                 <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                    <a href="showallcont?page=${pageBean.currentPage+1}&roletype=${roletype}&name=${name}">下一页</a>
+                                    <a href="showallcont?page=${pageBean.currentPage+1}&roletype=${roletype}&name=${name}&siteid=${siteid}">下一页</a>
                                 </c:if>
 
-                                <a href="showallcont?page=${pageBean.totalPage}&roletype=${roletype}&name=${name}">最后一页</a>
+                                <a href="showallcont?page=${pageBean.totalPage}&roletype=${roletype}&name=${name}&siteid=${siteid}">最后一页</a>
 
                                 第${pageBean.currentPage}页/共${pageBean.totalPage}页
                             </div>

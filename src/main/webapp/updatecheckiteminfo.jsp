@@ -121,6 +121,26 @@
                                     </tr>
                                     <tr>
                                         <td class="form-inline">
+                                            <label class="control-label" for="site">厂区:</label>
+                                            <select name="siteareaid" id="site" class="form-control" >
+                                                <c:if test="${ad.siteid eq null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <option ${checkiteminfo.siteareaid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${ad.siteid != null}">
+                                                    <c:forEach items="${siteareainfos}" var="site">
+                                                        <c:if test="${checkiteminfo.siteareaid eq site.id}">
+                                                            <option selected value="${site.id}">${site.customid}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
                                             <label class="control-label" for="username">名称:</label>
                                             <input type="text" class="form-control" style="width: 300px;" id="username" name="itemname"value="${checkiteminfo.itemname}" required>
                                         </td>
@@ -134,7 +154,7 @@
                                     <tr>
                                         <td class="form-inline">
                                             <label class="control-label" for="pwd2">类型:</label>
-                                            <select name="type" id="pwd2" onchange="change()">
+                                            <select name="type" id="pwd2" class="form-control" onchange="change()">
                                                 <option ${checkiteminfo.type eq '1'?'selected':''} value="1">状态项</option>
                                                 <option ${checkiteminfo.type eq '2'?'selected':''} value="2">记录项</option>
                                                 <option ${checkiteminfo.type eq '3'?'selected':''} value="3">枚举项</option>
@@ -147,7 +167,7 @@
                                         <td class="form-inline" id="type2">
                                             <label class="control-label" for="jilutype">记录类型:</label>
                                                 <%--<input type="text" value="${checkiteminfo.daterecord.name}&nbsp;${checkiteminfo.daterecord.unitname}" readonly class="form-control">--%>
-                                            <select id="jilutype" name="recordid" readonly="readonly">
+                                            <select id="jilutype" name="recordid" readonly="readonly" class="form-control">
                                                 <c:forEach var="daterecord" items="${daterecordinfos}">
                                                     <c:if test="${checkiteminfo.type ==2}">
                                                         <option ${checkiteminfo.recordid eq daterecord.id ? 'selected' : ''} value="${daterecord.id}">${daterecord.name} &nbsp;&nbsp;&nbsp;${daterecord.unitname}</option>
