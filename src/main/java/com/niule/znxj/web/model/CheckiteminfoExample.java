@@ -733,6 +733,66 @@ public class CheckiteminfoExample {
             addCriterion("recordid not between", value1, value2, "recordid");
             return (Criteria) this;
         }
+
+        public Criteria andSiteareaidIsNull() {
+            addCriterion("siteareaid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidIsNotNull() {
+            addCriterion("siteareaid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidEqualTo(Long value) {
+            addCriterion("siteareaid =", value, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidNotEqualTo(Long value) {
+            addCriterion("siteareaid <>", value, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidGreaterThan(Long value) {
+            addCriterion("siteareaid >", value, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidGreaterThanOrEqualTo(Long value) {
+            addCriterion("siteareaid >=", value, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidLessThan(Long value) {
+            addCriterion("siteareaid <", value, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidLessThanOrEqualTo(Long value) {
+            addCriterion("siteareaid <=", value, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidIn(List<Long> values) {
+            addCriterion("siteareaid in", values, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidNotIn(List<Long> values) {
+            addCriterion("siteareaid not in", values, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidBetween(Long value1, Long value2) {
+            addCriterion("siteareaid between", value1, value2, "siteareaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andSiteareaidNotBetween(Long value1, Long value2) {
+            addCriterion("siteareaid not between", value1, value2, "siteareaid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

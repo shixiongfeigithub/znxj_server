@@ -21,16 +21,9 @@ public class Checkiteminfo {
 
     private Long recordid;
 
+    private Long siteareaid;
+
     private Daterecordinfo daterecord;
-
-
-    public Daterecordinfo getDaterecord() {
-        return daterecord;
-    }
-
-    public void setDaterecord(Daterecordinfo daterecord) {
-        this.daterecord = daterecord;
-    }
 
     public Long getId() {
         return id;
@@ -110,5 +103,20 @@ public class Checkiteminfo {
 
     public void setRecordid(Long recordid) {
         this.recordid = recordid;
+    }
+
+    public Long getSiteareaid() {
+        return siteareaid;
+    }
+
+    public void setSiteareaid(Long siteareaid) {
+        this.siteareaid = siteareaid;
+    }
+
+    public Daterecordinfo getDaterecord() {
+        return daterecord;
+    }
+    public void setDaterecord(Daterecordinfo daterecord) {
+        this.daterecord = daterecord;
     }
 }
