@@ -49,9 +49,25 @@
             var areaid = $("#areainfo option:selected")[0].value;
             $("#equipment").append("<option  value='' >所有设备</option>");
             var equipmentid = '${equipmentid}';
+            var areaId1 = '${areaid}';
             if(areaid != null && areaid != '') {
                 $.ajax({
                     url: "showequipment?areaid=" + areaid,
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].id == equipmentid) {
+                                $("#equipment").append("<option  value='" + data[i].id + "' selected>" + data[i].name + "</option>");
+                            } else {
+                                $("#equipment").append("<option  value='" + data[i].id + "' >" + data[i].name + "</option>");
+                            }
+                        }
+                    }
+                })
+            }else if(areaId1!=null && areaId1!=''){
+                $.ajax({
+                    url: "showequipment?areaid=" + areaId1,
                     type: "post",
                     dataType: "json",
                     success: function (data) {
@@ -68,11 +84,11 @@
         }
 
         function closetaskreport(id) {
-            window.location="/toclosetaskreport?id="+id;
+            window.location="/toclosetaskreport?id="+id+"&siteid="+'${siteid}'+"&areaid="+'${areaid}'+"&equipmentid="+'${equipmentid}'+"&exceptionstate="+'${exceptionstate}'+"&exceptiontype="+'${exceptiontype}'+"&exceptionlever="+'${exceptionlever}'+"&operatorname="+'${operatorname}'+"&time1="+'${time1}'+"&time2="+'${time2}';
         }
 
         function assignprincipal(id) {
-            window.location="/toassignprincipal?id="+id;
+            window.location="/toassignprincipal?id="+id+"&siteid="+'${siteid}'+"&areaid="+'${areaid}'+"&equipmentid="+'${equipmentid}'+"&exceptionstate="+'${exceptionstate}'+"&exceptiontype="+'${exceptiontype}'+"&exceptionlever="+'${exceptionlever}'+"&operatorname="+'${operatorname}'+"&time1="+'${time1}'+"&time2="+'${time2}';
         }
         function handlerdetail(id){
             window.location="/handlerexceptiondetail?id="+id;
@@ -225,34 +241,65 @@
                                                 <c:if test="${item.checktype == '记录项'}">
                                                     <c:if test="${item.checkvalue == '' or item.checkvalue==null}">
                                                         <c:if test="${item.numvalue!='' and item.numvalue !=null}">
-                                                            <c:if test="${item.normalmin !='-' and item.normalmax!='-' and item.lowerwarning !='-' and item.upperwarning!='-'}">
+                                                            <c:if test="${item.normalmin !='-' and item.lowerwarning !='-'}">
                                                                 <c:if test="${Double.parseDouble(item.numvalue) < Double.parseDouble(item.normalmin) and Double.parseDouble(item.numvalue) > Double.parseDouble(item.lowerwarning)}">${item.numvalue}<span style="color: red;">↓</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.normalmax!='-' and item.upperwarning!='-'}">
                                                                 <c:if test="${Double.parseDouble(item.numvalue) > Double.parseDouble(item.normalmax) and Double.parseDouble(item.numvalue) < Double.parseDouble(item.upperwarning)}">${item.numvalue}<span style="color: red;">↑</span></c:if>
-                                                                <c:if test="${ Double.parseDouble(item.normalmin)<=Double.parseDouble(item.numvalue) and Double.parseDouble(item.numvalue) <= Double.parseDouble(item.normalmax)}"><span>${item.numvalue}</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.normalmin !='-' and item.normalmax!='-'}">
+                                                                <c:if test="${Double.parseDouble(item.normalmin)<=Double.parseDouble(item.numvalue) and Double.parseDouble(item.numvalue) <= Double.parseDouble(item.normalmax)}"><span>${item.numvalue}</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.lowerwarning !='-'}">
                                                                 <c:if test="${Double.parseDouble(item.numvalue) <= Double.parseDouble(item.lowerwarning)}">${item.numvalue}<span style="color: red;">↓↓</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.upperwarning!='-'}">
                                                                 <c:if test="${Double.parseDouble(item.numvalue) >= Double.parseDouble(item.upperwarning)}">${item.numvalue}<span style="color: red;">↑↑</span></c:if>
                                                             </c:if>
                                                         </c:if>
                                                     </c:if>
                                                     <c:if test="${item.checkvalue!='' and item.checkvalue !=null}">
-                                                        ${item.errcontent}
+                                                        <c:if test="${item.errcontent !=null and item.errcontent !=''}">
+                                                            ${item.errcontent}
+                                                        </c:if>
+                                                        <c:if test="${item.errcontent ==null or item.errcontent ==''}">
+                                                            <c:if test="${item.normalmin !='-' and item.lowerwarning !='-'}">
+                                                                <c:if test="${Double.parseDouble(item.checkvalue) < Double.parseDouble(item.normalmin) and Double.parseDouble(item.checkvalue) > Double.parseDouble(item.lowerwarning)}">${item.checkvalue}<span style="color: red;">↓</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.normalmax!='-' and item.upperwarning!='-'}">
+                                                                <c:if test="${Double.parseDouble(item.checkvalue) > Double.parseDouble(item.normalmax) and Double.parseDouble(item.checkvalue) < Double.parseDouble(item.upperwarning)}">${item.checkvalue}<span style="color: red;">↑</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.normalmin !='-' and item.normalmax!='-'}">
+                                                                <c:if test="${Double.parseDouble(item.normalmin)<=Double.parseDouble(item.checkvalue) and Double.parseDouble(item.checkvalue) <= Double.parseDouble(item.normalmax)}"><span>${item.checkvalue}</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.lowerwarning !='-'}">
+                                                                <c:if test="${Double.parseDouble(item.checkvalue) <= Double.parseDouble(item.lowerwarning)}">${item.checkvalue}<span style="color: red;">↓↓</span></c:if>
+                                                            </c:if>
+                                                            <c:if test="${item.upperwarning!='-'}">
+                                                                <c:if test="${Double.parseDouble(item.checkvalue) >= Double.parseDouble(item.upperwarning)}">${item.checkvalue}<span style="color: red;">↑↑</span></c:if>
+                                                            </c:if>
+                                                        </c:if>
                                                     </c:if>
                                                 </c:if>
                                                 <c:if test="${item.checktype == '状态项'}">
-                                                        <c:if test="${item.reportstate == ''}">-</c:if>
-                                                        <c:if test="${item.reportstate != ''}">
-                                                            <c:if test="${item.reportstate == 1}">
-                                                                <c:if test="${item.img != 'null' or item.audio != 'null' or item.video != 'null'}">
+                                                    <c:choose>
+                                                        <c:when test="${item.reportstate != '' and item.reportstate == 1}">
+                                                            <c:choose>
+                                                                <c:when test="${item.img != 'null' or item.audio != 'null' or item.video != 'null'}">
                                                                     <a href='http://${ip}/toException?img=${item.img}&audio=${item.audio}&video=${item.video}'  target="_Blank">${item.errcontent}</a>
-                                                                </c:if>
-                                                                <c:if test="${item.img == 'null' and item.audio == 'null' and item.video == 'null'}">
+                                                                </c:when>
+                                                                <c:otherwise>
                                                                     ${item.errcontent}
-                                                                </c:if>
-                                                            </c:if>
-                                                            <c:if test="${item.reportstate == 0}">
-                                                                正常
-                                                            </c:if>
-                                                        </c:if>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:when>
+                                                        <c:when test="${item.reportstate != '' and item.reportstate == 0}">
+                                                            正常
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            -
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:if>
                                             </td>
                                             <td class="fontcenter">${item.operationtime}</td>
