@@ -998,12 +998,12 @@ public class CommonServiceImpl implements CommonService {
                     reportcontent.setErrcontent("");
                 }
                 //大于最低值  小于低值
-                else if (!reportcontent.getNormalmin().equals("-")
+                else if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getLowerwarning().equals("-")
                         && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getNormalmin())
                         && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getLowerwarning())) {
                     reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↓" + bodongzhi + "</span>");
                 }//大于高值  小于最高值值
-                else if (!reportcontent.getNormalmax().equals("-")
+                else if (!reportcontent.getNormalmax().equals("-") && !reportcontent.getUpperwarning().equals("-")
                         && Double.parseDouble(reportcontent.getCheckvalue()) > Double.parseDouble(reportcontent.getNormalmax())
                         && Double.parseDouble(reportcontent.getCheckvalue()) < Double.parseDouble(reportcontent.getUpperwarning())) {
                     reportcontent.setErrcontent(reportcontent.getCheckvalue()+"<span style='color:red;'>" + "↑" + bodongzhi + "</span>");
@@ -1020,18 +1020,18 @@ public class CommonServiceImpl implements CommonService {
                 }
             } else if (!reportcontent.getNumvalue().equals("")) {
                 //大于低值 小于高值
-                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
+                if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getNormalmax().equals("-") &&
                         Double.parseDouble(reportcontent.getNormalmin()) <= Double.parseDouble(reportcontent.getNumvalue()) &&
                         Double.parseDouble(reportcontent.getNumvalue()) <= Double.parseDouble(reportcontent.getNormalmax())) {
                     reportcontent.setErrcontent("");
                 }//大于最低值  小于低值
-                else if (!reportcontent.getNormalmin().equals("-")
+                else if (!reportcontent.getNormalmin().equals("-") && !reportcontent.getLowerwarning().equals("-")
                         && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getNormalmin())
                         && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getLowerwarning())) {
                     reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↓" + bodongzhi + "</span>");
                 }
                 //大于高值  小于最高值值
-                else if (!reportcontent.getNormalmax().equals("-")
+                else if (!reportcontent.getNormalmax().equals("-") && !reportcontent.getUpperwarning().equals("-")
                         && Double.parseDouble(reportcontent.getNumvalue()) > Double.parseDouble(reportcontent.getNormalmax())
                         && Double.parseDouble(reportcontent.getNumvalue()) < Double.parseDouble(reportcontent.getUpperwarning())) {
                     reportcontent.setErrcontent(reportcontent.getNumvalue()+"<span style='color:red;'>" + "↑" + bodongzhi + "</span>");

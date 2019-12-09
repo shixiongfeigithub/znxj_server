@@ -17,13 +17,6 @@
             text-align: center !important;
             vertical-align: middle;
         }
-
-        #testalert {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            width: 200px;
-        }
     </style>
     <script src="${pageContext.request.contextPath}/js/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript">
@@ -170,20 +163,12 @@
             }
         })
 
-        function refer(){
-            location.reload();
-        }
-
-        function showtask() {
-            window.location = "showdanger?page=" + $("#page").val();
-        }
-
         function closedanger(id) {
-            window.location="/toclosedanger?id="+id;
+            window.location="/toclosedanger?id="+id+"&siteid="+'${siteid}'+"&dangerstate="+'${dangerstate}'+"&operatorname="+'${operatorname}'+"&reportcode="+'${reportcode}'+"&time1="+'${time1}'+"&time2="+'${time2}';
         }
 
         function assigndanger(id) {
-            window.location="/toassigndanger?id="+id;
+            window.location="/toassigndanger?id="+id+"&siteid="+'${siteid}'+"&dangerstate="+'${dangerstate}'+"&operatorname="+'${operatorname}'+"&reportcode="+'${reportcode}'+"&time1="+'${time1}'+"&time2="+'${time2}';
         }
         function handlerdetail(id){
             window.location="/handlerdangerdetail?id="+id;
@@ -226,6 +211,7 @@
                                             <label class="control-label" for="dangerstate">处理状态：</label>
                                             <select class="form-control" id="dangerstate" name="dangerstate">
                                                 <option ${dangerstate eq '' ? 'selected' : ''} value="">所有</option>
+                                                <option ${dangerstate eq '0' ? 'selected' : ''} value="0">待处理</option>
                                                 <option ${dangerstate eq '1' ? 'selected' : ''} value="1">已关闭</option>
                                                 <option ${dangerstate eq '2' ? 'selected' : ''} value="2">处理中</option>
                                             </select>
@@ -290,16 +276,16 @@
                                         <input type="hidden" id="errorlen" value="${pageBean.list.size()}">
                                     </table>
                                     <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;">
-                                        <a href="showdanger?page=1&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">第一页</a>
+                                        <a href="showdanger?page=1&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&reportcode=${reportcode}&time1=${time1}&time2=${time2}">第一页</a>
                                         <c:if test="${pageBean.currentPage>1}">
-                                            <a href="showdanger?page=${pageBean.currentPage-1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">上一页</a>
+                                            <a href="showdanger?page=${pageBean.currentPage-1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&reportcode=${reportcode}&time1=${time1}&time2=${time2}">上一页</a>
                                         </c:if>
 
                                         <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                            <a href="showdanger?page=${pageBean.currentPage+1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">下一页</a>
+                                            <a href="showdanger?page=${pageBean.currentPage+1}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&reportcode=${reportcode}&time1=${time1}&time2=${time2}">下一页</a>
                                         </c:if>
 
-                                        <a href="showdanger?page=${pageBean.totalPage}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&&reportcode=${reportcode}&time1=${time1}&time2=${time2}">最后一页</a>
+                                        <a href="showdanger?page=${pageBean.totalPage}&siteid=${siteid}&dangerstate=${dangerstate}&operatorname=${operatorname}&reportcode=${reportcode}&time1=${time1}&time2=${time2}">最后一页</a>
 
                                         第${pageBean.currentPage}页/共${pageBean.totalPage}页
 

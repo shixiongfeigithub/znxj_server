@@ -86,7 +86,6 @@ public class TaskExceptionController {
             areainfo = areaService.selectByPrimaryKey(areaid);
         if (equipmentid !=null)
             equipmentinfo = equipmentService.selectByPrimaryKey(equipmentid);
-
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("page", (page - 1) * pagesize);
         map.put("pagesize", pagesize);
@@ -94,6 +93,8 @@ public class TaskExceptionController {
         map.put("areaname", areainfo!=null?areainfo.getCustomid():null);
         map.put("equipname",equipmentinfo!=null?equipmentinfo.getName():null);
         map.put("exceptionstate",exceptionstate);//异常处理状态
+        if (exceptionstate!=null && exceptionstate==0)
+            map.put("showexceptiontype","1");
         map.put("operatorname",operatorname); //巡检责任人
         map.put("exceptionlever",exceptionlever); //异常分级
         map.put("exceptiontype",exceptiontype); //异常分类
@@ -141,7 +142,8 @@ public class TaskExceptionController {
     /*跳转到关闭异常巡检项页面*/
     @RequestMapping("/toclosetaskreport")
     @RequiresPermissions("item:closereport")
-    public String toclosetaskreport(Model m, Long id,HttpServletRequest request) {
+    public String toclosetaskreport(Model m, Long id,Long siteid,Long areaid,Long equipmentid,Integer exceptionstate,
+                                    String operatorname,String exceptiontype,String exceptionlever, String time1, String time2) {
         Reportcontent reportcontent = taskreportService.selectReportContentByPrimaryKey(id);
         List<Warningtasktype> exceptiontypeList = commonService.getWarningTypeOrLevels(3); //异常类型
         List<Warningtasktype> levertype1List = commonService.getWarningTypeOrLevels(4); //异常等级
@@ -155,6 +157,16 @@ public class TaskExceptionController {
         m.addAttribute("reportcontent", reportcontent);
         m.addAttribute("levertype1List",levertype1List);
         m.addAttribute("exceptiontypeList",exceptiontypeList);
+
+        m.addAttribute("siteid", siteid);
+        m.addAttribute("areaid", areaid);
+        m.addAttribute("equipmentid", equipmentid);
+        m.addAttribute("exceptionstate", exceptionstate);
+        m.addAttribute("operatorname",operatorname);
+        m.addAttribute("exceptionlever",exceptionlever); //异常分级
+        m.addAttribute("exceptiontype",exceptiontype); //异常分类
+        m.addAttribute("time1", time1);
+        m.addAttribute("time2", time2);
         return "closetaskreport";
     }
 
@@ -202,7 +214,8 @@ public class TaskExceptionController {
     /*异常巡检任务指定责任人页面*/
     @RequestMapping("/toassignprincipal")
     @RequiresPermissions("item:assignprincipal")
-    public String toassignprincipal(Model m, Long id, HttpServletRequest request) {
+    public String toassignprincipal(Model m, Long id,Long siteid,Long areaid,Long equipmentid,Integer exceptionstate,
+                                    String operatorname,String exceptiontype,String exceptionlever, String time1, String time2, HttpServletRequest request) {
         Admininfo admininfo = (Admininfo) request.getSession().getAttribute("userInfo");
         List<Admininfo> operationuserList = admininfoService.selectByRoleId(3); //查询所有角色为操作员的用户
         Reportcontent reportcontent = taskreportService.selectReportContentByPrimaryKey(id);
@@ -224,6 +237,16 @@ public class TaskExceptionController {
         m.addAttribute("operationuserList",operationuserList);
         m.addAttribute("levertype1List",levertype1List);
         m.addAttribute("exceptiontypeList",exceptiontypeList);
+
+        m.addAttribute("siteid", siteid);
+        m.addAttribute("areaid", areaid);
+        m.addAttribute("equipmentid", equipmentid);
+        m.addAttribute("exceptionstate", exceptionstate);
+        m.addAttribute("operatorname",operatorname);
+        m.addAttribute("exceptionlever",exceptionlever); //异常分级
+        m.addAttribute("exceptiontype",exceptiontype); //异常分类
+        m.addAttribute("time1", time1);
+        m.addAttribute("time2", time2);
         return "assignprincipal";
     }
 

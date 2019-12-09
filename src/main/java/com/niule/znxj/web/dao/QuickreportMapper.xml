@@ -348,6 +348,9 @@
     <if test="dangerstate!=null and dangerstate!=''">
       and d.dangerstate=#{dangerstate}
     </if>
+    <if test="showdangerstate!=null and showdangerstate!=''">
+      and d.dangerstate=0
+    </if>
     <if test="time1!=null and time1!=''">
       and date_format(q.uploadtime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
@@ -382,6 +385,9 @@
     <if test="dangerstate!=null and dangerstate!=''">
       and d.dangerstate=#{dangerstate}
     </if>
+    <if test="showdangerstate!=null and showdangerstate!=''">
+      and d.dangerstate=0
+    </if>
     <if test="time1!=null and time1!=''">
       and date_format(q.uploadtime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
@@ -396,7 +402,7 @@
     left join userinfo u on u.id=q.userid
     left join classinfo c on u.classid=c.id
     left join siteareainfo s on c.siteareaid=s.id
-    where q.type=1
+    where q.type=1 and d.dangerstate=1
     <if test="reportcode!=null and reportcode!=''">
       AND q.reportcode LIKE #{reportcode}
     </if>
@@ -412,11 +418,16 @@
     <if test="operatorid != null and operatorid !=''" >
       AND d.operatorid =#{operatorid}
     </if>
+    <if test="dangerstate!=null and dangerstate!=''">
+      and d.dangerstate=#{dangerstate}
+    </if>
+    <if test="showdangerstate!=null and showdangerstate!=''">
+      and d.dangerstate=0
+    </if>
     <if test="time1!=null and time1!=''">
       and date_format(q.uploadtime, '%Y-%m-%d'
       ) between #{time1,jdbcType=VARCHAR}  </if>
     <if test="time2!=null and time2!=''">and #{time2,jdbcType=VARCHAR}</if>
-      and d.dangerstate=1
     order BY  q.id desc
   </select>
 

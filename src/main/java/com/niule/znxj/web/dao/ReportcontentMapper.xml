@@ -121,6 +121,7 @@
       order by ${orderByClause}
     </if>
   </select>
+
   <select id="selectByExample2" resultMap="BaseResultMap" parameterType="map" >
     SELECT r.*,t.taskcode,t.worker,p.customid taskname,s.customid sitename,e.operatorname,
     e.exceptionstate,e.reporttime,e.appointedtime,e.exceptionclosetime,e.exceptiontype,e.exceptionlever,
@@ -150,6 +151,9 @@
     </if>
     <if test="exceptionstate!=null and exceptionstate!=''">
       and e.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="showexceptiontype!=null and showexceptiontype!=''">
+      and e.exceptionstate=0
     </if>
     <if test="exceptiontype!=null and exceptiontype!=''">
       and e.exceptiontype=#{exceptiontype}
@@ -194,6 +198,9 @@
     <if test="exceptiontype!=null and exceptiontype!=''">
       and e.exceptiontype=#{exceptiontype}
     </if>
+    <if test="showexceptiontype!=null and showexceptiontype!=''">
+      and e.exceptionstate=0
+    </if>
     <if test="exceptionlever!=null and exceptionlever!=''">
       and e.exceptionlever=#{exceptionlever}
     </if>
@@ -226,6 +233,12 @@
     </if>
     <if test="operatorid != null and operatorid !=''" >
       AND e.operatorid =#{operatorid}
+    </if>
+    <if test="exceptionstate!=null and exceptionstate!=''">
+      and e.exceptionstate=#{exceptionstate}
+    </if>
+    <if test="showexceptiontype!=null and showexceptiontype!=''">
+      and e.exceptionstate=0
     </if>
     <if test="exceptiontype!=null and exceptiontype!=''">
       and e.exceptiontype=#{exceptiontype}

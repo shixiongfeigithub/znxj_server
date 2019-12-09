@@ -33,7 +33,7 @@
     }
 
     function showdanger(){
-        window.location="showdanger?page=1";
+        window.location="showdanger?page=1&siteid="+'${siteid}'+"&dangerstate="+'${dangerstate}'+"&operatorname="+'${operatorname}'+"&reportcode="+'${reportcode}'+"&time1="+'${time1}'+"&time2="+'${time2}';
     }
 </script>
 <div class="ch-container">

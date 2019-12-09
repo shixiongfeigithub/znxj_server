@@ -34,7 +34,7 @@
     }
 
     function showexceptionreport(){
-        window.location="showexceptionreport?page=1";
+        window.location="showexceptionreport?page=1&siteid="+'${siteid}'+"&areaid="+'${areaid}'+"&equipmentid="+'${equipmentid}'+"&exceptionstate="+'${exceptionstate}'+"&exceptiontype="+'${exceptiontype}'+"&exceptionlever="+'${exceptionlever}'+"&operatorname="+'${operatorname}'+"&time1="+'${time1}'+"&time2="+'${time2}';;
     }
 </script>
 <div class="ch-container">
