@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>智能巡检系统</title>
@@ -55,6 +56,17 @@
                                                 <option value="1">主任</option>
                                                 <option value="2">经理</option>
                                                 <option selected="selected" value="3">员工</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="form-inline">
+                                            <label class="control-label" for="site">厂区:</label>
+                                            <select id="site" name="siteareaid" class="form-control">
+                                                <c:forEach items="${siteareainfos}" var="site">
+                                                    <option ${ad.siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                                </c:forEach>
+                                                <option ${ad.siteid eq null?'selected':''} value="9999">其他</option>
                                             </select>
                                         </td>
                                     </tr>

@@ -15,6 +15,8 @@ public class Contactinfo {
 
     private String name;
 
+    private Long siteareaid;
+
     public Long getId() {
         return id;
     }
@@ -69,5 +71,13 @@ public class Contactinfo {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public Long getSiteareaid() {
+        return siteareaid;
+    }
+
+    public void setSiteareaid(Long siteareaid) {
+        this.siteareaid = siteareaid;
     }
 }

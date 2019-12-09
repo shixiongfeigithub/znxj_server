@@ -45,37 +45,58 @@ public class WebContactController {
 
     @RequestMapping("/showallcont")
     @RequiresPermissions("item:contact")
-    public String showallcont(Model m, int page,String name,String roletype){
+    public String showallcont(Model m, int page,String name,String roletype,String siteid,HttpServletRequest request){
         if(page<=0){
             page=1;
         }
         int pagesieze=15;
         page = PageBean.countCurrentPage(page);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        HashMap<String,Object> map=new HashMap<String,Object>();
+        //单个工厂登录者所属工厂 或者 多个工厂登陆者下拉框所选工厂
+        if(siteid ==null || "".equals(siteid) ) {
+            map.put("siteid", admininfo.getSiteid());
+            m.addAttribute("siteid",admininfo.getSiteid());
+        }else{
+            map.put("siteid", siteid);
+            m.addAttribute("siteid",siteid);
+        }
         List<Contactinfo> contactinfos=null;
         long totalpage=0;
-        if((name==null||"".equals(name)) && (roletype==null || "".equals(roletype)) ){
-            contactinfos = contactinfoService.findByPageCon(page, pagesieze);
-            int rows1 = contactinfoService.countCon();
-            totalpage = PageBean.counTotalPage(pagesieze, rows1);
-            roletype="";
+        map.put("page",(page-1)*pagesieze);
+        map.put("pagesize",pagesieze);
+        if(name ==null || "".equals(name) ) {
+            map.put("name", "");
         }else{
-            HashMap<String,Object> map=new HashMap<String,Object>();
-            map.put("page",(page-1)*pagesieze);
-            map.put("pagesize",pagesieze);
             map.put("name","%"+name+"%");
-            map.put("roletype",roletype);
-            contactinfos = contactinfoService.findByPageCon2(map);
-            int rows2 = contactinfoService.countCon2(map);
-            totalpage = PageBean.counTotalPage(pagesieze, rows2);
         }
+        map.put("roletype",roletype);
+        contactinfos = contactinfoService.findByPageCon2(map);
+        int rows2 = contactinfoService.countCon2(map);
+        totalpage = PageBean.counTotalPage(pagesieze, rows2);
+
+        m.addAttribute("ad",admininfo);
         pageBean.setList(contactinfos);
         pageBean.setTotalPage((int) totalpage);
         pageBean.setCurrentPage(page);
         m.addAttribute("pageBean",pageBean);
         m.addAttribute("roletype",roletype);
         m.addAttribute("name",name);
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos", siteareainfos);
         return "showpersion";
     }
+
+    @RequestMapping("toaddcont")
+    @RequiresPermissions("add:contact")
+    public String toaddcont(Model m,HttpServletRequest request) {
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos",siteareainfos);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        m.addAttribute("ad",admininfo);
+        return "addpersion";
+    }
+
     @RequestMapping("/addcont")
     @RequiresPermissions("add:contact")
     public String addcont(Contactinfo contactinfo,HttpSession session){
@@ -111,11 +132,14 @@ public class WebContactController {
     }
     @RequestMapping("/queryById")
     @RequiresPermissions("upd:contact")
-    public String queryById(Long id,Model m,int page){
+    public String queryById(Long id,Model m,int page,HttpServletRequest request){
+        List<Siteareainfo> siteareainfos=siteService.queryAllSite();
+        m.addAttribute("siteareainfos",siteareainfos);
+        Admininfo admininfo=(Admininfo) request.getSession().getAttribute("userInfo");
+        m.addAttribute("ad",admininfo);
         Contactinfo contactinfo=contactinfoService.selectByPrimaryKey(id);
         m.addAttribute("page",page);
-        if(m!=null)
-            m.addAttribute("contactinfo",contactinfo);
+        m.addAttribute("contactinfo",contactinfo);
         return "updatepersion";
     }
     @RequestMapping("/updcont")

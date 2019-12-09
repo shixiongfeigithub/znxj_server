@@ -56,7 +56,7 @@
                             <%--<div class="clearfix"></div>--%>
                         </div>
                         <div class="box-content">
-                            <div class="form-inline" style="margin-bottom: 20px;">
+                            <div class="form-inline"  style="margin-bottom: 10px;">
                                 <form action="" method="post">
                                     <label class="control-label" for="name2">姓名：</label>
                                     <input type="text" class="form-control" style="width: 300px;" id="name2" name="name" value="${param.name}">
@@ -69,12 +69,21 @@
                                         <option ${roletype eq '3' ? 'selected' : ''} value="3">员工</option>
 
                                     </select>
+                                    <label class="control-label" for="site">厂区:</label>
+                                    <select id="site" name="siteid" class="form-control">
+                                        <option ${siteid eq null?'selected':''} value="">所有厂区</option>
+                                        <c:forEach items="${siteareainfos}" var="site">
+                                            <option ${siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
+                                        </c:forEach>
+                                        <option ${siteid = '9999'?'selected':''} value="9999">其他</option>
+                                    </select>
                                     <input type="submit" class="btn btn-primary" value="搜索">
-                                    <shiro:hasPermission name="add:contact">
-                                        <a href="addpersion.jsp" id="button" class="btn btn-primary" style="margin-left:250px;">添加联系人</a>
-                                    </shiro:hasPermission>
+                                    <div style="float: right;">
+                                        <shiro:hasPermission name="add:contact">
+                                            <a href="toaddcont" id="button" class="btn btn-primary" style="margin-left:250px;">添加联系人</a>
+                                        </shiro:hasPermission>
+                                    </div>
                                 </form>
-
                             </div>
                             <table class="table table-striped table-bordered table-hover bootstrap-datatable datatable responsive dataTable">
                                 <tr>
