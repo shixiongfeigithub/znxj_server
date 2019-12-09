@@ -57,7 +57,7 @@
                         </div>
                         <div class="box-content">
                             <div class="form-inline"  style="margin-bottom: 10px;">
-                                <form action="" method="post">
+                                <form action="showallcont?page=1" method="post">
                                     <label class="control-label" for="name2">姓名：</label>
                                     <input type="text" class="form-control" style="width: 300px;" id="name2" name="name" value="${param.name}">
                                     <label class="control-label" for="status">角色：</label>
@@ -75,7 +75,7 @@
                                         <c:forEach items="${siteareainfos}" var="site">
                                             <option ${siteid eq site.id?'selected':''} value="${site.id}">${site.customid}</option>
                                         </c:forEach>
-                                        <option ${'9999' eq siteid?'selected':''} value="9999">其他</option>
+                                        <option value="9999">其他</option>
                                     </select>
                                     <input type="submit" class="btn btn-primary" value="搜索">
                                     <div style="float: right;">

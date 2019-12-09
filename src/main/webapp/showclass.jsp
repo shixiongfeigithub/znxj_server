@@ -131,16 +131,16 @@
                                 </tbody>
                             </table>
                             <div style="height: 50px;width: 500px;text-align: center;margin-left: 300px;font: 18px;">
-                                <a href="showallclass?page=1">第一页</a>
+                                <a href="showallclass?page=1&siteid=${siteid}">第一页</a>
                                 <c:if test="${pageBean.currentPage>1}">
-                                    <a href="showallclass?page=${pageBean.currentPage-1}">上一页</a>
+                                    <a href="showallclass?page=${pageBean.currentPage-1}&siteid=${siteid}">上一页</a>
                                 </c:if>
 
                                 <c:if test="${pageBean.currentPage<pageBean.totalPage}">
-                                    <a href="showallclass?page=${pageBean.currentPage+1}">下一页</a>
+                                    <a href="showallclass?page=${pageBean.currentPage+1}&siteid=${siteid}">下一页</a>
                                 </c:if>
 
-                                <a href="showallclass?page=${pageBean.totalPage}">最后一页</a>
+                                <a href="showallclass?page=${pageBean.totalPage}&siteid=${siteid}">最后一页</a>
 
                                 第${pageBean.currentPage}页/共${pageBean.totalPage}页
                             </div>
